@@ -156,6 +156,19 @@ test_radio_lifecycle/fast:
 .PHONY : test_radio_lifecycle/fast
 
 #=============================================================================
+# Target rules for targets named nr_core
+
+# Build rule for target.
+nr_core: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_core
+.PHONY : nr_core
+
+# fast build rule for target.
+nr_core/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/build
+.PHONY : nr_core/fast
+
+#=============================================================================
 # Target rules for targets named toa_core
 
 # Build rule for target.
@@ -193,6 +206,117 @@ toa_run_realtime: cmake_check_build_system
 toa_run_realtime/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/build
 .PHONY : toa_run_realtime/fast
+
+#=============================================================================
+# Target rules for targets named nr_ssb_scan
+
+# Build rule for target.
+nr_ssb_scan: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_ssb_scan
+.PHONY : nr_ssb_scan
+
+# fast build rule for target.
+nr_ssb_scan/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/build
+.PHONY : nr_ssb_scan/fast
+
+#=============================================================================
+# Target rules for targets named nr_pbch_dmrs_probe
+
+# Build rule for target.
+nr_pbch_dmrs_probe: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_pbch_dmrs_probe
+.PHONY : nr_pbch_dmrs_probe
+
+# fast build rule for target.
+nr_pbch_dmrs_probe/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_pbch_dmrs_probe.dir/build.make CMakeFiles/nr_pbch_dmrs_probe.dir/build
+.PHONY : nr_pbch_dmrs_probe/fast
+
+#=============================================================================
+# Target rules for targets named nr_mib_decode
+
+# Build rule for target.
+nr_mib_decode: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_mib_decode
+.PHONY : nr_mib_decode
+
+# fast build rule for target.
+nr_mib_decode/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/build
+.PHONY : nr_mib_decode/fast
+
+demo/nr_mib_decode.o: demo/nr_mib_decode.c.o
+.PHONY : demo/nr_mib_decode.o
+
+# target to build an object file
+demo/nr_mib_decode.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/demo/nr_mib_decode.c.o
+.PHONY : demo/nr_mib_decode.c.o
+
+demo/nr_mib_decode.i: demo/nr_mib_decode.c.i
+.PHONY : demo/nr_mib_decode.i
+
+# target to preprocess a source file
+demo/nr_mib_decode.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/demo/nr_mib_decode.c.i
+.PHONY : demo/nr_mib_decode.c.i
+
+demo/nr_mib_decode.s: demo/nr_mib_decode.c.s
+.PHONY : demo/nr_mib_decode.s
+
+# target to generate assembly for a file
+demo/nr_mib_decode.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/demo/nr_mib_decode.c.s
+.PHONY : demo/nr_mib_decode.c.s
+
+demo/nr_pbch_dmrs_probe.o: demo/nr_pbch_dmrs_probe.c.o
+.PHONY : demo/nr_pbch_dmrs_probe.o
+
+# target to build an object file
+demo/nr_pbch_dmrs_probe.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_pbch_dmrs_probe.dir/build.make CMakeFiles/nr_pbch_dmrs_probe.dir/demo/nr_pbch_dmrs_probe.c.o
+.PHONY : demo/nr_pbch_dmrs_probe.c.o
+
+demo/nr_pbch_dmrs_probe.i: demo/nr_pbch_dmrs_probe.c.i
+.PHONY : demo/nr_pbch_dmrs_probe.i
+
+# target to preprocess a source file
+demo/nr_pbch_dmrs_probe.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_pbch_dmrs_probe.dir/build.make CMakeFiles/nr_pbch_dmrs_probe.dir/demo/nr_pbch_dmrs_probe.c.i
+.PHONY : demo/nr_pbch_dmrs_probe.c.i
+
+demo/nr_pbch_dmrs_probe.s: demo/nr_pbch_dmrs_probe.c.s
+.PHONY : demo/nr_pbch_dmrs_probe.s
+
+# target to generate assembly for a file
+demo/nr_pbch_dmrs_probe.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_pbch_dmrs_probe.dir/build.make CMakeFiles/nr_pbch_dmrs_probe.dir/demo/nr_pbch_dmrs_probe.c.s
+.PHONY : demo/nr_pbch_dmrs_probe.c.s
+
+demo/nr_ssb_scan.o: demo/nr_ssb_scan.c.o
+.PHONY : demo/nr_ssb_scan.o
+
+# target to build an object file
+demo/nr_ssb_scan.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/demo/nr_ssb_scan.c.o
+.PHONY : demo/nr_ssb_scan.c.o
+
+demo/nr_ssb_scan.i: demo/nr_ssb_scan.c.i
+.PHONY : demo/nr_ssb_scan.i
+
+# target to preprocess a source file
+demo/nr_ssb_scan.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/demo/nr_ssb_scan.c.i
+.PHONY : demo/nr_ssb_scan.c.i
+
+demo/nr_ssb_scan.s: demo/nr_ssb_scan.c.s
+.PHONY : demo/nr_ssb_scan.s
+
+# target to generate assembly for a file
+demo/nr_ssb_scan.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/demo/nr_ssb_scan.c.s
+.PHONY : demo/nr_ssb_scan.c.s
 
 demo/record_lime_iq.o: demo/record_lime_iq.c.o
 .PHONY : demo/record_lime_iq.o
@@ -323,6 +447,9 @@ src/common/log.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/log.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/common/log.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/log.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/src/common/log.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_pbch_dmrs_probe.dir/build.make CMakeFiles/nr_pbch_dmrs_probe.dir/src/common/log.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/src/common/log.c.o
 .PHONY : src/common/log.c.o
 
 src/common/log.i: src/common/log.c.i
@@ -334,6 +461,9 @@ src/common/log.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/log.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/common/log.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/log.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/src/common/log.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_pbch_dmrs_probe.dir/build.make CMakeFiles/nr_pbch_dmrs_probe.dir/src/common/log.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/src/common/log.c.i
 .PHONY : src/common/log.c.i
 
 src/common/log.s: src/common/log.c.s
@@ -345,6 +475,9 @@ src/common/log.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/log.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/common/log.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/log.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/src/common/log.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_pbch_dmrs_probe.dir/build.make CMakeFiles/nr_pbch_dmrs_probe.dir/src/common/log.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/src/common/log.c.s
 .PHONY : src/common/log.c.s
 
 src/common/ring_buffer.o: src/common/ring_buffer.c.o
@@ -370,6 +503,222 @@ src/common/ring_buffer.s: src/common/ring_buffer.c.s
 src/common/ring_buffer.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/ring_buffer.c.s
 .PHONY : src/common/ring_buffer.c.s
+
+src/nr/mib.o: src/nr/mib.c.o
+.PHONY : src/nr/mib.o
+
+# target to build an object file
+src/nr/mib.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/mib.c.o
+.PHONY : src/nr/mib.c.o
+
+src/nr/mib.i: src/nr/mib.c.i
+.PHONY : src/nr/mib.i
+
+# target to preprocess a source file
+src/nr/mib.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/mib.c.i
+.PHONY : src/nr/mib.c.i
+
+src/nr/mib.s: src/nr/mib.c.s
+.PHONY : src/nr/mib.s
+
+# target to generate assembly for a file
+src/nr/mib.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/mib.c.s
+.PHONY : src/nr/mib.c.s
+
+src/nr/nr_fft.o: src/nr/nr_fft.c.o
+.PHONY : src/nr/nr_fft.o
+
+# target to build an object file
+src/nr/nr_fft.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_fft.c.o
+.PHONY : src/nr/nr_fft.c.o
+
+src/nr/nr_fft.i: src/nr/nr_fft.c.i
+.PHONY : src/nr/nr_fft.i
+
+# target to preprocess a source file
+src/nr/nr_fft.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_fft.c.i
+.PHONY : src/nr/nr_fft.c.i
+
+src/nr/nr_fft.s: src/nr/nr_fft.c.s
+.PHONY : src/nr/nr_fft.s
+
+# target to generate assembly for a file
+src/nr/nr_fft.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_fft.c.s
+.PHONY : src/nr/nr_fft.c.s
+
+src/nr/nr_grid.o: src/nr/nr_grid.c.o
+.PHONY : src/nr/nr_grid.o
+
+# target to build an object file
+src/nr/nr_grid.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_grid.c.o
+.PHONY : src/nr/nr_grid.c.o
+
+src/nr/nr_grid.i: src/nr/nr_grid.c.i
+.PHONY : src/nr/nr_grid.i
+
+# target to preprocess a source file
+src/nr/nr_grid.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_grid.c.i
+.PHONY : src/nr/nr_grid.c.i
+
+src/nr/nr_grid.s: src/nr/nr_grid.c.s
+.PHONY : src/nr/nr_grid.s
+
+# target to generate assembly for a file
+src/nr/nr_grid.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_grid.c.s
+.PHONY : src/nr/nr_grid.c.s
+
+src/nr/nr_sequence.o: src/nr/nr_sequence.c.o
+.PHONY : src/nr/nr_sequence.o
+
+# target to build an object file
+src/nr/nr_sequence.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.o
+.PHONY : src/nr/nr_sequence.c.o
+
+src/nr/nr_sequence.i: src/nr/nr_sequence.c.i
+.PHONY : src/nr/nr_sequence.i
+
+# target to preprocess a source file
+src/nr/nr_sequence.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.i
+.PHONY : src/nr/nr_sequence.c.i
+
+src/nr/nr_sequence.s: src/nr/nr_sequence.c.s
+.PHONY : src/nr/nr_sequence.s
+
+# target to generate assembly for a file
+src/nr/nr_sequence.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.s
+.PHONY : src/nr/nr_sequence.c.s
+
+src/nr/pbch_decode.o: src/nr/pbch_decode.c.o
+.PHONY : src/nr/pbch_decode.o
+
+# target to build an object file
+src/nr/pbch_decode.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.o
+.PHONY : src/nr/pbch_decode.c.o
+
+src/nr/pbch_decode.i: src/nr/pbch_decode.c.i
+.PHONY : src/nr/pbch_decode.i
+
+# target to preprocess a source file
+src/nr/pbch_decode.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.i
+.PHONY : src/nr/pbch_decode.c.i
+
+src/nr/pbch_decode.s: src/nr/pbch_decode.c.s
+.PHONY : src/nr/pbch_decode.s
+
+# target to generate assembly for a file
+src/nr/pbch_decode.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.s
+.PHONY : src/nr/pbch_decode.c.s
+
+src/nr/pbch_dmrs.o: src/nr/pbch_dmrs.c.o
+.PHONY : src/nr/pbch_dmrs.o
+
+# target to build an object file
+src/nr/pbch_dmrs.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.o
+.PHONY : src/nr/pbch_dmrs.c.o
+
+src/nr/pbch_dmrs.i: src/nr/pbch_dmrs.c.i
+.PHONY : src/nr/pbch_dmrs.i
+
+# target to preprocess a source file
+src/nr/pbch_dmrs.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.i
+.PHONY : src/nr/pbch_dmrs.c.i
+
+src/nr/pbch_dmrs.s: src/nr/pbch_dmrs.c.s
+.PHONY : src/nr/pbch_dmrs.s
+
+# target to generate assembly for a file
+src/nr/pbch_dmrs.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.s
+.PHONY : src/nr/pbch_dmrs.c.s
+
+src/nr/pbch_re.o: src/nr/pbch_re.c.o
+.PHONY : src/nr/pbch_re.o
+
+# target to build an object file
+src/nr/pbch_re.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_re.c.o
+.PHONY : src/nr/pbch_re.c.o
+
+src/nr/pbch_re.i: src/nr/pbch_re.c.i
+.PHONY : src/nr/pbch_re.i
+
+# target to preprocess a source file
+src/nr/pbch_re.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_re.c.i
+.PHONY : src/nr/pbch_re.c.i
+
+src/nr/pbch_re.s: src/nr/pbch_re.c.s
+.PHONY : src/nr/pbch_re.s
+
+# target to generate assembly for a file
+src/nr/pbch_re.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_re.c.s
+.PHONY : src/nr/pbch_re.c.s
+
+src/nr/polar.o: src/nr/polar.c.o
+.PHONY : src/nr/polar.o
+
+# target to build an object file
+src/nr/polar.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/polar.c.o
+.PHONY : src/nr/polar.c.o
+
+src/nr/polar.i: src/nr/polar.c.i
+.PHONY : src/nr/polar.i
+
+# target to preprocess a source file
+src/nr/polar.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/polar.c.i
+.PHONY : src/nr/polar.c.i
+
+src/nr/polar.s: src/nr/polar.c.s
+.PHONY : src/nr/polar.s
+
+# target to generate assembly for a file
+src/nr/polar.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/polar.c.s
+.PHONY : src/nr/polar.c.s
+
+src/nr/ssb_sync.o: src/nr/ssb_sync.c.o
+.PHONY : src/nr/ssb_sync.o
+
+# target to build an object file
+src/nr/ssb_sync.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.o
+.PHONY : src/nr/ssb_sync.c.o
+
+src/nr/ssb_sync.i: src/nr/ssb_sync.c.i
+.PHONY : src/nr/ssb_sync.i
+
+# target to preprocess a source file
+src/nr/ssb_sync.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.i
+.PHONY : src/nr/ssb_sync.c.i
+
+src/nr/ssb_sync.s: src/nr/ssb_sync.c.s
+.PHONY : src/nr/ssb_sync.s
+
+# target to generate assembly for a file
+src/nr/ssb_sync.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.s
+.PHONY : src/nr/ssb_sync.c.s
 
 src/radio/radio_factory.o: src/radio/radio_factory.c.o
 .PHONY : src/radio/radio_factory.o
@@ -589,12 +938,25 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... nr_core"
+	@echo "... nr_mib_decode"
+	@echo "... nr_pbch_dmrs_probe"
+	@echo "... nr_ssb_scan"
 	@echo "... record_lime_iq"
 	@echo "... test_lime_rx"
 	@echo "... test_radio_lifecycle"
 	@echo "... toa_core"
 	@echo "... toa_prs_offline"
 	@echo "... toa_run_realtime"
+	@echo "... demo/nr_mib_decode.o"
+	@echo "... demo/nr_mib_decode.i"
+	@echo "... demo/nr_mib_decode.s"
+	@echo "... demo/nr_pbch_dmrs_probe.o"
+	@echo "... demo/nr_pbch_dmrs_probe.i"
+	@echo "... demo/nr_pbch_dmrs_probe.s"
+	@echo "... demo/nr_ssb_scan.o"
+	@echo "... demo/nr_ssb_scan.i"
+	@echo "... demo/nr_ssb_scan.s"
 	@echo "... demo/record_lime_iq.o"
 	@echo "... demo/record_lime_iq.i"
 	@echo "... demo/record_lime_iq.s"
@@ -616,6 +978,33 @@ help:
 	@echo "... src/common/ring_buffer.o"
 	@echo "... src/common/ring_buffer.i"
 	@echo "... src/common/ring_buffer.s"
+	@echo "... src/nr/mib.o"
+	@echo "... src/nr/mib.i"
+	@echo "... src/nr/mib.s"
+	@echo "... src/nr/nr_fft.o"
+	@echo "... src/nr/nr_fft.i"
+	@echo "... src/nr/nr_fft.s"
+	@echo "... src/nr/nr_grid.o"
+	@echo "... src/nr/nr_grid.i"
+	@echo "... src/nr/nr_grid.s"
+	@echo "... src/nr/nr_sequence.o"
+	@echo "... src/nr/nr_sequence.i"
+	@echo "... src/nr/nr_sequence.s"
+	@echo "... src/nr/pbch_decode.o"
+	@echo "... src/nr/pbch_decode.i"
+	@echo "... src/nr/pbch_decode.s"
+	@echo "... src/nr/pbch_dmrs.o"
+	@echo "... src/nr/pbch_dmrs.i"
+	@echo "... src/nr/pbch_dmrs.s"
+	@echo "... src/nr/pbch_re.o"
+	@echo "... src/nr/pbch_re.i"
+	@echo "... src/nr/pbch_re.s"
+	@echo "... src/nr/polar.o"
+	@echo "... src/nr/polar.i"
+	@echo "... src/nr/polar.s"
+	@echo "... src/nr/ssb_sync.o"
+	@echo "... src/nr/ssb_sync.i"
+	@echo "... src/nr/ssb_sync.s"
 	@echo "... src/radio/radio_factory.o"
 	@echo "... src/radio/radio_factory.i"
 	@echo "... src/radio/radio_factory.s"
