@@ -7,13 +7,14 @@
 
 int main(void)
 {
-  radio_device_t device;
-  radio_channel_config_t rx_cfg;
-  radio_stream_config_t rx_stream_cfg;
-  radio_rx_result_t rx_result;
-  iq_recorder_t recorder;
+  //定义一些结构体
+  radio_device_t device;//设备相关的结构体
+  radio_channel_config_t rx_cfg;//信道相关的参数
+  radio_stream_config_t rx_stream_cfg;//接受流控制相关参数
+  radio_rx_result_t rx_result;//接受结果标志（并非存储）
+  iq_recorder_t recorder;//结果记录结构体
 
-  cf32_t *rx_buffer = NULL;
+  cf32_t *rx_buffer = NULL;//存储缓存
   void *buffs[1];
 
   int ret;
