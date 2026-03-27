@@ -142,6 +142,58 @@ record_lime_iq/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/build
 .PHONY : record_lime_iq/fast
 
+#=============================================================================
+# Target rules for targets named test_radio_lifecycle
+
+# Build rule for target.
+test_radio_lifecycle: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_radio_lifecycle
+.PHONY : test_radio_lifecycle
+
+# fast build rule for target.
+test_radio_lifecycle/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/build
+.PHONY : test_radio_lifecycle/fast
+
+#=============================================================================
+# Target rules for targets named toa_core
+
+# Build rule for target.
+toa_core: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 toa_core
+.PHONY : toa_core
+
+# fast build rule for target.
+toa_core/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/build
+.PHONY : toa_core/fast
+
+#=============================================================================
+# Target rules for targets named toa_prs_offline
+
+# Build rule for target.
+toa_prs_offline: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 toa_prs_offline
+.PHONY : toa_prs_offline
+
+# fast build rule for target.
+toa_prs_offline/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/build
+.PHONY : toa_prs_offline/fast
+
+#=============================================================================
+# Target rules for targets named toa_run_realtime
+
+# Build rule for target.
+toa_run_realtime: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 toa_run_realtime
+.PHONY : toa_run_realtime
+
+# fast build rule for target.
+toa_run_realtime/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/build
+.PHONY : toa_run_realtime/fast
+
 demo/record_lime_iq.o: demo/record_lime_iq.c.o
 .PHONY : demo/record_lime_iq.o
 
@@ -190,6 +242,135 @@ demo/test_lime_rx.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/demo/test_lime_rx.c.s
 .PHONY : demo/test_lime_rx.c.s
 
+demo/test_radio_lifecycle.o: demo/test_radio_lifecycle.c.o
+.PHONY : demo/test_radio_lifecycle.o
+
+# target to build an object file
+demo/test_radio_lifecycle.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/demo/test_radio_lifecycle.c.o
+.PHONY : demo/test_radio_lifecycle.c.o
+
+demo/test_radio_lifecycle.i: demo/test_radio_lifecycle.c.i
+.PHONY : demo/test_radio_lifecycle.i
+
+# target to preprocess a source file
+demo/test_radio_lifecycle.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/demo/test_radio_lifecycle.c.i
+.PHONY : demo/test_radio_lifecycle.c.i
+
+demo/test_radio_lifecycle.s: demo/test_radio_lifecycle.c.s
+.PHONY : demo/test_radio_lifecycle.s
+
+# target to generate assembly for a file
+demo/test_radio_lifecycle.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/demo/test_radio_lifecycle.c.s
+.PHONY : demo/test_radio_lifecycle.c.s
+
+demo/toa_prs_offline.o: demo/toa_prs_offline.c.o
+.PHONY : demo/toa_prs_offline.o
+
+# target to build an object file
+demo/toa_prs_offline.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/demo/toa_prs_offline.c.o
+.PHONY : demo/toa_prs_offline.c.o
+
+demo/toa_prs_offline.i: demo/toa_prs_offline.c.i
+.PHONY : demo/toa_prs_offline.i
+
+# target to preprocess a source file
+demo/toa_prs_offline.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/demo/toa_prs_offline.c.i
+.PHONY : demo/toa_prs_offline.c.i
+
+demo/toa_prs_offline.s: demo/toa_prs_offline.c.s
+.PHONY : demo/toa_prs_offline.s
+
+# target to generate assembly for a file
+demo/toa_prs_offline.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/demo/toa_prs_offline.c.s
+.PHONY : demo/toa_prs_offline.c.s
+
+demo/toa_run_realtime.o: demo/toa_run_realtime.c.o
+.PHONY : demo/toa_run_realtime.o
+
+# target to build an object file
+demo/toa_run_realtime.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/demo/toa_run_realtime.c.o
+.PHONY : demo/toa_run_realtime.c.o
+
+demo/toa_run_realtime.i: demo/toa_run_realtime.c.i
+.PHONY : demo/toa_run_realtime.i
+
+# target to preprocess a source file
+demo/toa_run_realtime.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/demo/toa_run_realtime.c.i
+.PHONY : demo/toa_run_realtime.c.i
+
+demo/toa_run_realtime.s: demo/toa_run_realtime.c.s
+.PHONY : demo/toa_run_realtime.s
+
+# target to generate assembly for a file
+demo/toa_run_realtime.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/demo/toa_run_realtime.c.s
+.PHONY : demo/toa_run_realtime.c.s
+
+src/common/log.o: src/common/log.c.o
+.PHONY : src/common/log.o
+
+# target to build an object file
+src/common/log.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/common/log.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/log.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/common/log.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/log.c.o
+.PHONY : src/common/log.c.o
+
+src/common/log.i: src/common/log.c.i
+.PHONY : src/common/log.i
+
+# target to preprocess a source file
+src/common/log.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/common/log.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/log.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/common/log.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/log.c.i
+.PHONY : src/common/log.c.i
+
+src/common/log.s: src/common/log.c.s
+.PHONY : src/common/log.s
+
+# target to generate assembly for a file
+src/common/log.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/common/log.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/log.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/common/log.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/log.c.s
+.PHONY : src/common/log.c.s
+
+src/common/ring_buffer.o: src/common/ring_buffer.c.o
+.PHONY : src/common/ring_buffer.o
+
+# target to build an object file
+src/common/ring_buffer.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/ring_buffer.c.o
+.PHONY : src/common/ring_buffer.c.o
+
+src/common/ring_buffer.i: src/common/ring_buffer.c.i
+.PHONY : src/common/ring_buffer.i
+
+# target to preprocess a source file
+src/common/ring_buffer.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/ring_buffer.c.i
+.PHONY : src/common/ring_buffer.c.i
+
+src/common/ring_buffer.s: src/common/ring_buffer.c.s
+.PHONY : src/common/ring_buffer.s
+
+# target to generate assembly for a file
+src/common/ring_buffer.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/ring_buffer.c.s
+.PHONY : src/common/ring_buffer.c.s
+
 src/radio/radio_factory.o: src/radio/radio_factory.c.o
 .PHONY : src/radio/radio_factory.o
 
@@ -197,6 +378,8 @@ src/radio/radio_factory.o: src/radio/radio_factory.c.o
 src/radio/radio_factory.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/radio/radio_factory.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_factory.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_factory.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_factory.c.o
 .PHONY : src/radio/radio_factory.c.o
 
 src/radio/radio_factory.i: src/radio/radio_factory.c.i
@@ -206,6 +389,8 @@ src/radio/radio_factory.i: src/radio/radio_factory.c.i
 src/radio/radio_factory.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/radio/radio_factory.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_factory.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_factory.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_factory.c.i
 .PHONY : src/radio/radio_factory.c.i
 
 src/radio/radio_factory.s: src/radio/radio_factory.c.s
@@ -215,6 +400,8 @@ src/radio/radio_factory.s: src/radio/radio_factory.c.s
 src/radio/radio_factory.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/radio/radio_factory.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_factory.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_factory.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_factory.c.s
 .PHONY : src/radio/radio_factory.c.s
 
 src/radio/radio_lime.o: src/radio/radio_lime.c.o
@@ -224,6 +411,8 @@ src/radio/radio_lime.o: src/radio/radio_lime.c.o
 src/radio/radio_lime.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/radio/radio_lime.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_lime.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_lime.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_lime.c.o
 .PHONY : src/radio/radio_lime.c.o
 
 src/radio/radio_lime.i: src/radio/radio_lime.c.i
@@ -233,6 +422,8 @@ src/radio/radio_lime.i: src/radio/radio_lime.c.i
 src/radio/radio_lime.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/radio/radio_lime.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_lime.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_lime.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_lime.c.i
 .PHONY : src/radio/radio_lime.c.i
 
 src/radio/radio_lime.s: src/radio/radio_lime.c.s
@@ -242,6 +433,8 @@ src/radio/radio_lime.s: src/radio/radio_lime.c.s
 src/radio/radio_lime.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/radio/radio_lime.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_lime.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_lime.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_lime.c.s
 .PHONY : src/radio/radio_lime.c.s
 
 src/recorder/iq_recorder.o: src/recorder/iq_recorder.c.o
@@ -268,6 +461,126 @@ src/recorder/iq_recorder.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/recorder/iq_recorder.c.s
 .PHONY : src/recorder/iq_recorder.c.s
 
+src/toa/prs_detector.o: src/toa/prs_detector.c.o
+.PHONY : src/toa/prs_detector.o
+
+# target to build an object file
+src/toa/prs_detector.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/prs_detector.c.o
+.PHONY : src/toa/prs_detector.c.o
+
+src/toa/prs_detector.i: src/toa/prs_detector.c.i
+.PHONY : src/toa/prs_detector.i
+
+# target to preprocess a source file
+src/toa/prs_detector.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/prs_detector.c.i
+.PHONY : src/toa/prs_detector.c.i
+
+src/toa/prs_detector.s: src/toa/prs_detector.c.s
+.PHONY : src/toa/prs_detector.s
+
+# target to generate assembly for a file
+src/toa/prs_detector.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/prs_detector.c.s
+.PHONY : src/toa/prs_detector.c.s
+
+src/toa/toa_context.o: src/toa/toa_context.c.o
+.PHONY : src/toa/toa_context.o
+
+# target to build an object file
+src/toa/toa_context.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_context.c.o
+.PHONY : src/toa/toa_context.c.o
+
+src/toa/toa_context.i: src/toa/toa_context.c.i
+.PHONY : src/toa/toa_context.i
+
+# target to preprocess a source file
+src/toa/toa_context.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_context.c.i
+.PHONY : src/toa/toa_context.c.i
+
+src/toa/toa_context.s: src/toa/toa_context.c.s
+.PHONY : src/toa/toa_context.s
+
+# target to generate assembly for a file
+src/toa/toa_context.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_context.c.s
+.PHONY : src/toa/toa_context.c.s
+
+src/toa/toa_estimator.o: src/toa/toa_estimator.c.o
+.PHONY : src/toa/toa_estimator.o
+
+# target to build an object file
+src/toa/toa_estimator.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_estimator.c.o
+.PHONY : src/toa/toa_estimator.c.o
+
+src/toa/toa_estimator.i: src/toa/toa_estimator.c.i
+.PHONY : src/toa/toa_estimator.i
+
+# target to preprocess a source file
+src/toa/toa_estimator.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_estimator.c.i
+.PHONY : src/toa/toa_estimator.c.i
+
+src/toa/toa_estimator.s: src/toa/toa_estimator.c.s
+.PHONY : src/toa/toa_estimator.s
+
+# target to generate assembly for a file
+src/toa/toa_estimator.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_estimator.c.s
+.PHONY : src/toa/toa_estimator.c.s
+
+src/toa/toa_pipeline.o: src/toa/toa_pipeline.c.o
+.PHONY : src/toa/toa_pipeline.o
+
+# target to build an object file
+src/toa/toa_pipeline.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_pipeline.c.o
+.PHONY : src/toa/toa_pipeline.c.o
+
+src/toa/toa_pipeline.i: src/toa/toa_pipeline.c.i
+.PHONY : src/toa/toa_pipeline.i
+
+# target to preprocess a source file
+src/toa/toa_pipeline.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_pipeline.c.i
+.PHONY : src/toa/toa_pipeline.c.i
+
+src/toa/toa_pipeline.s: src/toa/toa_pipeline.c.s
+.PHONY : src/toa/toa_pipeline.s
+
+# target to generate assembly for a file
+src/toa/toa_pipeline.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_pipeline.c.s
+.PHONY : src/toa/toa_pipeline.c.s
+
+src/toa/toa_solver_wls.o: src/toa/toa_solver_wls.c.o
+.PHONY : src/toa/toa_solver_wls.o
+
+# target to build an object file
+src/toa/toa_solver_wls.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_solver_wls.c.o
+.PHONY : src/toa/toa_solver_wls.c.o
+
+src/toa/toa_solver_wls.i: src/toa/toa_solver_wls.c.i
+.PHONY : src/toa/toa_solver_wls.i
+
+# target to preprocess a source file
+src/toa/toa_solver_wls.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_solver_wls.c.i
+.PHONY : src/toa/toa_solver_wls.c.i
+
+src/toa/toa_solver_wls.s: src/toa/toa_solver_wls.c.s
+.PHONY : src/toa/toa_solver_wls.s
+
+# target to generate assembly for a file
+src/toa/toa_solver_wls.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_solver_wls.c.s
+.PHONY : src/toa/toa_solver_wls.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -278,12 +591,31 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... record_lime_iq"
 	@echo "... test_lime_rx"
+	@echo "... test_radio_lifecycle"
+	@echo "... toa_core"
+	@echo "... toa_prs_offline"
+	@echo "... toa_run_realtime"
 	@echo "... demo/record_lime_iq.o"
 	@echo "... demo/record_lime_iq.i"
 	@echo "... demo/record_lime_iq.s"
 	@echo "... demo/test_lime_rx.o"
 	@echo "... demo/test_lime_rx.i"
 	@echo "... demo/test_lime_rx.s"
+	@echo "... demo/test_radio_lifecycle.o"
+	@echo "... demo/test_radio_lifecycle.i"
+	@echo "... demo/test_radio_lifecycle.s"
+	@echo "... demo/toa_prs_offline.o"
+	@echo "... demo/toa_prs_offline.i"
+	@echo "... demo/toa_prs_offline.s"
+	@echo "... demo/toa_run_realtime.o"
+	@echo "... demo/toa_run_realtime.i"
+	@echo "... demo/toa_run_realtime.s"
+	@echo "... src/common/log.o"
+	@echo "... src/common/log.i"
+	@echo "... src/common/log.s"
+	@echo "... src/common/ring_buffer.o"
+	@echo "... src/common/ring_buffer.i"
+	@echo "... src/common/ring_buffer.s"
 	@echo "... src/radio/radio_factory.o"
 	@echo "... src/radio/radio_factory.i"
 	@echo "... src/radio/radio_factory.s"
@@ -293,6 +625,21 @@ help:
 	@echo "... src/recorder/iq_recorder.o"
 	@echo "... src/recorder/iq_recorder.i"
 	@echo "... src/recorder/iq_recorder.s"
+	@echo "... src/toa/prs_detector.o"
+	@echo "... src/toa/prs_detector.i"
+	@echo "... src/toa/prs_detector.s"
+	@echo "... src/toa/toa_context.o"
+	@echo "... src/toa/toa_context.i"
+	@echo "... src/toa/toa_context.s"
+	@echo "... src/toa/toa_estimator.o"
+	@echo "... src/toa/toa_estimator.i"
+	@echo "... src/toa/toa_estimator.s"
+	@echo "... src/toa/toa_pipeline.o"
+	@echo "... src/toa/toa_pipeline.i"
+	@echo "... src/toa/toa_pipeline.s"
+	@echo "... src/toa/toa_solver_wls.o"
+	@echo "... src/toa/toa_solver_wls.i"
+	@echo "... src/toa/toa_solver_wls.s"
 .PHONY : help
 
 

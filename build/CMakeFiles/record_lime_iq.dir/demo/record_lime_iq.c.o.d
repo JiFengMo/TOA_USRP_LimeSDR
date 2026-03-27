@@ -20,6 +20,8 @@ CMakeFiles/record_lime_iq.dir/demo/record_lime_iq.c.o: \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
+ /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/error.h \
+ /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/log.h \
  /home/jfm/桌面/TOA_USRP_LimeSDR/include/recorder/iq_recorder.h \
  /usr/include/stdio.h /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \

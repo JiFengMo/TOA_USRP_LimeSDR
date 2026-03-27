@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/toa_run_realtime.dir/demo/toa_run_realtime.c.o CMakeFiles/toa_run_realtime.dir/src/radio/radio_factory.c.o CMakeFiles/toa_run_realtime.dir/src/radio/radio_lime.c.o -o toa_run_realtime  libtoa_core.a -lm -lSoapySDR 

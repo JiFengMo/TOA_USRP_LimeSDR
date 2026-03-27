@@ -1,4 +1,8 @@
 /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles/test_lime_rx.dir
 /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles/record_lime_iq.dir
+/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles/test_radio_lifecycle.dir
+/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles/toa_core.dir
+/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles/toa_prs_offline.dir
+/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles/toa_run_realtime.dir
 /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles/edit_cache.dir
 /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles/rebuild_cache.dir

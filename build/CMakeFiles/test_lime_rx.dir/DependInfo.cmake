@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/jfm/桌面/TOA_USRP_LimeSDR/demo/test_lime_rx.c" "CMakeFiles/test_lime_rx.dir/demo/test_lime_rx.c.o" "gcc" "CMakeFiles/test_lime_rx.dir/demo/test_lime_rx.c.o.d"
+  "/home/jfm/桌面/TOA_USRP_LimeSDR/src/common/log.c" "CMakeFiles/test_lime_rx.dir/src/common/log.c.o" "gcc" "CMakeFiles/test_lime_rx.dir/src/common/log.c.o.d"
   "/home/jfm/桌面/TOA_USRP_LimeSDR/src/radio/radio_factory.c" "CMakeFiles/test_lime_rx.dir/src/radio/radio_factory.c.o" "gcc" "CMakeFiles/test_lime_rx.dir/src/radio/radio_factory.c.o.d"
   "/home/jfm/桌面/TOA_USRP_LimeSDR/src/radio/radio_lime.c" "CMakeFiles/test_lime_rx.dir/src/radio/radio_lime.c.o" "gcc" "CMakeFiles/test_lime_rx.dir/src/radio/radio_lime.c.o.d"
   )

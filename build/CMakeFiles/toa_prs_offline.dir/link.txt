@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/toa_prs_offline.dir/demo/toa_prs_offline.c.o -o toa_prs_offline  libtoa_core.a -lm 

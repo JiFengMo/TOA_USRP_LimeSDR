@@ -45,4 +45,8 @@ set(CMAKE_MAKEFILE_PRODUCTS
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/test_lime_rx.dir/DependInfo.cmake"
   "CMakeFiles/record_lime_iq.dir/DependInfo.cmake"
+  "CMakeFiles/test_radio_lifecycle.dir/DependInfo.cmake"
+  "CMakeFiles/toa_core.dir/DependInfo.cmake"
+  "CMakeFiles/toa_prs_offline.dir/DependInfo.cmake"
+  "CMakeFiles/toa_run_realtime.dir/DependInfo.cmake"
   )

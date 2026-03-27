@@ -1,6 +1,8 @@
 CMakeFiles/test_lime_rx.dir/demo/test_lime_rx.c.o: \
  /home/jfm/桌面/TOA_USRP_LimeSDR/demo/test_lime_rx.c \
  /usr/include/stdc-predef.h \
+ /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/error.h \
+ /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/log.h \
  /home/jfm/桌面/TOA_USRP_LimeSDR/include/radio/radio_factory.h \
  /home/jfm/桌面/TOA_USRP_LimeSDR/include/radio/radio_device.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h /usr/include/stdint.h \

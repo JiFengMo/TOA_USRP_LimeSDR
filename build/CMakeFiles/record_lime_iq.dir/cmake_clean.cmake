@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/record_lime_iq.dir/demo/record_lime_iq.c.o"
   "CMakeFiles/record_lime_iq.dir/demo/record_lime_iq.c.o.d"
+  "CMakeFiles/record_lime_iq.dir/src/common/log.c.o"
+  "CMakeFiles/record_lime_iq.dir/src/common/log.c.o.d"
   "CMakeFiles/record_lime_iq.dir/src/radio/radio_factory.c.o"
   "CMakeFiles/record_lime_iq.dir/src/radio/radio_factory.c.o.d"
   "CMakeFiles/record_lime_iq.dir/src/radio/radio_lime.c.o"
