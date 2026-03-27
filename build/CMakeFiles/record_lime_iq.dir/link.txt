@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/record_lime_iq.dir/demo/record_lime_iq.c.o CMakeFiles/record_lime_iq.dir/src/radio/radio_factory.c.o CMakeFiles/record_lime_iq.dir/src/radio/radio_lime.c.o CMakeFiles/record_lime_iq.dir/src/recorder/iq_recorder.c.o -o record_lime_iq  -lSoapySDR 
