@@ -9,6 +9,14 @@ int main(void)
   nr_iq_block_t blk;
   nr_sync_state_t sync;
   memset(&blk, 0, sizeof(blk));
+  blk.nsamps = 256;
+  c16_t buf[256];
+  memset(buf, 0, sizeof(buf));
+  for (int i = 64; i < 96; i++) {
+    buf[i].r = 12000;
+    buf[i].i = 0;
+  }
+  blk.rx[0] = buf;
   if (nr_ssb_pss_search(&blk, hits, 4) != 0) {
     return 1;
   }

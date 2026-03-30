@@ -1,0 +1,3 @@
+anchor_id,pci,ssb_index,x_m,y_m,z_m,absolute_time_valid,hw_cal_delay_ns
+0,42,0,0.0,0.0,3.0,1,0.0
+1,43,0,20.0,0.0,3.0,1,0.0

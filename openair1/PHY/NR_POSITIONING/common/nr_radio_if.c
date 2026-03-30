@@ -17,7 +17,17 @@ int nr_toa_radio_init(openair0_device_t **dev, openair0_config_t *cfg)
   } else {
     return -1;
   }
-  return *dev ? 0 : -1;
+  if (!*dev) {
+    return -1;
+  }
+
+  /* Important Phase-0 step: configure RF immediately after device creation. */
+  if ((*dev)->trx_config_func) {
+    if ((*dev)->trx_config_func(*dev, cfg) != 0) {
+      return -1;
+    }
+  }
+  return 0;
 }
 
 int nr_toa_radio_start(openair0_device_t *dev)
@@ -33,11 +43,25 @@ int nr_toa_radio_read(openair0_device_t *dev, nr_iq_block_t *blk)
   if (!dev || !blk || !dev->trx_read_func) {
     return -1;
   }
+
   void *buf[NR_TOA_MAX_RX_ANT] = {0};
+  uint8_t n_ant = blk->rx_ant ? blk->rx_ant : 1;
+  if (n_ant > NR_TOA_MAX_RX_ANT) {
+    n_ant = NR_TOA_MAX_RX_ANT;
+  }
+  for (int i = 0; i < (int)n_ant; i++) {
+    buf[i] = blk->rx[i];
+  }
+
   openair0_timestamp_t ts = 0;
+  /* Phase-0 skeleton: backends may ignore antenna, but we pass the buffers. */
   int ret = dev->trx_read_func(dev, &ts, buf, blk->nsamps, 0);
+  if (ret < 0) {
+    return -1;
+  }
   blk->ts_first = ts;
-  return ret;
+  blk->abs_samp0 = (uint64_t)ts;
+  return 0;
 }
 
 int nr_toa_radio_write(openair0_device_t *dev, const nr_iq_block_t *blk)
@@ -46,7 +70,11 @@ int nr_toa_radio_write(openair0_device_t *dev, const nr_iq_block_t *blk)
     return -1;
   }
   void *buf[NR_TOA_MAX_RX_ANT];
-  for (int i = 0; i < NR_TOA_MAX_RX_ANT; i++) {
+  uint8_t n_ant = blk->rx_ant ? blk->rx_ant : 1;
+  if (n_ant > NR_TOA_MAX_RX_ANT) {
+    n_ant = NR_TOA_MAX_RX_ANT;
+  }
+  for (int i = 0; i < (int)n_ant; i++) {
     buf[i] = blk->rx[i];
   }
   openair0_timestamp_t ts = blk->ts_first;

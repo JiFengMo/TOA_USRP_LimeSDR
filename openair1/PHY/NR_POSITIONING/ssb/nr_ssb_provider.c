@@ -1,4 +1,5 @@
 #include "openair1/PHY/NR_POSITIONING/nr_pos_provider_if.h"
+#include "openair1/PHY/NR_POSITIONING/nr_pos_api.h"
 
 static int ssb_init(void *ctx)
 {
@@ -6,34 +7,95 @@ static int ssb_init(void *ctx)
   return 0;
 }
 
-static int ssb_acquire(const nr_iq_block_t *blk, nr_sync_state_t *sync)
+static int ssb_acquire(void *ctx, const nr_iq_block_t *blk, nr_sync_state_t *sync)
 {
+  (void)ctx;
   if (!blk || !sync) {
     return -1;
+  }
+
+  nr_pss_hit_t hits[4];
+  if (nr_ssb_pss_search(blk, hits, 4) != 0) {
+    sync->locked = 0;
+    return -1;
+  }
+  if (nr_ssb_refine_sync(blk, &hits[0], sync) != 0) {
+    sync->locked = 0;
+    return -1;
+  }
+  /* PBCH decode is optional in V0 sniff mode. */
+  (void)nr_ssb_pbch_decode(blk, sync);
+  return 0;
+}
+
+static int ssb_track(void *ctx, const nr_iq_block_t *blk, nr_sync_state_t *sync)
+{
+  (void)ctx;
+  if (!blk || !sync) {
+    return -1;
+  }
+
+  if (nr_ssb_track_cfo(blk, sync) != 0) {
+    sync->locked = 0;
+    return -1;
+  }
+  int sample_shift = 0;
+  if (nr_ssb_track_timing(blk, sync, &sample_shift) != 0) {
+    sync->locked = 0;
+    return -1;
+  }
+  if (nr_ssb_check_lost_lock(sync) != 0) {
+    sync->locked = 0;
   }
   return 0;
 }
 
-static int ssb_track(const nr_iq_block_t *blk, nr_sync_state_t *sync)
-{
-  if (!blk || !sync) {
-    return -1;
-  }
-  return 0;
-}
-
-static int ssb_extract_meas(const nr_iq_block_t *blk,
+static int ssb_extract_meas(void *ctx, const nr_iq_block_t *blk,
                             const nr_sync_state_t *sync, nr_toa_meas_t *meas)
 {
+  (void)ctx;
   if (!blk || !sync || !meas) {
     return -1;
   }
+
+  nr_ssb_window_t win;
+  nr_ssb_grid_t grid;
+  nr_chest_t h;
+  nr_chest_full_t hf;
+  nr_cir_t cir;
+  int peak_idx = 0;
+  double frac = 0.0;
+
+  if (nr_ssb_extract_window(blk, sync, &win) != 0) {
+    return -1;
+  }
+  if (nr_ssb_demod(&win, &grid) != 0) {
+    return -1;
+  }
+  if (nr_ssb_ls_estimate(&grid, &h) != 0) {
+    return -1;
+  }
+  if (nr_ssb_interp_channel(&h, &hf) != 0) {
+    return -1;
+  }
+  if (nr_ssb_build_cir(&hf, &cir) != 0) {
+    return -1;
+  }
+  if (nr_toa_find_integer_peak(&cir, &peak_idx) != 0) {
+    return -1;
+  }
+  if (nr_toa_refine_fractional(&cir, peak_idx, &frac) != 0) {
+    return -1;
+  }
+  if (nr_toa_build_meas(sync, blk, peak_idx, frac, meas) != 0) {
+    return -1;
+  }
   return 0;
 }
 
-static int ssb_dump_trace(void *obj)
+static int ssb_dump_trace(void *ctx)
 {
-  (void)obj;
+  (void)ctx;
   return 0;
 }
 

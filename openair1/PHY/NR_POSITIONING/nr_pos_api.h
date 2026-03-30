@@ -2,14 +2,19 @@
 
 #include "openair1/PHY/NR_POSITIONING/nr_pos_types.h"
 #include "openair1/PHY/NR_POSITIONING/nr_pos_provider_if.h"
+#include "openair1/PHY/NR_POSITIONING/nr_toa_ue.h"
 #include "radio/COMMON/common_lib.h"
 
 /* Module: iq_ring */
 int nr_iq_ring_init(nr_iq_ring_t *rb, int depth);
 nr_iq_block_t *nr_iq_ring_alloc(nr_iq_ring_t *rb, uint32_t nsamps);
+nr_iq_block_t *nr_iq_ring_alloc_ex(nr_iq_ring_t *rb, uint32_t nsamps, uint8_t rx_ant);
 void nr_iq_ring_push(nr_iq_ring_t *rb, nr_iq_block_t *blk);
+void nr_iq_block_get(nr_iq_block_t *blk);
+void nr_iq_block_put(nr_iq_block_t *blk);
 nr_iq_block_t *nr_iq_ring_get_window(nr_iq_ring_t *rb, uint64_t abs_samp0,
                                      uint32_t len);
+void nr_iq_ring_free(nr_iq_ring_t *rb);
 
 /* Module: epoch_mgr */
 int nr_epoch_mgr_push(nr_epoch_mgr_t *mgr, const nr_toa_meas_t *meas);
@@ -51,12 +56,14 @@ int nr_ssb_plan_next_epoch(nr_ssb_tx_plan_t *plan, uint64_t epoch_id);
 /* ssb_beacon_gen */
 int nr_ssb_gen_ref(uint16_t pci, uint8_t ssb_idx, nr_ssb_ref_t *ref);
 int nr_ssb_build_grid(const nr_ssb_ref_t *ref, nr_ssb_grid_t *grid);
-int nr_ssb_ofdm_mod(const nr_ssb_grid_t *grid, c16_t *txbuf, uint32_t *nsamps);
+int nr_ssb_ofdm_mod(const nr_ssb_grid_t *grid, nr_tx_burst_t *burst);
 
 /* anchor_write */
 int nr_anchor_write_burst(openair0_device_t *dev,
-                          const nr_ssb_tx_plan_t *plan, c16_t **txbuf);
+                          const nr_ssb_tx_plan_t *plan,
+                          const nr_tx_burst_t *burst);
 int nr_anchor_log_tx_event(const nr_ssb_tx_plan_t *plan);
+openair0_timestamp_t nr_toa_get_last_tx_timestamp(void);
 
 /* sync_actor */
 int nr_ssb_pss_search(const nr_iq_block_t *blk, nr_pss_hit_t *hits, int max_hits);
@@ -91,10 +98,10 @@ int nr_meas_assoc_anchor(const nr_toa_meas_t *meas, const nr_anchor_desc_t *db,
                          int n);
 
 /* TOA UE orchestration */
-int nr_toa_clock_ready(void *ue);
-int nr_toa_read_two_frames(void *ue, nr_iq_ring_t *ring);
-int nr_toa_read_one_slot(void *ue, nr_iq_ring_t *ring);
-void nr_toa_enqueue_sync_job(void *ue);
-void nr_toa_enqueue_measure_job(void *ue);
-void nr_toa_reset_tracking(void *ue);
+int nr_toa_clock_ready(nr_toa_ue_t *ue);
+int nr_toa_read_two_frames(nr_toa_ue_t *ue, nr_iq_ring_t *ring);
+int nr_toa_read_one_slot(nr_toa_ue_t *ue, nr_iq_ring_t *ring);
+int nr_toa_enqueue_sync_job(nr_toa_ue_t *ue, nr_iq_block_t *blk);
+int nr_toa_enqueue_measure_job(nr_toa_ue_t *ue, nr_iq_block_t *blk);
+void nr_toa_reset_tracking(nr_toa_ue_t *ue);
 int nr_slot_contains_ssb(const nr_sync_state_t *sync);

@@ -8,7 +8,10 @@ int nr_ssb_build_tx_plan(const nr_toa_app_cfg_t *cfg, nr_ssb_tx_plan_t *plan)
     return -1;
   }
   memset(plan, 0, sizeof(*plan));
-  plan->period_ms = 20;
+  plan->anchor_id = 0;
+  plan->pci = 0;
+  plan->ssb_index = 0;
+  plan->period_ms = cfg->ssb_period_ms ? cfg->ssb_period_ms : 20;
   return 0;
 }
 

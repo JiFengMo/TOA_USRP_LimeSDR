@@ -27,9 +27,9 @@ typedef struct openair0_config {
   double rx_freq_hz;
   double tx_gain_db;
   double rx_gain_db;
-  char *sdr_addrs;
-  char *clock_source;
-  char *time_source;
+  const char *sdr_addrs;
+  const char *clock_source;
+  const char *time_source;
 } openair0_config_t;
 
 struct openair0_device;

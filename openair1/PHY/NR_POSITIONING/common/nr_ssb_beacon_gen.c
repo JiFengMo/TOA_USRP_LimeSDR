@@ -24,12 +24,17 @@ int nr_ssb_build_grid(const nr_ssb_ref_t *ref, nr_ssb_grid_t *grid)
   return 0;
 }
 
-int nr_ssb_ofdm_mod(const nr_ssb_grid_t *grid, c16_t *txbuf, uint32_t *nsamps)
+int nr_ssb_ofdm_mod(const nr_ssb_grid_t *grid, nr_tx_burst_t *burst)
 {
-  if (!grid || !txbuf || !nsamps) {
+  if (!grid || !burst || !burst->tx[0]) {
     return -1;
   }
-  *nsamps = 0;
   (void)grid;
+  burst->nsamps = 4096;
+  burst->tx_ant = 1;
+  for (uint32_t i = 0; i < burst->nsamps; i++) {
+    burst->tx[0][i].r = (i % 16 == 0) ? 2047 : 0;
+    burst->tx[0][i].i = 0;
+  }
   return 0;
 }

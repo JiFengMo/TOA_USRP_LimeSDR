@@ -52,6 +52,13 @@ typedef struct {
 } nr_iq_block_t;
 
 typedef struct {
+  openair0_timestamp_t ts_first;
+  uint32_t nsamps;
+  uint8_t tx_ant;
+  c16_t *tx[NR_TOA_MAX_RX_ANT];
+} nr_tx_burst_t;
+
+typedef struct {
   uint8_t anchor_id;
   uint16_t pci;
   uint8_t ssb_index;
@@ -59,6 +66,7 @@ typedef struct {
   double y_m;
   double z_m;
   uint8_t absolute_time_valid;
+  double hw_cal_delay_ns; /* Frontend/cable chain fixed delay for absolute TOA. */
 } nr_anchor_desc_t;
 
 typedef struct {
@@ -122,12 +130,18 @@ typedef struct {
   uint32_t sfn;
   uint16_t slot;
 
+  /* Timestamps kept in sample-domain split (integer + fractional). */
+  openair0_timestamp_t tx_ts_int;
+  double tx_ts_frac;
   openair0_timestamp_t rx_ts_int;
   double rx_ts_frac;
-  double fs_hz;
 
+  /* TOA in sample-domain split; ns/range derived. */
+  int64_t toa_samp_int;
+  double toa_samp_frac;
+
+  double fs_hz; /* samples per second */
   double toa_ns;
-  double tx_epoch_ns;
   double range_m;
 
   float snr_db;
@@ -141,6 +155,22 @@ typedef struct {
   uint8_t num_meas;
   nr_toa_meas_t meas[NR_TOA_MAX_MEAS_PER_EP];
 } nr_toa_epoch_t;
+
+/* Phase-0 minimal job objects (used by actor threads). */
+typedef struct {
+  nr_iq_block_t *blk; /* job/actor reference (must be refcount-managed). */
+  nr_sync_state_t sync_out; /* filled by provider->acquire */
+} nr_sync_job_t;
+
+typedef struct {
+  nr_iq_block_t *blk; /* job/actor reference (must be refcount-managed). */
+  nr_sync_state_t sync_snapshot;
+  nr_toa_meas_t meas_out; /* filled by provider->extract_meas */
+} nr_meas_job_t;
+
+typedef struct {
+  nr_toa_meas_t meas;
+} nr_solver_job_t;
 
 typedef struct {
   uint64_t epoch_id;
@@ -173,6 +203,11 @@ typedef struct {
   char anchor_db_path[512];
   uint8_t trace_enable;
   uint8_t iq_dump_enable;
+
+  /* SSB scheduler / RF stream shaping */
+  uint32_t ssb_period_ms;
+  uint32_t rx_ant;
+  uint32_t tx_ant;
 } nr_toa_app_cfg_t;
 
 typedef struct {
@@ -185,9 +220,14 @@ typedef struct {
 } nr_ssb_tx_plan_t;
 
 typedef struct {
-  double ranges_m[NR_TOA_MAX_ANCHORS];
-  double weights[NR_TOA_MAX_ANCHORS];
-  uint8_t n_anchors;
+  uint8_t n_obs;
+  struct {
+    uint8_t anchor_id;
+    double x_m, y_m, z_m;
+    double range_m;
+    double weight;
+    uint8_t valid;
+  } obs[NR_TOA_MAX_ANCHORS];
 } nr_solver_input_t;
 
 typedef struct nr_iq_ring {
@@ -195,9 +235,19 @@ typedef struct nr_iq_ring {
   uint64_t abs_samp_base;
   uint32_t overrun_cnt;
   uint32_t underrun_cnt;
+
+  /* Simple SPSC ring (Phase-0): single producer pushes contiguous blocks,
+   * consumer uses get_window() to retrieve by abs_samp0.
+   */
+  nr_iq_block_t **blocks;
+  uint32_t head; /* oldest */
+  uint32_t tail; /* next write */
+  uint32_t count;
 } nr_iq_ring_t;
 
 typedef struct nr_epoch_mgr {
   uint64_t next_epoch_id;
   uint8_t pending;
+  uint32_t meas_count;
+  nr_toa_meas_t meas_buf[NR_TOA_MAX_MEAS_PER_EP];
 } nr_epoch_mgr_t;
