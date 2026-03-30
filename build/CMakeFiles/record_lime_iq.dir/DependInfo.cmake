@@ -9,10 +9,10 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/jfm/桌面/TOA_USRP_LimeSDR/demo/record_lime_iq.c" "CMakeFiles/record_lime_iq.dir/demo/record_lime_iq.c.o" "gcc" "CMakeFiles/record_lime_iq.dir/demo/record_lime_iq.c.o.d"
+  "/home/jfm/桌面/TOA_USRP_LimeSDR/src/common/cli.c" "CMakeFiles/record_lime_iq.dir/src/common/cli.c.o" "gcc" "CMakeFiles/record_lime_iq.dir/src/common/cli.c.o.d"
   "/home/jfm/桌面/TOA_USRP_LimeSDR/src/common/log.c" "CMakeFiles/record_lime_iq.dir/src/common/log.c.o" "gcc" "CMakeFiles/record_lime_iq.dir/src/common/log.c.o.d"
   "/home/jfm/桌面/TOA_USRP_LimeSDR/src/radio/radio_factory.c" "CMakeFiles/record_lime_iq.dir/src/radio/radio_factory.c.o" "gcc" "CMakeFiles/record_lime_iq.dir/src/radio/radio_factory.c.o.d"
   "/home/jfm/桌面/TOA_USRP_LimeSDR/src/radio/radio_lime.c" "CMakeFiles/record_lime_iq.dir/src/radio/radio_lime.c.o" "gcc" "CMakeFiles/record_lime_iq.dir/src/radio/radio_lime.c.o.d"
-  "/home/jfm/桌面/TOA_USRP_LimeSDR/src/recorder/iq_recorder.c" "CMakeFiles/record_lime_iq.dir/src/recorder/iq_recorder.c.o" "gcc" "CMakeFiles/record_lime_iq.dir/src/recorder/iq_recorder.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

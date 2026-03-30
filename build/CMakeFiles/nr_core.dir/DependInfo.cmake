@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/gscn.c" "CMakeFiles/nr_core.dir/src/nr/gscn.c.o" "gcc" "CMakeFiles/nr_core.dir/src/nr/gscn.c.o.d"
   "/home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/mib.c" "CMakeFiles/nr_core.dir/src/nr/mib.c.o" "gcc" "CMakeFiles/nr_core.dir/src/nr/mib.c.o.d"
   "/home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/nr_fft.c" "CMakeFiles/nr_core.dir/src/nr/nr_fft.c.o" "gcc" "CMakeFiles/nr_core.dir/src/nr/nr_fft.c.o.d"
   "/home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/nr_grid.c" "CMakeFiles/nr_core.dir/src/nr/nr_grid.c.o" "gcc" "CMakeFiles/nr_core.dir/src/nr/nr_grid.c.o.d"

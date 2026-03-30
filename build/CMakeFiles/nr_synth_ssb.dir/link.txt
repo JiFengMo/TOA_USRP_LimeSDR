@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/nr_synth_ssb.dir/demo/nr_synth_ssb.c.o -o nr_synth_ssb  libnr_core.a libtoa_io.a -lm 

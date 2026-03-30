@@ -4,22 +4,22 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include "radio/radio_device.h"
+#include "common/cf32.h"
 
-/* IQ 录制器 */
+/* IQ 褰曞埗鍣? */
 typedef struct {
-  FILE *fp;                  /* 文件指针 */
-  char filename[256];        /* 文件名 */
-  uint64_t total_samples;    /* 已保存样点数 */
+  FILE *fp;                  /* 鏂囦欢鎸囬拡 */
+  char filename[256];        /* 鏂囦欢鍚? */
+  uint64_t total_samples;    /* 宸蹭繚瀛樻牱鐐规暟 */
 } iq_recorder_t;
 
-/* 打开录制文件 */
+/* 鎵撳紑褰曞埗鏂囦欢 */
 int iq_recorder_open(iq_recorder_t *rec, const char *filename);
 
-/* 写入一段 cf32 IQ 数据 */
+/* 鍐欏叆涓�娈? cf32 IQ 鏁版嵁 */
 int iq_recorder_write_cf32(iq_recorder_t *rec, const cf32_t *buff, uint32_t nsamps);
 
-/* 关闭录制文件 */
+/* 鍏抽棴褰曞埗鏂囦欢 */
 void iq_recorder_close(iq_recorder_t *rec);
 
 #endif

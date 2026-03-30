@@ -1,0 +1,2 @@
+/usr/bin/ar qc libtoa_pipeline.a CMakeFiles/toa_pipeline.dir/src/pipeline/offline_runner.c.o
+/usr/bin/ranlib libtoa_pipeline.a

@@ -18,7 +18,6 @@ CMakeFiles/nr_core.dir/src/nr/nr_grid.c.o: \
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
- /home/jfm/桌面/TOA_USRP_LimeSDR/include/radio/radio_device.h \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
+ /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/cf32.h \
  /home/jfm/桌面/TOA_USRP_LimeSDR/include/nr/nr_fft.h \
  /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/error.h

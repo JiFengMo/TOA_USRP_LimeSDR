@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/toa_prs_offline.dir/demo/toa_prs_offline.c.o"
   "CMakeFiles/toa_prs_offline.dir/demo/toa_prs_offline.c.o.d"
+  "CMakeFiles/toa_prs_offline.dir/src/common/cli.c.o"
+  "CMakeFiles/toa_prs_offline.dir/src/common/cli.c.o.d"
   "toa_prs_offline"
   "toa_prs_offline.pdb"
 )

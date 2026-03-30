@@ -21,10 +21,9 @@ CMakeFiles/toa_core.dir/src/toa/toa_pipeline.c.o: \
  /home/jfm/桌面/TOA_USRP_LimeSDR/include/toa/prs_detector.h \
  /home/jfm/桌面/TOA_USRP_LimeSDR/include/toa/toa_context.h \
  /home/jfm/桌面/TOA_USRP_LimeSDR/include/toa/toa_types.h \
- /home/jfm/桌面/TOA_USRP_LimeSDR/include/radio/radio_device.h \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
+ /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/cf32.h \
  /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/error.h \
- /usr/include/string.h \
+ /usr/include/string.h /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h

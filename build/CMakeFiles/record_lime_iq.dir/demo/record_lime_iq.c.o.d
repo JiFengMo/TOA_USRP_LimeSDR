@@ -20,9 +20,12 @@ CMakeFiles/record_lime_iq.dir/demo/record_lime_iq.c.o: \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
+ /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/cf32.h \
+ /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/cli.h \
+ /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/demo_rx_defaults.h \
  /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/error.h \
  /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/log.h \
- /home/jfm/桌面/TOA_USRP_LimeSDR/include/recorder/iq_recorder.h \
+ /home/jfm/桌面/TOA_USRP_LimeSDR/include/io/capture_session.h \
  /usr/include/stdio.h /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
@@ -34,7 +37,9 @@ CMakeFiles/record_lime_iq.dir/demo/record_lime_iq.c.o: \
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
  /usr/include/x86_64-linux-gnu/bits/floatn.h \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
- /home/jfm/桌面/TOA_USRP_LimeSDR/include/radio/radio_device.h \
+ /home/jfm/桌面/TOA_USRP_LimeSDR/include/io/iq_meta.h \
+ /home/jfm/桌面/TOA_USRP_LimeSDR/include/recorder/iq_recorder.h \
+ /home/jfm/桌面/TOA_USRP_LimeSDR/include/nr/gscn.h \
  /usr/include/stdlib.h /usr/include/x86_64-linux-gnu/bits/waitflags.h \
  /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
  /usr/include/x86_64-linux-gnu/sys/types.h \

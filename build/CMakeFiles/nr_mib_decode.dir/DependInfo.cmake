@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/jfm/桌面/TOA_USRP_LimeSDR/demo/nr_mib_decode.c" "CMakeFiles/nr_mib_decode.dir/demo/nr_mib_decode.c.o" "gcc" "CMakeFiles/nr_mib_decode.dir/demo/nr_mib_decode.c.o.d"
+  "/home/jfm/桌面/TOA_USRP_LimeSDR/src/common/cli.c" "CMakeFiles/nr_mib_decode.dir/src/common/cli.c.o" "gcc" "CMakeFiles/nr_mib_decode.dir/src/common/cli.c.o.d"
   "/home/jfm/桌面/TOA_USRP_LimeSDR/src/common/log.c" "CMakeFiles/nr_mib_decode.dir/src/common/log.c.o" "gcc" "CMakeFiles/nr_mib_decode.dir/src/common/log.c.o.d"
   )
 

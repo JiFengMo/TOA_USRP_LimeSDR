@@ -31,7 +31,7 @@ CMakeFiles/record_lime_iq.dir/src/recorder/iq_recorder.c.o: \
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
- /home/jfm/桌面/TOA_USRP_LimeSDR/include/radio/radio_device.h \
+ /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/cf32.h \
  /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \

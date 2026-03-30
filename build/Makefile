@@ -117,17 +117,30 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test_lime_rx
+# Target rules for targets named toa_io
 
 # Build rule for target.
-test_lime_rx: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_lime_rx
-.PHONY : test_lime_rx
+toa_io: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 toa_io
+.PHONY : toa_io
 
 # fast build rule for target.
-test_lime_rx/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/build
-.PHONY : test_lime_rx/fast
+toa_io/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/build
+.PHONY : toa_io/fast
+
+#=============================================================================
+# Target rules for targets named toa_pipeline
+
+# Build rule for target.
+toa_pipeline: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 toa_pipeline
+.PHONY : toa_pipeline
+
+# fast build rule for target.
+toa_pipeline/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_pipeline.dir/build.make CMakeFiles/toa_pipeline.dir/build
+.PHONY : toa_pipeline/fast
 
 #=============================================================================
 # Target rules for targets named record_lime_iq
@@ -141,6 +154,19 @@ record_lime_iq: cmake_check_build_system
 record_lime_iq/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/build
 .PHONY : record_lime_iq/fast
+
+#=============================================================================
+# Target rules for targets named record_lime_gscn_scan
+
+# Build rule for target.
+record_lime_gscn_scan: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 record_lime_gscn_scan
+.PHONY : record_lime_gscn_scan
+
+# fast build rule for target.
+record_lime_gscn_scan/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/build
+.PHONY : record_lime_gscn_scan/fast
 
 #=============================================================================
 # Target rules for targets named test_radio_lifecycle
@@ -221,17 +247,17 @@ nr_ssb_scan/fast:
 .PHONY : nr_ssb_scan/fast
 
 #=============================================================================
-# Target rules for targets named nr_pbch_dmrs_probe
+# Target rules for targets named nr_ssb_live_gscn
 
 # Build rule for target.
-nr_pbch_dmrs_probe: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_pbch_dmrs_probe
-.PHONY : nr_pbch_dmrs_probe
+nr_ssb_live_gscn: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_ssb_live_gscn
+.PHONY : nr_ssb_live_gscn
 
 # fast build rule for target.
-nr_pbch_dmrs_probe/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_pbch_dmrs_probe.dir/build.make CMakeFiles/nr_pbch_dmrs_probe.dir/build
-.PHONY : nr_pbch_dmrs_probe/fast
+nr_ssb_live_gscn/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/build
+.PHONY : nr_ssb_live_gscn/fast
 
 #=============================================================================
 # Target rules for targets named nr_mib_decode
@@ -245,6 +271,32 @@ nr_mib_decode: cmake_check_build_system
 nr_mib_decode/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/build
 .PHONY : nr_mib_decode/fast
+
+#=============================================================================
+# Target rules for targets named nr_ssb_selftest
+
+# Build rule for target.
+nr_ssb_selftest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_ssb_selftest
+.PHONY : nr_ssb_selftest
+
+# fast build rule for target.
+nr_ssb_selftest/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_selftest.dir/build.make CMakeFiles/nr_ssb_selftest.dir/build
+.PHONY : nr_ssb_selftest/fast
+
+#=============================================================================
+# Target rules for targets named nr_synth_ssb
+
+# Build rule for target.
+nr_synth_ssb: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_synth_ssb
+.PHONY : nr_synth_ssb
+
+# fast build rule for target.
+nr_synth_ssb/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_synth_ssb.dir/build.make CMakeFiles/nr_synth_ssb.dir/build
+.PHONY : nr_synth_ssb/fast
 
 demo/nr_mib_decode.o: demo/nr_mib_decode.c.o
 .PHONY : demo/nr_mib_decode.o
@@ -270,29 +322,29 @@ demo/nr_mib_decode.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/demo/nr_mib_decode.c.s
 .PHONY : demo/nr_mib_decode.c.s
 
-demo/nr_pbch_dmrs_probe.o: demo/nr_pbch_dmrs_probe.c.o
-.PHONY : demo/nr_pbch_dmrs_probe.o
+demo/nr_ssb_live_gscn.o: demo/nr_ssb_live_gscn.c.o
+.PHONY : demo/nr_ssb_live_gscn.o
 
 # target to build an object file
-demo/nr_pbch_dmrs_probe.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_pbch_dmrs_probe.dir/build.make CMakeFiles/nr_pbch_dmrs_probe.dir/demo/nr_pbch_dmrs_probe.c.o
-.PHONY : demo/nr_pbch_dmrs_probe.c.o
+demo/nr_ssb_live_gscn.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/demo/nr_ssb_live_gscn.c.o
+.PHONY : demo/nr_ssb_live_gscn.c.o
 
-demo/nr_pbch_dmrs_probe.i: demo/nr_pbch_dmrs_probe.c.i
-.PHONY : demo/nr_pbch_dmrs_probe.i
+demo/nr_ssb_live_gscn.i: demo/nr_ssb_live_gscn.c.i
+.PHONY : demo/nr_ssb_live_gscn.i
 
 # target to preprocess a source file
-demo/nr_pbch_dmrs_probe.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_pbch_dmrs_probe.dir/build.make CMakeFiles/nr_pbch_dmrs_probe.dir/demo/nr_pbch_dmrs_probe.c.i
-.PHONY : demo/nr_pbch_dmrs_probe.c.i
+demo/nr_ssb_live_gscn.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/demo/nr_ssb_live_gscn.c.i
+.PHONY : demo/nr_ssb_live_gscn.c.i
 
-demo/nr_pbch_dmrs_probe.s: demo/nr_pbch_dmrs_probe.c.s
-.PHONY : demo/nr_pbch_dmrs_probe.s
+demo/nr_ssb_live_gscn.s: demo/nr_ssb_live_gscn.c.s
+.PHONY : demo/nr_ssb_live_gscn.s
 
 # target to generate assembly for a file
-demo/nr_pbch_dmrs_probe.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_pbch_dmrs_probe.dir/build.make CMakeFiles/nr_pbch_dmrs_probe.dir/demo/nr_pbch_dmrs_probe.c.s
-.PHONY : demo/nr_pbch_dmrs_probe.c.s
+demo/nr_ssb_live_gscn.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/demo/nr_ssb_live_gscn.c.s
+.PHONY : demo/nr_ssb_live_gscn.c.s
 
 demo/nr_ssb_scan.o: demo/nr_ssb_scan.c.o
 .PHONY : demo/nr_ssb_scan.o
@@ -318,6 +370,78 @@ demo/nr_ssb_scan.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/demo/nr_ssb_scan.c.s
 .PHONY : demo/nr_ssb_scan.c.s
 
+demo/nr_ssb_selftest.o: demo/nr_ssb_selftest.c.o
+.PHONY : demo/nr_ssb_selftest.o
+
+# target to build an object file
+demo/nr_ssb_selftest.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_selftest.dir/build.make CMakeFiles/nr_ssb_selftest.dir/demo/nr_ssb_selftest.c.o
+.PHONY : demo/nr_ssb_selftest.c.o
+
+demo/nr_ssb_selftest.i: demo/nr_ssb_selftest.c.i
+.PHONY : demo/nr_ssb_selftest.i
+
+# target to preprocess a source file
+demo/nr_ssb_selftest.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_selftest.dir/build.make CMakeFiles/nr_ssb_selftest.dir/demo/nr_ssb_selftest.c.i
+.PHONY : demo/nr_ssb_selftest.c.i
+
+demo/nr_ssb_selftest.s: demo/nr_ssb_selftest.c.s
+.PHONY : demo/nr_ssb_selftest.s
+
+# target to generate assembly for a file
+demo/nr_ssb_selftest.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_selftest.dir/build.make CMakeFiles/nr_ssb_selftest.dir/demo/nr_ssb_selftest.c.s
+.PHONY : demo/nr_ssb_selftest.c.s
+
+demo/nr_synth_ssb.o: demo/nr_synth_ssb.c.o
+.PHONY : demo/nr_synth_ssb.o
+
+# target to build an object file
+demo/nr_synth_ssb.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_synth_ssb.dir/build.make CMakeFiles/nr_synth_ssb.dir/demo/nr_synth_ssb.c.o
+.PHONY : demo/nr_synth_ssb.c.o
+
+demo/nr_synth_ssb.i: demo/nr_synth_ssb.c.i
+.PHONY : demo/nr_synth_ssb.i
+
+# target to preprocess a source file
+demo/nr_synth_ssb.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_synth_ssb.dir/build.make CMakeFiles/nr_synth_ssb.dir/demo/nr_synth_ssb.c.i
+.PHONY : demo/nr_synth_ssb.c.i
+
+demo/nr_synth_ssb.s: demo/nr_synth_ssb.c.s
+.PHONY : demo/nr_synth_ssb.s
+
+# target to generate assembly for a file
+demo/nr_synth_ssb.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_synth_ssb.dir/build.make CMakeFiles/nr_synth_ssb.dir/demo/nr_synth_ssb.c.s
+.PHONY : demo/nr_synth_ssb.c.s
+
+demo/record_lime_gscn_scan.o: demo/record_lime_gscn_scan.c.o
+.PHONY : demo/record_lime_gscn_scan.o
+
+# target to build an object file
+demo/record_lime_gscn_scan.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/demo/record_lime_gscn_scan.c.o
+.PHONY : demo/record_lime_gscn_scan.c.o
+
+demo/record_lime_gscn_scan.i: demo/record_lime_gscn_scan.c.i
+.PHONY : demo/record_lime_gscn_scan.i
+
+# target to preprocess a source file
+demo/record_lime_gscn_scan.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/demo/record_lime_gscn_scan.c.i
+.PHONY : demo/record_lime_gscn_scan.c.i
+
+demo/record_lime_gscn_scan.s: demo/record_lime_gscn_scan.c.s
+.PHONY : demo/record_lime_gscn_scan.s
+
+# target to generate assembly for a file
+demo/record_lime_gscn_scan.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/demo/record_lime_gscn_scan.c.s
+.PHONY : demo/record_lime_gscn_scan.c.s
+
 demo/record_lime_iq.o: demo/record_lime_iq.c.o
 .PHONY : demo/record_lime_iq.o
 
@@ -341,30 +465,6 @@ demo/record_lime_iq.s: demo/record_lime_iq.c.s
 demo/record_lime_iq.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/demo/record_lime_iq.c.s
 .PHONY : demo/record_lime_iq.c.s
-
-demo/test_lime_rx.o: demo/test_lime_rx.c.o
-.PHONY : demo/test_lime_rx.o
-
-# target to build an object file
-demo/test_lime_rx.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/demo/test_lime_rx.c.o
-.PHONY : demo/test_lime_rx.c.o
-
-demo/test_lime_rx.i: demo/test_lime_rx.c.i
-.PHONY : demo/test_lime_rx.i
-
-# target to preprocess a source file
-demo/test_lime_rx.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/demo/test_lime_rx.c.i
-.PHONY : demo/test_lime_rx.c.i
-
-demo/test_lime_rx.s: demo/test_lime_rx.c.s
-.PHONY : demo/test_lime_rx.s
-
-# target to generate assembly for a file
-demo/test_lime_rx.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/demo/test_lime_rx.c.s
-.PHONY : demo/test_lime_rx.c.s
 
 demo/test_radio_lifecycle.o: demo/test_radio_lifecycle.c.o
 .PHONY : demo/test_radio_lifecycle.o
@@ -438,17 +538,56 @@ demo/toa_run_realtime.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/demo/toa_run_realtime.c.s
 .PHONY : demo/toa_run_realtime.c.s
 
+src/common/cli.o: src/common/cli.c.o
+.PHONY : src/common/cli.o
+
+# target to build an object file
+src/common/cli.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/cli.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/common/cli.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/src/common/cli.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/src/common/cli.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/common/cli.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/src/common/cli.c.o
+.PHONY : src/common/cli.c.o
+
+src/common/cli.i: src/common/cli.c.i
+.PHONY : src/common/cli.i
+
+# target to preprocess a source file
+src/common/cli.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/cli.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/common/cli.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/src/common/cli.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/src/common/cli.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/common/cli.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/src/common/cli.c.i
+.PHONY : src/common/cli.c.i
+
+src/common/cli.s: src/common/cli.c.s
+.PHONY : src/common/cli.s
+
+# target to generate assembly for a file
+src/common/cli.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/cli.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/common/cli.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/src/common/cli.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/src/common/cli.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/common/cli.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/src/common/cli.c.s
+.PHONY : src/common/cli.c.s
+
 src/common/log.o: src/common/log.c.o
 .PHONY : src/common/log.o
 
 # target to build an object file
 src/common/log.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/common/log.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/log.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/common/log.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/common/log.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/log.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/src/common/log.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_pbch_dmrs_probe.dir/build.make CMakeFiles/nr_pbch_dmrs_probe.dir/src/common/log.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/common/log.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/src/common/log.c.o
 .PHONY : src/common/log.c.o
 
@@ -457,12 +596,12 @@ src/common/log.i: src/common/log.c.i
 
 # target to preprocess a source file
 src/common/log.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/common/log.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/log.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/common/log.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/common/log.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/log.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/src/common/log.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_pbch_dmrs_probe.dir/build.make CMakeFiles/nr_pbch_dmrs_probe.dir/src/common/log.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/common/log.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/src/common/log.c.i
 .PHONY : src/common/log.c.i
 
@@ -471,12 +610,12 @@ src/common/log.s: src/common/log.c.s
 
 # target to generate assembly for a file
 src/common/log.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/common/log.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/log.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/common/log.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/common/log.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/log.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/src/common/log.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_pbch_dmrs_probe.dir/build.make CMakeFiles/nr_pbch_dmrs_probe.dir/src/common/log.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/common/log.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/src/common/log.c.s
 .PHONY : src/common/log.c.s
 
@@ -503,6 +642,102 @@ src/common/ring_buffer.s: src/common/ring_buffer.c.s
 src/common/ring_buffer.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/ring_buffer.c.s
 .PHONY : src/common/ring_buffer.c.s
+
+src/io/capture_session.o: src/io/capture_session.c.o
+.PHONY : src/io/capture_session.o
+
+# target to build an object file
+src/io/capture_session.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/capture_session.c.o
+.PHONY : src/io/capture_session.c.o
+
+src/io/capture_session.i: src/io/capture_session.c.i
+.PHONY : src/io/capture_session.i
+
+# target to preprocess a source file
+src/io/capture_session.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/capture_session.c.i
+.PHONY : src/io/capture_session.c.i
+
+src/io/capture_session.s: src/io/capture_session.c.s
+.PHONY : src/io/capture_session.s
+
+# target to generate assembly for a file
+src/io/capture_session.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/capture_session.c.s
+.PHONY : src/io/capture_session.c.s
+
+src/io/iq_meta.o: src/io/iq_meta.c.o
+.PHONY : src/io/iq_meta.o
+
+# target to build an object file
+src/io/iq_meta.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/iq_meta.c.o
+.PHONY : src/io/iq_meta.c.o
+
+src/io/iq_meta.i: src/io/iq_meta.c.i
+.PHONY : src/io/iq_meta.i
+
+# target to preprocess a source file
+src/io/iq_meta.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/iq_meta.c.i
+.PHONY : src/io/iq_meta.c.i
+
+src/io/iq_meta.s: src/io/iq_meta.c.s
+.PHONY : src/io/iq_meta.s
+
+# target to generate assembly for a file
+src/io/iq_meta.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/iq_meta.c.s
+.PHONY : src/io/iq_meta.c.s
+
+src/io/iq_reader.o: src/io/iq_reader.c.o
+.PHONY : src/io/iq_reader.o
+
+# target to build an object file
+src/io/iq_reader.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/iq_reader.c.o
+.PHONY : src/io/iq_reader.c.o
+
+src/io/iq_reader.i: src/io/iq_reader.c.i
+.PHONY : src/io/iq_reader.i
+
+# target to preprocess a source file
+src/io/iq_reader.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/iq_reader.c.i
+.PHONY : src/io/iq_reader.c.i
+
+src/io/iq_reader.s: src/io/iq_reader.c.s
+.PHONY : src/io/iq_reader.s
+
+# target to generate assembly for a file
+src/io/iq_reader.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/iq_reader.c.s
+.PHONY : src/io/iq_reader.c.s
+
+src/nr/gscn.o: src/nr/gscn.c.o
+.PHONY : src/nr/gscn.o
+
+# target to build an object file
+src/nr/gscn.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/gscn.c.o
+.PHONY : src/nr/gscn.c.o
+
+src/nr/gscn.i: src/nr/gscn.c.i
+.PHONY : src/nr/gscn.i
+
+# target to preprocess a source file
+src/nr/gscn.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/gscn.c.i
+.PHONY : src/nr/gscn.c.i
+
+src/nr/gscn.s: src/nr/gscn.c.s
+.PHONY : src/nr/gscn.s
+
+# target to generate assembly for a file
+src/nr/gscn.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/gscn.c.s
+.PHONY : src/nr/gscn.c.s
 
 src/nr/mib.o: src/nr/mib.c.o
 .PHONY : src/nr/mib.o
@@ -720,15 +955,40 @@ src/nr/ssb_sync.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.s
 .PHONY : src/nr/ssb_sync.c.s
 
+src/pipeline/offline_runner.o: src/pipeline/offline_runner.c.o
+.PHONY : src/pipeline/offline_runner.o
+
+# target to build an object file
+src/pipeline/offline_runner.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_pipeline.dir/build.make CMakeFiles/toa_pipeline.dir/src/pipeline/offline_runner.c.o
+.PHONY : src/pipeline/offline_runner.c.o
+
+src/pipeline/offline_runner.i: src/pipeline/offline_runner.c.i
+.PHONY : src/pipeline/offline_runner.i
+
+# target to preprocess a source file
+src/pipeline/offline_runner.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_pipeline.dir/build.make CMakeFiles/toa_pipeline.dir/src/pipeline/offline_runner.c.i
+.PHONY : src/pipeline/offline_runner.c.i
+
+src/pipeline/offline_runner.s: src/pipeline/offline_runner.c.s
+.PHONY : src/pipeline/offline_runner.s
+
+# target to generate assembly for a file
+src/pipeline/offline_runner.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_pipeline.dir/build.make CMakeFiles/toa_pipeline.dir/src/pipeline/offline_runner.c.s
+.PHONY : src/pipeline/offline_runner.c.s
+
 src/radio/radio_factory.o: src/radio/radio_factory.c.o
 .PHONY : src/radio/radio_factory.o
 
 # target to build an object file
 src/radio/radio_factory.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/radio/radio_factory.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_factory.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/radio/radio_factory.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_factory.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_factory.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/radio/radio_factory.c.o
 .PHONY : src/radio/radio_factory.c.o
 
 src/radio/radio_factory.i: src/radio/radio_factory.c.i
@@ -736,10 +996,11 @@ src/radio/radio_factory.i: src/radio/radio_factory.c.i
 
 # target to preprocess a source file
 src/radio/radio_factory.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/radio/radio_factory.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_factory.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/radio/radio_factory.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_factory.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_factory.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/radio/radio_factory.c.i
 .PHONY : src/radio/radio_factory.c.i
 
 src/radio/radio_factory.s: src/radio/radio_factory.c.s
@@ -747,10 +1008,11 @@ src/radio/radio_factory.s: src/radio/radio_factory.c.s
 
 # target to generate assembly for a file
 src/radio/radio_factory.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/radio/radio_factory.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_factory.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/radio/radio_factory.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_factory.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_factory.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/radio/radio_factory.c.s
 .PHONY : src/radio/radio_factory.c.s
 
 src/radio/radio_lime.o: src/radio/radio_lime.c.o
@@ -758,10 +1020,11 @@ src/radio/radio_lime.o: src/radio/radio_lime.c.o
 
 # target to build an object file
 src/radio/radio_lime.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/radio/radio_lime.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_lime.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/radio/radio_lime.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_lime.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_lime.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/radio/radio_lime.c.o
 .PHONY : src/radio/radio_lime.c.o
 
 src/radio/radio_lime.i: src/radio/radio_lime.c.i
@@ -769,10 +1032,11 @@ src/radio/radio_lime.i: src/radio/radio_lime.c.i
 
 # target to preprocess a source file
 src/radio/radio_lime.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/radio/radio_lime.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_lime.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/radio/radio_lime.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_lime.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_lime.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/radio/radio_lime.c.i
 .PHONY : src/radio/radio_lime.c.i
 
 src/radio/radio_lime.s: src/radio/radio_lime.c.s
@@ -780,10 +1044,11 @@ src/radio/radio_lime.s: src/radio/radio_lime.c.s
 
 # target to generate assembly for a file
 src/radio/radio_lime.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_lime_rx.dir/build.make CMakeFiles/test_lime_rx.dir/src/radio/radio_lime.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_lime.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/radio/radio_lime.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_lime.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_lime.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/radio/radio_lime.c.s
 .PHONY : src/radio/radio_lime.c.s
 
 src/recorder/iq_recorder.o: src/recorder/iq_recorder.c.o
@@ -791,7 +1056,7 @@ src/recorder/iq_recorder.o: src/recorder/iq_recorder.c.o
 
 # target to build an object file
 src/recorder/iq_recorder.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/recorder/iq_recorder.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/recorder/iq_recorder.c.o
 .PHONY : src/recorder/iq_recorder.c.o
 
 src/recorder/iq_recorder.i: src/recorder/iq_recorder.c.i
@@ -799,7 +1064,7 @@ src/recorder/iq_recorder.i: src/recorder/iq_recorder.c.i
 
 # target to preprocess a source file
 src/recorder/iq_recorder.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/recorder/iq_recorder.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/recorder/iq_recorder.c.i
 .PHONY : src/recorder/iq_recorder.c.i
 
 src/recorder/iq_recorder.s: src/recorder/iq_recorder.c.s
@@ -807,7 +1072,7 @@ src/recorder/iq_recorder.s: src/recorder/iq_recorder.c.s
 
 # target to generate assembly for a file
 src/recorder/iq_recorder.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/recorder/iq_recorder.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/recorder/iq_recorder.c.s
 .PHONY : src/recorder/iq_recorder.c.s
 
 src/toa/prs_detector.o: src/toa/prs_detector.c.o
@@ -940,29 +1205,39 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... nr_core"
 	@echo "... nr_mib_decode"
-	@echo "... nr_pbch_dmrs_probe"
+	@echo "... nr_ssb_live_gscn"
 	@echo "... nr_ssb_scan"
+	@echo "... nr_ssb_selftest"
+	@echo "... nr_synth_ssb"
+	@echo "... record_lime_gscn_scan"
 	@echo "... record_lime_iq"
-	@echo "... test_lime_rx"
 	@echo "... test_radio_lifecycle"
 	@echo "... toa_core"
+	@echo "... toa_io"
+	@echo "... toa_pipeline"
 	@echo "... toa_prs_offline"
 	@echo "... toa_run_realtime"
 	@echo "... demo/nr_mib_decode.o"
 	@echo "... demo/nr_mib_decode.i"
 	@echo "... demo/nr_mib_decode.s"
-	@echo "... demo/nr_pbch_dmrs_probe.o"
-	@echo "... demo/nr_pbch_dmrs_probe.i"
-	@echo "... demo/nr_pbch_dmrs_probe.s"
+	@echo "... demo/nr_ssb_live_gscn.o"
+	@echo "... demo/nr_ssb_live_gscn.i"
+	@echo "... demo/nr_ssb_live_gscn.s"
 	@echo "... demo/nr_ssb_scan.o"
 	@echo "... demo/nr_ssb_scan.i"
 	@echo "... demo/nr_ssb_scan.s"
+	@echo "... demo/nr_ssb_selftest.o"
+	@echo "... demo/nr_ssb_selftest.i"
+	@echo "... demo/nr_ssb_selftest.s"
+	@echo "... demo/nr_synth_ssb.o"
+	@echo "... demo/nr_synth_ssb.i"
+	@echo "... demo/nr_synth_ssb.s"
+	@echo "... demo/record_lime_gscn_scan.o"
+	@echo "... demo/record_lime_gscn_scan.i"
+	@echo "... demo/record_lime_gscn_scan.s"
 	@echo "... demo/record_lime_iq.o"
 	@echo "... demo/record_lime_iq.i"
 	@echo "... demo/record_lime_iq.s"
-	@echo "... demo/test_lime_rx.o"
-	@echo "... demo/test_lime_rx.i"
-	@echo "... demo/test_lime_rx.s"
 	@echo "... demo/test_radio_lifecycle.o"
 	@echo "... demo/test_radio_lifecycle.i"
 	@echo "... demo/test_radio_lifecycle.s"
@@ -972,12 +1247,27 @@ help:
 	@echo "... demo/toa_run_realtime.o"
 	@echo "... demo/toa_run_realtime.i"
 	@echo "... demo/toa_run_realtime.s"
+	@echo "... src/common/cli.o"
+	@echo "... src/common/cli.i"
+	@echo "... src/common/cli.s"
 	@echo "... src/common/log.o"
 	@echo "... src/common/log.i"
 	@echo "... src/common/log.s"
 	@echo "... src/common/ring_buffer.o"
 	@echo "... src/common/ring_buffer.i"
 	@echo "... src/common/ring_buffer.s"
+	@echo "... src/io/capture_session.o"
+	@echo "... src/io/capture_session.i"
+	@echo "... src/io/capture_session.s"
+	@echo "... src/io/iq_meta.o"
+	@echo "... src/io/iq_meta.i"
+	@echo "... src/io/iq_meta.s"
+	@echo "... src/io/iq_reader.o"
+	@echo "... src/io/iq_reader.i"
+	@echo "... src/io/iq_reader.s"
+	@echo "... src/nr/gscn.o"
+	@echo "... src/nr/gscn.i"
+	@echo "... src/nr/gscn.s"
 	@echo "... src/nr/mib.o"
 	@echo "... src/nr/mib.i"
 	@echo "... src/nr/mib.s"
@@ -1005,6 +1295,9 @@ help:
 	@echo "... src/nr/ssb_sync.o"
 	@echo "... src/nr/ssb_sync.i"
 	@echo "... src/nr/ssb_sync.s"
+	@echo "... src/pipeline/offline_runner.o"
+	@echo "... src/pipeline/offline_runner.i"
+	@echo "... src/pipeline/offline_runner.s"
 	@echo "... src/radio/radio_factory.o"
 	@echo "... src/radio/radio_factory.i"
 	@echo "... src/radio/radio_factory.s"

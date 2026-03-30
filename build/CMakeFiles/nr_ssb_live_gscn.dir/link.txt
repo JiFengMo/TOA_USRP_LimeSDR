@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/nr_ssb_live_gscn.dir/demo/nr_ssb_live_gscn.c.o CMakeFiles/nr_ssb_live_gscn.dir/src/radio/radio_factory.c.o CMakeFiles/nr_ssb_live_gscn.dir/src/radio/radio_lime.c.o CMakeFiles/nr_ssb_live_gscn.dir/src/common/log.c.o CMakeFiles/nr_ssb_live_gscn.dir/src/common/cli.c.o -o nr_ssb_live_gscn  libnr_core.a -lm -lSoapySDR 

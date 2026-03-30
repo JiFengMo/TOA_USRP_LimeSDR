@@ -69,10 +69,24 @@ include CMakeFiles/nr_core.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/nr_core.dir/flags.make
 
+CMakeFiles/nr_core.dir/src/nr/gscn.c.o: CMakeFiles/nr_core.dir/flags.make
+CMakeFiles/nr_core.dir/src/nr/gscn.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/gscn.c
+CMakeFiles/nr_core.dir/src/nr/gscn.c.o: CMakeFiles/nr_core.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/nr_core.dir/src/nr/gscn.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_core.dir/src/nr/gscn.c.o -MF CMakeFiles/nr_core.dir/src/nr/gscn.c.o.d -o CMakeFiles/nr_core.dir/src/nr/gscn.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/gscn.c
+
+CMakeFiles/nr_core.dir/src/nr/gscn.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/nr_core.dir/src/nr/gscn.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/gscn.c > CMakeFiles/nr_core.dir/src/nr/gscn.c.i
+
+CMakeFiles/nr_core.dir/src/nr/gscn.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/nr_core.dir/src/nr/gscn.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/gscn.c -o CMakeFiles/nr_core.dir/src/nr/gscn.c.s
+
 CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.o: CMakeFiles/nr_core.dir/flags.make
 CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/nr_sequence.c
 CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.o: CMakeFiles/nr_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.o -MF CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.o.d -o CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/nr_sequence.c
 
 CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.i: cmake_force
@@ -86,7 +100,7 @@ CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.s: cmake_force
 CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.o: CMakeFiles/nr_core.dir/flags.make
 CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/ssb_sync.c
 CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.o: CMakeFiles/nr_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.o -MF CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.o.d -o CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/ssb_sync.c
 
 CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.i: cmake_force
@@ -100,7 +114,7 @@ CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.s: cmake_force
 CMakeFiles/nr_core.dir/src/nr/nr_fft.c.o: CMakeFiles/nr_core.dir/flags.make
 CMakeFiles/nr_core.dir/src/nr/nr_fft.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/nr_fft.c
 CMakeFiles/nr_core.dir/src/nr/nr_fft.c.o: CMakeFiles/nr_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/nr_core.dir/src/nr/nr_fft.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/nr_core.dir/src/nr/nr_fft.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_core.dir/src/nr/nr_fft.c.o -MF CMakeFiles/nr_core.dir/src/nr/nr_fft.c.o.d -o CMakeFiles/nr_core.dir/src/nr/nr_fft.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/nr_fft.c
 
 CMakeFiles/nr_core.dir/src/nr/nr_fft.c.i: cmake_force
@@ -114,7 +128,7 @@ CMakeFiles/nr_core.dir/src/nr/nr_fft.c.s: cmake_force
 CMakeFiles/nr_core.dir/src/nr/nr_grid.c.o: CMakeFiles/nr_core.dir/flags.make
 CMakeFiles/nr_core.dir/src/nr/nr_grid.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/nr_grid.c
 CMakeFiles/nr_core.dir/src/nr/nr_grid.c.o: CMakeFiles/nr_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/nr_core.dir/src/nr/nr_grid.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/nr_core.dir/src/nr/nr_grid.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_core.dir/src/nr/nr_grid.c.o -MF CMakeFiles/nr_core.dir/src/nr/nr_grid.c.o.d -o CMakeFiles/nr_core.dir/src/nr/nr_grid.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/nr_grid.c
 
 CMakeFiles/nr_core.dir/src/nr/nr_grid.c.i: cmake_force
@@ -128,7 +142,7 @@ CMakeFiles/nr_core.dir/src/nr/nr_grid.c.s: cmake_force
 CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.o: CMakeFiles/nr_core.dir/flags.make
 CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/pbch_dmrs.c
 CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.o: CMakeFiles/nr_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.o -MF CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.o.d -o CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/pbch_dmrs.c
 
 CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.i: cmake_force
@@ -142,7 +156,7 @@ CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.s: cmake_force
 CMakeFiles/nr_core.dir/src/nr/pbch_re.c.o: CMakeFiles/nr_core.dir/flags.make
 CMakeFiles/nr_core.dir/src/nr/pbch_re.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/pbch_re.c
 CMakeFiles/nr_core.dir/src/nr/pbch_re.c.o: CMakeFiles/nr_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/nr_core.dir/src/nr/pbch_re.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/nr_core.dir/src/nr/pbch_re.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_core.dir/src/nr/pbch_re.c.o -MF CMakeFiles/nr_core.dir/src/nr/pbch_re.c.o.d -o CMakeFiles/nr_core.dir/src/nr/pbch_re.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/pbch_re.c
 
 CMakeFiles/nr_core.dir/src/nr/pbch_re.c.i: cmake_force
@@ -156,7 +170,7 @@ CMakeFiles/nr_core.dir/src/nr/pbch_re.c.s: cmake_force
 CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.o: CMakeFiles/nr_core.dir/flags.make
 CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/pbch_decode.c
 CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.o: CMakeFiles/nr_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.o -MF CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.o.d -o CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/pbch_decode.c
 
 CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.i: cmake_force
@@ -170,7 +184,7 @@ CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.s: cmake_force
 CMakeFiles/nr_core.dir/src/nr/polar.c.o: CMakeFiles/nr_core.dir/flags.make
 CMakeFiles/nr_core.dir/src/nr/polar.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/polar.c
 CMakeFiles/nr_core.dir/src/nr/polar.c.o: CMakeFiles/nr_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/nr_core.dir/src/nr/polar.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/nr_core.dir/src/nr/polar.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_core.dir/src/nr/polar.c.o -MF CMakeFiles/nr_core.dir/src/nr/polar.c.o.d -o CMakeFiles/nr_core.dir/src/nr/polar.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/polar.c
 
 CMakeFiles/nr_core.dir/src/nr/polar.c.i: cmake_force
@@ -184,7 +198,7 @@ CMakeFiles/nr_core.dir/src/nr/polar.c.s: cmake_force
 CMakeFiles/nr_core.dir/src/nr/mib.c.o: CMakeFiles/nr_core.dir/flags.make
 CMakeFiles/nr_core.dir/src/nr/mib.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/mib.c
 CMakeFiles/nr_core.dir/src/nr/mib.c.o: CMakeFiles/nr_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/nr_core.dir/src/nr/mib.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/nr_core.dir/src/nr/mib.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_core.dir/src/nr/mib.c.o -MF CMakeFiles/nr_core.dir/src/nr/mib.c.o.d -o CMakeFiles/nr_core.dir/src/nr/mib.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/src/nr/mib.c
 
 CMakeFiles/nr_core.dir/src/nr/mib.c.i: cmake_force
@@ -197,6 +211,7 @@ CMakeFiles/nr_core.dir/src/nr/mib.c.s: cmake_force
 
 # Object files for target nr_core
 nr_core_OBJECTS = \
+"CMakeFiles/nr_core.dir/src/nr/gscn.c.o" \
 "CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.o" \
 "CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.o" \
 "CMakeFiles/nr_core.dir/src/nr/nr_fft.c.o" \
@@ -210,6 +225,7 @@ nr_core_OBJECTS = \
 # External object files for target nr_core
 nr_core_EXTERNAL_OBJECTS =
 
+libnr_core.a: CMakeFiles/nr_core.dir/src/nr/gscn.c.o
 libnr_core.a: CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.o
 libnr_core.a: CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.o
 libnr_core.a: CMakeFiles/nr_core.dir/src/nr/nr_fft.c.o
@@ -221,7 +237,7 @@ libnr_core.a: CMakeFiles/nr_core.dir/src/nr/polar.c.o
 libnr_core.a: CMakeFiles/nr_core.dir/src/nr/mib.c.o
 libnr_core.a: CMakeFiles/nr_core.dir/build.make
 libnr_core.a: CMakeFiles/nr_core.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking C static library libnr_core.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking C static library libnr_core.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/nr_core.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/nr_core.dir/link.txt --verbose=$(VERBOSE)
 

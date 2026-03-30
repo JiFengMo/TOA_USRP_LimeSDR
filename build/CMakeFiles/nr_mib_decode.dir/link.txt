@@ -1,1 +1,1 @@
-/usr/bin/cc CMakeFiles/nr_mib_decode.dir/demo/nr_mib_decode.c.o CMakeFiles/nr_mib_decode.dir/src/common/log.c.o -o nr_mib_decode  libnr_core.a -lm 
+/usr/bin/cc CMakeFiles/nr_mib_decode.dir/demo/nr_mib_decode.c.o CMakeFiles/nr_mib_decode.dir/src/common/log.c.o CMakeFiles/nr_mib_decode.dir/src/common/cli.c.o -o nr_mib_decode  libnr_core.a libtoa_pipeline.a libtoa_io.a -lm 

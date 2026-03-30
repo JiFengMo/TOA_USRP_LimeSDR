@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/jfm/桌面/TOA_USRP_LimeSDR/demo/toa_prs_offline.c" "CMakeFiles/toa_prs_offline.dir/demo/toa_prs_offline.c.o" "gcc" "CMakeFiles/toa_prs_offline.dir/demo/toa_prs_offline.c.o.d"
+  "/home/jfm/桌面/TOA_USRP_LimeSDR/src/common/cli.c" "CMakeFiles/toa_prs_offline.dir/src/common/cli.c.o" "gcc" "CMakeFiles/toa_prs_offline.dir/src/common/cli.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

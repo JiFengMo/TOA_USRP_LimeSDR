@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/nr_ssb_selftest.dir/demo/nr_ssb_selftest.c.o -o nr_ssb_selftest  libnr_core.a -lm 

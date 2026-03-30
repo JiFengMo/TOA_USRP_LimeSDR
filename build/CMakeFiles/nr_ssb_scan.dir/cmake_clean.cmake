@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/nr_ssb_scan.dir/demo/nr_ssb_scan.c.o"
   "CMakeFiles/nr_ssb_scan.dir/demo/nr_ssb_scan.c.o.d"
+  "CMakeFiles/nr_ssb_scan.dir/src/common/cli.c.o"
+  "CMakeFiles/nr_ssb_scan.dir/src/common/cli.c.o.d"
   "CMakeFiles/nr_ssb_scan.dir/src/common/log.c.o"
   "CMakeFiles/nr_ssb_scan.dir/src/common/log.c.o.d"
   "nr_ssb_scan"

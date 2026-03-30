@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/nr_core.dir/src/nr/gscn.c.o"
+  "CMakeFiles/nr_core.dir/src/nr/gscn.c.o.d"
   "CMakeFiles/nr_core.dir/src/nr/mib.c.o"
   "CMakeFiles/nr_core.dir/src/nr/mib.c.o.d"
   "CMakeFiles/nr_core.dir/src/nr/nr_fft.c.o"

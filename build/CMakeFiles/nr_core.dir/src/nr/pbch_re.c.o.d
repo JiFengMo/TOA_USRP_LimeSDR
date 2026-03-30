@@ -18,10 +18,9 @@ CMakeFiles/nr_core.dir/src/nr/pbch_re.c.o: \
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
- /home/jfm/桌面/TOA_USRP_LimeSDR/include/radio/radio_device.h \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
+ /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/cf32.h \
  /home/jfm/桌面/TOA_USRP_LimeSDR/include/common/error.h \
- /usr/include/string.h \
+ /usr/include/string.h /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h

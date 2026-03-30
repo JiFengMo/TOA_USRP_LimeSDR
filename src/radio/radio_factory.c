@@ -1,14 +1,15 @@
-#include "radio_factory.h"
-#include "radio_lime.h"
+#include "radio/radio_factory.h"
+#include "radio/radio_lime.h"
+#include "common/error.h"
 
 #include <string.h>
 
 int radio_device_init(radio_device_t *device, radio_device_type_t type)
 {
   if (!device)
-    return -1;
+    return TOA_ERR_INVALID_ARG;
 
-  /* 先整体清零 */
+  /* 鍏堟暣浣撴竻闆? */
   memset(device, 0, sizeof(*device));
 
   switch (type) {
@@ -16,10 +17,10 @@ int radio_device_init(radio_device_t *device, radio_device_type_t type)
       return radio_lime_device_init(device);
 
     case RADIO_DEVICE_USRP:
-      /* 后续再补 USRP 实现 */
-      return -2;
+      /* 鍚庣画鍐嶈ˉ USRP 瀹炵幇 */
+      return TOA_ERR_UNSUPPORTED;
 
     default:
-      return -3;
+      return TOA_ERR_UNSUPPORTED;
   }
 }

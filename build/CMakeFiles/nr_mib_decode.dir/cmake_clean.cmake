@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/nr_mib_decode.dir/demo/nr_mib_decode.c.o"
   "CMakeFiles/nr_mib_decode.dir/demo/nr_mib_decode.c.o.d"
+  "CMakeFiles/nr_mib_decode.dir/src/common/cli.c.o"
+  "CMakeFiles/nr_mib_decode.dir/src/common/cli.c.o.d"
   "CMakeFiles/nr_mib_decode.dir/src/common/log.c.o"
   "CMakeFiles/nr_mib_decode.dir/src/common/log.c.o.d"
   "nr_mib_decode"
