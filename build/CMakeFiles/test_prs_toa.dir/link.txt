@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/test_prs_toa.dir/openair1/PHY/NR_POSITIONING/tests/test_prs_toa.c.o -o test_prs_toa  libnr_positioning.a libnr_radio.a -lm -lpthread 

@@ -1,2 +1,0 @@
-/usr/bin/ar qc libtoa_io.a CMakeFiles/toa_io.dir/src/io/iq_meta.c.o CMakeFiles/toa_io.dir/src/io/iq_reader.c.o CMakeFiles/toa_io.dir/src/io/capture_session.c.o CMakeFiles/toa_io.dir/src/recorder/iq_recorder.c.o
-/usr/bin/ranlib libtoa_io.a

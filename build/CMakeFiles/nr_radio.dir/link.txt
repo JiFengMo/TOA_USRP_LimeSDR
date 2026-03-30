@@ -1,0 +1,2 @@
+/usr/bin/ar qc libnr_radio.a CMakeFiles/nr_radio.dir/radio/USRP/usrp_lib.cpp.o CMakeFiles/nr_radio.dir/radio/LIME/lime_lib.cpp.o
+/usr/bin/ranlib libnr_radio.a

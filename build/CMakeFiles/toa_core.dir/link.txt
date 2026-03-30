@@ -1,2 +1,0 @@
-/usr/bin/ar qc libtoa_core.a CMakeFiles/toa_core.dir/src/toa/toa_context.c.o CMakeFiles/toa_core.dir/src/toa/prs_detector.c.o CMakeFiles/toa_core.dir/src/toa/toa_pipeline.c.o CMakeFiles/toa_core.dir/src/toa/toa_estimator.c.o CMakeFiles/toa_core.dir/src/toa/toa_solver_wls.c.o CMakeFiles/toa_core.dir/src/common/ring_buffer.c.o CMakeFiles/toa_core.dir/src/common/log.c.o
-/usr/bin/ranlib libtoa_core.a

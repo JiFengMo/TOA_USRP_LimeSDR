@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/test_solver.dir/openair1/PHY/NR_POSITIONING/tests/test_solver.c.o -o test_solver  libnr_positioning.a libnr_radio.a -lm -lpthread 

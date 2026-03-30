@@ -1,201 +1,66 @@
 cmake_minimum_required(VERSION 3.16)
-project(TOA_USRP_LimeSDR C)
+project(NR_TOA_USRP_LimeSDR LANGUAGES C CXX)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_compile_options(
-  -Wall
-  -Wextra
-  -Wpedantic
+add_compile_options(-Wall -Wextra -Wpedantic)
+
+include_directories(${CMAKE_SOURCE_DIR})
+
+add_library(nr_radio STATIC
+  radio/USRP/usrp_lib.cpp
+  radio/LIME/lime_lib.cpp
 )
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(SOAPYSDR REQUIRED SoapySDR)
-
-include_directories(
-  ${CMAKE_SOURCE_DIR}/include
-  ${CMAKE_SOURCE_DIR}/include/radio
-  ${CMAKE_SOURCE_DIR}/include/recorder
-  ${CMAKE_SOURCE_DIR}/include/toa
-  ${CMAKE_SOURCE_DIR}/include/nr
-  ${CMAKE_SOURCE_DIR}/include/common
-  ${SOAPYSDR_INCLUDE_DIRS}
+set(NR_POSITIONING_SOURCES
+  openair1/PHY/NR_POSITIONING/common/nr_iq_ring.c
+  openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.c
+  openair1/PHY/NR_POSITIONING/common/nr_anchor_db.c
+  openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c
+  openair1/PHY/NR_POSITIONING/common/nr_pos_solver.c
+  openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.c
+  openair1/PHY/NR_POSITIONING/common/nr_radio_if.c
+  openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c
+  openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.c
+  openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c
+  openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c
+  openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c
+  openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c
+  openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c
+  openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c
+  openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c
+  openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c
+  openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c
+  openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c
+  openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c
+  openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c
+  openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c
+  openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c
 )
 
-link_directories(
-  ${SOAPYSDR_LIBRARY_DIRS}
-)
+add_library(nr_positioning STATIC ${NR_POSITIONING_SOURCES})
+target_link_libraries(nr_positioning PUBLIC nr_radio m pthread)
 
-# IO + offline pipeline（元数据 / 读块 / 录制 session / 离线�?�?�?
-add_library(toa_io STATIC
-  src/io/iq_meta.c
-  src/io/iq_reader.c
-  src/io/capture_session.c
-  src/recorder/iq_recorder.c
-)
+add_executable(nr-toa-uesoftmodem executables/nr-toa-uesoftmodem.c)
+target_link_libraries(nr-toa-uesoftmodem PRIVATE nr_positioning)
 
-add_library(toa_pipeline STATIC
-  src/pipeline/offline_runner.c
-)
+add_executable(nr-ssb-anchor executables/nr-ssb-anchor.c)
+target_link_libraries(nr-ssb-anchor PRIVATE nr_positioning)
 
-target_link_libraries(toa_pipeline PUBLIC toa_io)
+add_executable(replay_toa_iq tools/replay_toa_iq.c)
+target_link_libraries(replay_toa_iq PRIVATE nr_positioning)
 
-set(COMMON_CLI_SRC src/common/cli.c)
+add_executable(test_ssb_sync openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c)
+target_link_libraries(test_ssb_sync PRIVATE nr_positioning)
 
-# IQ 录制程序（兼�? Lime RX 连通性验证；�? test_lime_rx 已合并删除）
-add_executable(record_lime_iq
-  demo/record_lime_iq.c
-  src/radio/radio_factory.c
-  src/radio/radio_lime.c
-  src/common/log.c
-  ${COMMON_CLI_SRC}
-)
+add_executable(test_ssb_toa openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.c)
+target_link_libraries(test_ssb_toa PRIVATE nr_positioning)
 
-target_link_libraries(record_lime_iq
-  nr_core
-  toa_io
-  m
-  ${SOAPYSDR_LIBRARIES}
-)
+add_executable(test_prs_toa openair1/PHY/NR_POSITIONING/tests/test_prs_toa.c)
+target_link_libraries(test_prs_toa PRIVATE nr_positioning)
 
-target_compile_options(record_lime_iq PRIVATE ${SOAPYSDR_CFLAGS_OTHER})
-
-# �? NR GSCN（FR1 <3 GHz 同�?�栅格）步进�?心�?�，每点�?�? IQ 录制；可�?�?多轮
-add_executable(record_lime_gscn_scan
-  demo/record_lime_gscn_scan.c
-  src/radio/radio_factory.c
-  src/radio/radio_lime.c
-  src/common/log.c
-  ${COMMON_CLI_SRC}
-)
-
-target_link_libraries(record_lime_gscn_scan
-  nr_core
-  toa_io
-  m
-  ${SOAPYSDR_LIBRARIES}
-)
-
-target_compile_options(record_lime_gscn_scan PRIVATE ${SOAPYSDR_CFLAGS_OTHER})
-
-# radio 生命周期�?检（phase0�?
-add_executable(test_radio_lifecycle
-  demo/test_radio_lifecycle.c
-  src/radio/radio_factory.c
-  src/radio/radio_lime.c
-  src/common/log.c
-)
-
-target_link_libraries(test_radio_lifecycle
-  ${SOAPYSDR_LIBRARIES}
-)
-
-target_compile_options(test_radio_lifecycle PRIVATE ${SOAPYSDR_CFLAGS_OTHER})
-
-# NR 模块（SSB�?描起步）
-add_library(nr_core
-  src/nr/gscn.c
-  src/nr/nr_sequence.c
-  src/nr/ssb_sync.c
-  src/nr/nr_fft.c
-  src/nr/nr_grid.c
-  src/nr/pbch_dmrs.c
-  src/nr/pbch_re.c
-  src/nr/pbch_decode.c
-  src/nr/polar.c
-  src/nr/mib.c
-)
-
-# nr_core is pure C signal processing; no Soapy compile flags needed.
-
-# TOA 模块基�?�库（先提供重构�?�架�?
-add_library(toa_core
-  src/toa/toa_context.c
-  src/toa/prs_detector.c
-  src/toa/toa_pipeline.c
-  src/toa/toa_estimator.c
-  src/toa/toa_solver_wls.c
-  src/common/ring_buffer.c
-  src/common/log.c
-)
-
-# toa_core does not use Soapy.
-
-# 离线 PRS/TOA 框架程序
-add_executable(toa_prs_offline
-  demo/toa_prs_offline.c
-  ${COMMON_CLI_SRC}
-)
-
-target_link_libraries(toa_prs_offline
-  toa_core
-  toa_pipeline
-  toa_io
-  m
-)
-
-# 近实�? TOA 框架程序
-add_executable(toa_run_realtime
-  demo/toa_run_realtime.c
-  src/radio/radio_factory.c
-  src/radio/radio_lime.c
-)
-
-target_link_libraries(toa_run_realtime
-  toa_core
-  m
-  ${SOAPYSDR_LIBRARIES}
-)
-
-target_compile_options(toa_run_realtime PRIVATE ${SOAPYSDR_CFLAGS_OTHER})
-
-# 离线 SSB �?描程序（Phase B�?
-add_executable(nr_ssb_scan
-  demo/nr_ssb_scan.c
-  src/common/log.c
-  ${COMMON_CLI_SRC}
-)
-
-target_link_libraries(nr_ssb_scan
-  nr_core
-  toa_pipeline
-  toa_io
-  m
-)
-
-add_executable(nr_ssb_live_gscn
-  demo/nr_ssb_live_gscn.c
-  src/radio/radio_factory.c
-  src/radio/radio_lime.c
-  src/common/log.c
-  ${COMMON_CLI_SRC}
-)
-
-target_link_libraries(nr_ssb_live_gscn
-  nr_core
-  m
-  ${SOAPYSDR_LIBRARIES}
-)
-
-target_compile_options(nr_ssb_live_gscn PRIVATE ${SOAPYSDR_CFLAGS_OTHER})
-
-# MIB 解码链（�? SSB + DMRS 对齐；原 nr_pbch_dmrs_probe 已合并删除）
-add_executable(nr_mib_decode
-  demo/nr_mib_decode.c
-  src/common/log.c
-  ${COMMON_CLI_SRC}
-)
-
-target_link_libraries(nr_mib_decode
-  nr_core
-  toa_pipeline
-  toa_io
-  m
-)
-
-add_executable(nr_ssb_selftest demo/nr_ssb_selftest.c)
-target_link_libraries(nr_ssb_selftest nr_core m)
-
-add_executable(nr_synth_ssb demo/nr_synth_ssb.c)
-target_link_libraries(nr_synth_ssb nr_core toa_io m)
+add_executable(test_solver openair1/PHY/NR_POSITIONING/tests/test_solver.c)
+target_link_libraries(test_solver PRIVATE nr_positioning)

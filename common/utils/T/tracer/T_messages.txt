@@ -1,0 +1,6 @@
+# NR-TOA / SSB / PRS trace IDs (OAI T tracer style; extend generator if integrated)
+# NR_TOA_SYNC       — sync state / coarse_offset / cum_tracking_shift
+# NR_TOA_SSB_GRID   — compact SSB RE grid dump
+# NR_TOA_CIR        — oversampled CIR / peak
+# NR_TOA_MEAS       — per-anchor TOA / pseudorange
+# NR_TOA_SOL        — WLS position + clk_bias + residual

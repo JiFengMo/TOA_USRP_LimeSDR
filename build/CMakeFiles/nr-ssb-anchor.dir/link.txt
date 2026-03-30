@@ -1,0 +1,1 @@
+/usr/bin/c++ "CMakeFiles/nr-ssb-anchor.dir/executables/nr-ssb-anchor.c.o" -o nr-ssb-anchor  libnr_positioning.a libnr_radio.a -lm -lpthread 

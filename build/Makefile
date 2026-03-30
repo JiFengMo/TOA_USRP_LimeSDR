@@ -117,1083 +117,889 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named toa_io
+# Target rules for targets named nr_radio
 
 # Build rule for target.
-toa_io: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 toa_io
-.PHONY : toa_io
+nr_radio: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_radio
+.PHONY : nr_radio
 
 # fast build rule for target.
-toa_io/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/build
-.PHONY : toa_io/fast
+nr_radio/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_radio.dir/build.make CMakeFiles/nr_radio.dir/build
+.PHONY : nr_radio/fast
 
 #=============================================================================
-# Target rules for targets named toa_pipeline
+# Target rules for targets named nr_positioning
 
 # Build rule for target.
-toa_pipeline: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 toa_pipeline
-.PHONY : toa_pipeline
+nr_positioning: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_positioning
+.PHONY : nr_positioning
 
 # fast build rule for target.
-toa_pipeline/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_pipeline.dir/build.make CMakeFiles/toa_pipeline.dir/build
-.PHONY : toa_pipeline/fast
+nr_positioning/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/build
+.PHONY : nr_positioning/fast
 
 #=============================================================================
-# Target rules for targets named record_lime_iq
+# Target rules for targets named nr-toa-uesoftmodem
 
 # Build rule for target.
-record_lime_iq: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 record_lime_iq
-.PHONY : record_lime_iq
+nr-toa-uesoftmodem: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr-toa-uesoftmodem
+.PHONY : nr-toa-uesoftmodem
 
 # fast build rule for target.
-record_lime_iq/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/build
-.PHONY : record_lime_iq/fast
+nr-toa-uesoftmodem/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-toa-uesoftmodem.dir/build.make CMakeFiles/nr-toa-uesoftmodem.dir/build
+.PHONY : nr-toa-uesoftmodem/fast
 
 #=============================================================================
-# Target rules for targets named record_lime_gscn_scan
+# Target rules for targets named nr-ssb-anchor
 
 # Build rule for target.
-record_lime_gscn_scan: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 record_lime_gscn_scan
-.PHONY : record_lime_gscn_scan
+nr-ssb-anchor: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr-ssb-anchor
+.PHONY : nr-ssb-anchor
 
 # fast build rule for target.
-record_lime_gscn_scan/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/build
-.PHONY : record_lime_gscn_scan/fast
+nr-ssb-anchor/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-ssb-anchor.dir/build.make CMakeFiles/nr-ssb-anchor.dir/build
+.PHONY : nr-ssb-anchor/fast
 
 #=============================================================================
-# Target rules for targets named test_radio_lifecycle
+# Target rules for targets named replay_toa_iq
 
 # Build rule for target.
-test_radio_lifecycle: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_radio_lifecycle
-.PHONY : test_radio_lifecycle
+replay_toa_iq: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 replay_toa_iq
+.PHONY : replay_toa_iq
 
 # fast build rule for target.
-test_radio_lifecycle/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/build
-.PHONY : test_radio_lifecycle/fast
+replay_toa_iq/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/replay_toa_iq.dir/build.make CMakeFiles/replay_toa_iq.dir/build
+.PHONY : replay_toa_iq/fast
 
 #=============================================================================
-# Target rules for targets named nr_core
+# Target rules for targets named test_ssb_sync
 
 # Build rule for target.
-nr_core: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_core
-.PHONY : nr_core
+test_ssb_sync: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_ssb_sync
+.PHONY : test_ssb_sync
 
 # fast build rule for target.
-nr_core/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/build
-.PHONY : nr_core/fast
+test_ssb_sync/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_sync.dir/build.make CMakeFiles/test_ssb_sync.dir/build
+.PHONY : test_ssb_sync/fast
 
 #=============================================================================
-# Target rules for targets named toa_core
+# Target rules for targets named test_ssb_toa
 
 # Build rule for target.
-toa_core: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 toa_core
-.PHONY : toa_core
+test_ssb_toa: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_ssb_toa
+.PHONY : test_ssb_toa
 
 # fast build rule for target.
-toa_core/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/build
-.PHONY : toa_core/fast
+test_ssb_toa/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_toa.dir/build.make CMakeFiles/test_ssb_toa.dir/build
+.PHONY : test_ssb_toa/fast
 
 #=============================================================================
-# Target rules for targets named toa_prs_offline
+# Target rules for targets named test_prs_toa
 
 # Build rule for target.
-toa_prs_offline: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 toa_prs_offline
-.PHONY : toa_prs_offline
+test_prs_toa: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_prs_toa
+.PHONY : test_prs_toa
 
 # fast build rule for target.
-toa_prs_offline/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/build
-.PHONY : toa_prs_offline/fast
+test_prs_toa/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_prs_toa.dir/build.make CMakeFiles/test_prs_toa.dir/build
+.PHONY : test_prs_toa/fast
 
 #=============================================================================
-# Target rules for targets named toa_run_realtime
+# Target rules for targets named test_solver
 
 # Build rule for target.
-toa_run_realtime: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 toa_run_realtime
-.PHONY : toa_run_realtime
+test_solver: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_solver
+.PHONY : test_solver
 
 # fast build rule for target.
-toa_run_realtime/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/build
-.PHONY : toa_run_realtime/fast
+test_solver/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_solver.dir/build.make CMakeFiles/test_solver.dir/build
+.PHONY : test_solver/fast
 
-#=============================================================================
-# Target rules for targets named nr_ssb_scan
-
-# Build rule for target.
-nr_ssb_scan: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_ssb_scan
-.PHONY : nr_ssb_scan
-
-# fast build rule for target.
-nr_ssb_scan/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/build
-.PHONY : nr_ssb_scan/fast
-
-#=============================================================================
-# Target rules for targets named nr_ssb_live_gscn
-
-# Build rule for target.
-nr_ssb_live_gscn: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_ssb_live_gscn
-.PHONY : nr_ssb_live_gscn
-
-# fast build rule for target.
-nr_ssb_live_gscn/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/build
-.PHONY : nr_ssb_live_gscn/fast
-
-#=============================================================================
-# Target rules for targets named nr_mib_decode
-
-# Build rule for target.
-nr_mib_decode: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_mib_decode
-.PHONY : nr_mib_decode
-
-# fast build rule for target.
-nr_mib_decode/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/build
-.PHONY : nr_mib_decode/fast
-
-#=============================================================================
-# Target rules for targets named nr_ssb_selftest
-
-# Build rule for target.
-nr_ssb_selftest: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_ssb_selftest
-.PHONY : nr_ssb_selftest
-
-# fast build rule for target.
-nr_ssb_selftest/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_selftest.dir/build.make CMakeFiles/nr_ssb_selftest.dir/build
-.PHONY : nr_ssb_selftest/fast
-
-#=============================================================================
-# Target rules for targets named nr_synth_ssb
-
-# Build rule for target.
-nr_synth_ssb: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 nr_synth_ssb
-.PHONY : nr_synth_ssb
-
-# fast build rule for target.
-nr_synth_ssb/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_synth_ssb.dir/build.make CMakeFiles/nr_synth_ssb.dir/build
-.PHONY : nr_synth_ssb/fast
-
-demo/nr_mib_decode.o: demo/nr_mib_decode.c.o
-.PHONY : demo/nr_mib_decode.o
+executables/nr-ssb-anchor.o: executables/nr-ssb-anchor.c.o
+.PHONY : executables/nr-ssb-anchor.o
 
 # target to build an object file
-demo/nr_mib_decode.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/demo/nr_mib_decode.c.o
-.PHONY : demo/nr_mib_decode.c.o
+executables/nr-ssb-anchor.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-ssb-anchor.dir/build.make CMakeFiles/nr-ssb-anchor.dir/executables/nr-ssb-anchor.c.o
+.PHONY : executables/nr-ssb-anchor.c.o
 
-demo/nr_mib_decode.i: demo/nr_mib_decode.c.i
-.PHONY : demo/nr_mib_decode.i
+executables/nr-ssb-anchor.i: executables/nr-ssb-anchor.c.i
+.PHONY : executables/nr-ssb-anchor.i
 
 # target to preprocess a source file
-demo/nr_mib_decode.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/demo/nr_mib_decode.c.i
-.PHONY : demo/nr_mib_decode.c.i
+executables/nr-ssb-anchor.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-ssb-anchor.dir/build.make CMakeFiles/nr-ssb-anchor.dir/executables/nr-ssb-anchor.c.i
+.PHONY : executables/nr-ssb-anchor.c.i
 
-demo/nr_mib_decode.s: demo/nr_mib_decode.c.s
-.PHONY : demo/nr_mib_decode.s
+executables/nr-ssb-anchor.s: executables/nr-ssb-anchor.c.s
+.PHONY : executables/nr-ssb-anchor.s
 
 # target to generate assembly for a file
-demo/nr_mib_decode.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/demo/nr_mib_decode.c.s
-.PHONY : demo/nr_mib_decode.c.s
+executables/nr-ssb-anchor.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-ssb-anchor.dir/build.make CMakeFiles/nr-ssb-anchor.dir/executables/nr-ssb-anchor.c.s
+.PHONY : executables/nr-ssb-anchor.c.s
 
-demo/nr_ssb_live_gscn.o: demo/nr_ssb_live_gscn.c.o
-.PHONY : demo/nr_ssb_live_gscn.o
+executables/nr-toa-uesoftmodem.o: executables/nr-toa-uesoftmodem.c.o
+.PHONY : executables/nr-toa-uesoftmodem.o
 
 # target to build an object file
-demo/nr_ssb_live_gscn.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/demo/nr_ssb_live_gscn.c.o
-.PHONY : demo/nr_ssb_live_gscn.c.o
+executables/nr-toa-uesoftmodem.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-toa-uesoftmodem.dir/build.make CMakeFiles/nr-toa-uesoftmodem.dir/executables/nr-toa-uesoftmodem.c.o
+.PHONY : executables/nr-toa-uesoftmodem.c.o
 
-demo/nr_ssb_live_gscn.i: demo/nr_ssb_live_gscn.c.i
-.PHONY : demo/nr_ssb_live_gscn.i
+executables/nr-toa-uesoftmodem.i: executables/nr-toa-uesoftmodem.c.i
+.PHONY : executables/nr-toa-uesoftmodem.i
 
 # target to preprocess a source file
-demo/nr_ssb_live_gscn.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/demo/nr_ssb_live_gscn.c.i
-.PHONY : demo/nr_ssb_live_gscn.c.i
+executables/nr-toa-uesoftmodem.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-toa-uesoftmodem.dir/build.make CMakeFiles/nr-toa-uesoftmodem.dir/executables/nr-toa-uesoftmodem.c.i
+.PHONY : executables/nr-toa-uesoftmodem.c.i
 
-demo/nr_ssb_live_gscn.s: demo/nr_ssb_live_gscn.c.s
-.PHONY : demo/nr_ssb_live_gscn.s
+executables/nr-toa-uesoftmodem.s: executables/nr-toa-uesoftmodem.c.s
+.PHONY : executables/nr-toa-uesoftmodem.s
 
 # target to generate assembly for a file
-demo/nr_ssb_live_gscn.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/demo/nr_ssb_live_gscn.c.s
-.PHONY : demo/nr_ssb_live_gscn.c.s
+executables/nr-toa-uesoftmodem.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-toa-uesoftmodem.dir/build.make CMakeFiles/nr-toa-uesoftmodem.dir/executables/nr-toa-uesoftmodem.c.s
+.PHONY : executables/nr-toa-uesoftmodem.c.s
 
-demo/nr_ssb_scan.o: demo/nr_ssb_scan.c.o
-.PHONY : demo/nr_ssb_scan.o
+openair1/PHY/NR_POSITIONING/common/nr_anchor_db.o: openair1/PHY/NR_POSITIONING/common/nr_anchor_db.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_anchor_db.o
 
 # target to build an object file
-demo/nr_ssb_scan.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/demo/nr_ssb_scan.c.o
-.PHONY : demo/nr_ssb_scan.c.o
+openair1/PHY/NR_POSITIONING/common/nr_anchor_db.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_anchor_db.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_anchor_db.c.o
 
-demo/nr_ssb_scan.i: demo/nr_ssb_scan.c.i
-.PHONY : demo/nr_ssb_scan.i
+openair1/PHY/NR_POSITIONING/common/nr_anchor_db.i: openair1/PHY/NR_POSITIONING/common/nr_anchor_db.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_anchor_db.i
 
 # target to preprocess a source file
-demo/nr_ssb_scan.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/demo/nr_ssb_scan.c.i
-.PHONY : demo/nr_ssb_scan.c.i
+openair1/PHY/NR_POSITIONING/common/nr_anchor_db.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_anchor_db.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_anchor_db.c.i
 
-demo/nr_ssb_scan.s: demo/nr_ssb_scan.c.s
-.PHONY : demo/nr_ssb_scan.s
+openair1/PHY/NR_POSITIONING/common/nr_anchor_db.s: openair1/PHY/NR_POSITIONING/common/nr_anchor_db.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_anchor_db.s
 
 # target to generate assembly for a file
-demo/nr_ssb_scan.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/demo/nr_ssb_scan.c.s
-.PHONY : demo/nr_ssb_scan.c.s
+openair1/PHY/NR_POSITIONING/common/nr_anchor_db.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_anchor_db.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_anchor_db.c.s
 
-demo/nr_ssb_selftest.o: demo/nr_ssb_selftest.c.o
-.PHONY : demo/nr_ssb_selftest.o
+openair1/PHY/NR_POSITIONING/common/nr_anchor_write.o: openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_anchor_write.o
 
 # target to build an object file
-demo/nr_ssb_selftest.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_selftest.dir/build.make CMakeFiles/nr_ssb_selftest.dir/demo/nr_ssb_selftest.c.o
-.PHONY : demo/nr_ssb_selftest.c.o
+openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c.o
 
-demo/nr_ssb_selftest.i: demo/nr_ssb_selftest.c.i
-.PHONY : demo/nr_ssb_selftest.i
+openair1/PHY/NR_POSITIONING/common/nr_anchor_write.i: openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_anchor_write.i
 
 # target to preprocess a source file
-demo/nr_ssb_selftest.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_selftest.dir/build.make CMakeFiles/nr_ssb_selftest.dir/demo/nr_ssb_selftest.c.i
-.PHONY : demo/nr_ssb_selftest.c.i
+openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c.i
 
-demo/nr_ssb_selftest.s: demo/nr_ssb_selftest.c.s
-.PHONY : demo/nr_ssb_selftest.s
+openair1/PHY/NR_POSITIONING/common/nr_anchor_write.s: openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_anchor_write.s
 
 # target to generate assembly for a file
-demo/nr_ssb_selftest.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_selftest.dir/build.make CMakeFiles/nr_ssb_selftest.dir/demo/nr_ssb_selftest.c.s
-.PHONY : demo/nr_ssb_selftest.c.s
+openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c.s
 
-demo/nr_synth_ssb.o: demo/nr_synth_ssb.c.o
-.PHONY : demo/nr_synth_ssb.o
+openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.o: openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.o
 
 # target to build an object file
-demo/nr_synth_ssb.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_synth_ssb.dir/build.make CMakeFiles/nr_synth_ssb.dir/demo/nr_synth_ssb.c.o
-.PHONY : demo/nr_synth_ssb.c.o
+openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c.o
 
-demo/nr_synth_ssb.i: demo/nr_synth_ssb.c.i
-.PHONY : demo/nr_synth_ssb.i
+openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.i: openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.i
 
 # target to preprocess a source file
-demo/nr_synth_ssb.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_synth_ssb.dir/build.make CMakeFiles/nr_synth_ssb.dir/demo/nr_synth_ssb.c.i
-.PHONY : demo/nr_synth_ssb.c.i
+openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c.i
 
-demo/nr_synth_ssb.s: demo/nr_synth_ssb.c.s
-.PHONY : demo/nr_synth_ssb.s
+openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.s: openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.s
 
 # target to generate assembly for a file
-demo/nr_synth_ssb.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_synth_ssb.dir/build.make CMakeFiles/nr_synth_ssb.dir/demo/nr_synth_ssb.c.s
-.PHONY : demo/nr_synth_ssb.c.s
+openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c.s
 
-demo/record_lime_gscn_scan.o: demo/record_lime_gscn_scan.c.o
-.PHONY : demo/record_lime_gscn_scan.o
+openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.o: openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.o
 
 # target to build an object file
-demo/record_lime_gscn_scan.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/demo/record_lime_gscn_scan.c.o
-.PHONY : demo/record_lime_gscn_scan.c.o
+openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.c.o
 
-demo/record_lime_gscn_scan.i: demo/record_lime_gscn_scan.c.i
-.PHONY : demo/record_lime_gscn_scan.i
+openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.i: openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.i
 
 # target to preprocess a source file
-demo/record_lime_gscn_scan.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/demo/record_lime_gscn_scan.c.i
-.PHONY : demo/record_lime_gscn_scan.c.i
+openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.c.i
 
-demo/record_lime_gscn_scan.s: demo/record_lime_gscn_scan.c.s
-.PHONY : demo/record_lime_gscn_scan.s
+openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.s: openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.s
 
 # target to generate assembly for a file
-demo/record_lime_gscn_scan.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/demo/record_lime_gscn_scan.c.s
-.PHONY : demo/record_lime_gscn_scan.c.s
+openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.c.s
 
-demo/record_lime_iq.o: demo/record_lime_iq.c.o
-.PHONY : demo/record_lime_iq.o
+openair1/PHY/NR_POSITIONING/common/nr_iq_ring.o: openair1/PHY/NR_POSITIONING/common/nr_iq_ring.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_iq_ring.o
 
 # target to build an object file
-demo/record_lime_iq.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/demo/record_lime_iq.c.o
-.PHONY : demo/record_lime_iq.c.o
+openair1/PHY/NR_POSITIONING/common/nr_iq_ring.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_iq_ring.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_iq_ring.c.o
 
-demo/record_lime_iq.i: demo/record_lime_iq.c.i
-.PHONY : demo/record_lime_iq.i
+openair1/PHY/NR_POSITIONING/common/nr_iq_ring.i: openair1/PHY/NR_POSITIONING/common/nr_iq_ring.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_iq_ring.i
 
 # target to preprocess a source file
-demo/record_lime_iq.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/demo/record_lime_iq.c.i
-.PHONY : demo/record_lime_iq.c.i
+openair1/PHY/NR_POSITIONING/common/nr_iq_ring.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_iq_ring.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_iq_ring.c.i
 
-demo/record_lime_iq.s: demo/record_lime_iq.c.s
-.PHONY : demo/record_lime_iq.s
+openair1/PHY/NR_POSITIONING/common/nr_iq_ring.s: openair1/PHY/NR_POSITIONING/common/nr_iq_ring.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_iq_ring.s
 
 # target to generate assembly for a file
-demo/record_lime_iq.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/demo/record_lime_iq.c.s
-.PHONY : demo/record_lime_iq.c.s
+openair1/PHY/NR_POSITIONING/common/nr_iq_ring.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_iq_ring.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_iq_ring.c.s
 
-demo/test_radio_lifecycle.o: demo/test_radio_lifecycle.c.o
-.PHONY : demo/test_radio_lifecycle.o
+openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.o: openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.o
 
 # target to build an object file
-demo/test_radio_lifecycle.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/demo/test_radio_lifecycle.c.o
-.PHONY : demo/test_radio_lifecycle.c.o
+openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.o
 
-demo/test_radio_lifecycle.i: demo/test_radio_lifecycle.c.i
-.PHONY : demo/test_radio_lifecycle.i
+openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.i: openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.i
 
 # target to preprocess a source file
-demo/test_radio_lifecycle.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/demo/test_radio_lifecycle.c.i
-.PHONY : demo/test_radio_lifecycle.c.i
+openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.i
 
-demo/test_radio_lifecycle.s: demo/test_radio_lifecycle.c.s
-.PHONY : demo/test_radio_lifecycle.s
+openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.s: openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.s
 
 # target to generate assembly for a file
-demo/test_radio_lifecycle.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/demo/test_radio_lifecycle.c.s
-.PHONY : demo/test_radio_lifecycle.c.s
+openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.s
 
-demo/toa_prs_offline.o: demo/toa_prs_offline.c.o
-.PHONY : demo/toa_prs_offline.o
+openair1/PHY/NR_POSITIONING/common/nr_pos_solver.o: openair1/PHY/NR_POSITIONING/common/nr_pos_solver.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_pos_solver.o
 
 # target to build an object file
-demo/toa_prs_offline.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/demo/toa_prs_offline.c.o
-.PHONY : demo/toa_prs_offline.c.o
+openair1/PHY/NR_POSITIONING/common/nr_pos_solver.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_pos_solver.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_pos_solver.c.o
 
-demo/toa_prs_offline.i: demo/toa_prs_offline.c.i
-.PHONY : demo/toa_prs_offline.i
+openair1/PHY/NR_POSITIONING/common/nr_pos_solver.i: openair1/PHY/NR_POSITIONING/common/nr_pos_solver.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_pos_solver.i
 
 # target to preprocess a source file
-demo/toa_prs_offline.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/demo/toa_prs_offline.c.i
-.PHONY : demo/toa_prs_offline.c.i
+openair1/PHY/NR_POSITIONING/common/nr_pos_solver.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_pos_solver.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_pos_solver.c.i
 
-demo/toa_prs_offline.s: demo/toa_prs_offline.c.s
-.PHONY : demo/toa_prs_offline.s
+openair1/PHY/NR_POSITIONING/common/nr_pos_solver.s: openair1/PHY/NR_POSITIONING/common/nr_pos_solver.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_pos_solver.s
 
 # target to generate assembly for a file
-demo/toa_prs_offline.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/demo/toa_prs_offline.c.s
-.PHONY : demo/toa_prs_offline.c.s
+openair1/PHY/NR_POSITIONING/common/nr_pos_solver.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_pos_solver.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_pos_solver.c.s
 
-demo/toa_run_realtime.o: demo/toa_run_realtime.c.o
-.PHONY : demo/toa_run_realtime.o
+openair1/PHY/NR_POSITIONING/common/nr_radio_if.o: openair1/PHY/NR_POSITIONING/common/nr_radio_if.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_radio_if.o
 
 # target to build an object file
-demo/toa_run_realtime.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/demo/toa_run_realtime.c.o
-.PHONY : demo/toa_run_realtime.c.o
+openair1/PHY/NR_POSITIONING/common/nr_radio_if.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_radio_if.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_radio_if.c.o
 
-demo/toa_run_realtime.i: demo/toa_run_realtime.c.i
-.PHONY : demo/toa_run_realtime.i
+openair1/PHY/NR_POSITIONING/common/nr_radio_if.i: openair1/PHY/NR_POSITIONING/common/nr_radio_if.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_radio_if.i
 
 # target to preprocess a source file
-demo/toa_run_realtime.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/demo/toa_run_realtime.c.i
-.PHONY : demo/toa_run_realtime.c.i
+openair1/PHY/NR_POSITIONING/common/nr_radio_if.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_radio_if.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_radio_if.c.i
 
-demo/toa_run_realtime.s: demo/toa_run_realtime.c.s
-.PHONY : demo/toa_run_realtime.s
+openair1/PHY/NR_POSITIONING/common/nr_radio_if.s: openair1/PHY/NR_POSITIONING/common/nr_radio_if.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_radio_if.s
 
 # target to generate assembly for a file
-demo/toa_run_realtime.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/demo/toa_run_realtime.c.s
-.PHONY : demo/toa_run_realtime.c.s
+openair1/PHY/NR_POSITIONING/common/nr_radio_if.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_radio_if.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_radio_if.c.s
 
-src/common/cli.o: src/common/cli.c.o
-.PHONY : src/common/cli.o
+openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.o: openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.o
 
 # target to build an object file
-src/common/cli.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/cli.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/common/cli.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/src/common/cli.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/src/common/cli.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/common/cli.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/src/common/cli.c.o
-.PHONY : src/common/cli.c.o
+openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c.o
 
-src/common/cli.i: src/common/cli.c.i
-.PHONY : src/common/cli.i
+openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.i: openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.i
 
 # target to preprocess a source file
-src/common/cli.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/cli.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/common/cli.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/src/common/cli.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/src/common/cli.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/common/cli.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/src/common/cli.c.i
-.PHONY : src/common/cli.c.i
+openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c.i
 
-src/common/cli.s: src/common/cli.c.s
-.PHONY : src/common/cli.s
+openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.s: openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.s
 
 # target to generate assembly for a file
-src/common/cli.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/cli.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/common/cli.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/src/common/cli.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/src/common/cli.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/common/cli.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/src/common/cli.c.s
-.PHONY : src/common/cli.c.s
+openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c.s
 
-src/common/log.o: src/common/log.c.o
-.PHONY : src/common/log.o
+openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.o: openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.o
 
 # target to build an object file
-src/common/log.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/log.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/common/log.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/common/log.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/log.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/src/common/log.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/common/log.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/src/common/log.c.o
-.PHONY : src/common/log.c.o
+openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.c.o
 
-src/common/log.i: src/common/log.c.i
-.PHONY : src/common/log.i
+openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.i: openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.i
 
 # target to preprocess a source file
-src/common/log.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/log.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/common/log.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/common/log.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/log.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/src/common/log.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/common/log.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/src/common/log.c.i
-.PHONY : src/common/log.c.i
+openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.c.i
 
-src/common/log.s: src/common/log.c.s
-.PHONY : src/common/log.s
+openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.s: openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.s
 
 # target to generate assembly for a file
-src/common/log.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/common/log.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/common/log.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/common/log.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/log.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/src/common/log.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/common/log.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/src/common/log.c.s
-.PHONY : src/common/log.c.s
+openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.c.s
 
-src/common/ring_buffer.o: src/common/ring_buffer.c.o
-.PHONY : src/common/ring_buffer.o
+openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.o: openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.o
 
 # target to build an object file
-src/common/ring_buffer.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/ring_buffer.c.o
-.PHONY : src/common/ring_buffer.c.o
+openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.c.o
 
-src/common/ring_buffer.i: src/common/ring_buffer.c.i
-.PHONY : src/common/ring_buffer.i
+openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.i: openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.i
 
 # target to preprocess a source file
-src/common/ring_buffer.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/ring_buffer.c.i
-.PHONY : src/common/ring_buffer.c.i
+openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.c.i
 
-src/common/ring_buffer.s: src/common/ring_buffer.c.s
-.PHONY : src/common/ring_buffer.s
+openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.s: openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.s
 
 # target to generate assembly for a file
-src/common/ring_buffer.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/common/ring_buffer.c.s
-.PHONY : src/common/ring_buffer.c.s
+openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.c.s
 
-src/io/capture_session.o: src/io/capture_session.c.o
-.PHONY : src/io/capture_session.o
+openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.o: openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.o
 
 # target to build an object file
-src/io/capture_session.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/capture_session.c.o
-.PHONY : src/io/capture_session.c.o
+openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.o
 
-src/io/capture_session.i: src/io/capture_session.c.i
-.PHONY : src/io/capture_session.i
+openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.i: openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.i
 
 # target to preprocess a source file
-src/io/capture_session.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/capture_session.c.i
-.PHONY : src/io/capture_session.c.i
+openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.i
 
-src/io/capture_session.s: src/io/capture_session.c.s
-.PHONY : src/io/capture_session.s
+openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.s: openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.s
 
 # target to generate assembly for a file
-src/io/capture_session.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/capture_session.c.s
-.PHONY : src/io/capture_session.c.s
+openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.s
 
-src/io/iq_meta.o: src/io/iq_meta.c.o
-.PHONY : src/io/iq_meta.o
+openair1/PHY/NR_POSITIONING/common/nr_trace_sink.o: openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_trace_sink.o
 
 # target to build an object file
-src/io/iq_meta.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/iq_meta.c.o
-.PHONY : src/io/iq_meta.c.o
+openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c.o
 
-src/io/iq_meta.i: src/io/iq_meta.c.i
-.PHONY : src/io/iq_meta.i
+openair1/PHY/NR_POSITIONING/common/nr_trace_sink.i: openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_trace_sink.i
 
 # target to preprocess a source file
-src/io/iq_meta.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/iq_meta.c.i
-.PHONY : src/io/iq_meta.c.i
+openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c.i
 
-src/io/iq_meta.s: src/io/iq_meta.c.s
-.PHONY : src/io/iq_meta.s
+openair1/PHY/NR_POSITIONING/common/nr_trace_sink.s: openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_trace_sink.s
 
 # target to generate assembly for a file
-src/io/iq_meta.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/iq_meta.c.s
-.PHONY : src/io/iq_meta.c.s
+openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c.s
 
-src/io/iq_reader.o: src/io/iq_reader.c.o
-.PHONY : src/io/iq_reader.o
+openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.o: openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.o
 
 # target to build an object file
-src/io/iq_reader.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/iq_reader.c.o
-.PHONY : src/io/iq_reader.c.o
+openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.o
 
-src/io/iq_reader.i: src/io/iq_reader.c.i
-.PHONY : src/io/iq_reader.i
+openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.i: openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.i
 
 # target to preprocess a source file
-src/io/iq_reader.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/iq_reader.c.i
-.PHONY : src/io/iq_reader.c.i
+openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.i
 
-src/io/iq_reader.s: src/io/iq_reader.c.s
-.PHONY : src/io/iq_reader.s
+openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.s: openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.s
 
 # target to generate assembly for a file
-src/io/iq_reader.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/io/iq_reader.c.s
-.PHONY : src/io/iq_reader.c.s
+openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.s
 
-src/nr/gscn.o: src/nr/gscn.c.o
-.PHONY : src/nr/gscn.o
+openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.o: openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.o
 
 # target to build an object file
-src/nr/gscn.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/gscn.c.o
-.PHONY : src/nr/gscn.c.o
+openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.o
 
-src/nr/gscn.i: src/nr/gscn.c.i
-.PHONY : src/nr/gscn.i
+openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.i: openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.i
 
 # target to preprocess a source file
-src/nr/gscn.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/gscn.c.i
-.PHONY : src/nr/gscn.c.i
+openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.i
 
-src/nr/gscn.s: src/nr/gscn.c.s
-.PHONY : src/nr/gscn.s
+openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.s: openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.s
 
 # target to generate assembly for a file
-src/nr/gscn.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/gscn.c.s
-.PHONY : src/nr/gscn.c.s
+openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.s
 
-src/nr/mib.o: src/nr/mib.c.o
-.PHONY : src/nr/mib.o
+openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.o: openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.o
 
 # target to build an object file
-src/nr/mib.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/mib.c.o
-.PHONY : src/nr/mib.c.o
+openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.o
 
-src/nr/mib.i: src/nr/mib.c.i
-.PHONY : src/nr/mib.i
+openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.i: openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.i
 
 # target to preprocess a source file
-src/nr/mib.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/mib.c.i
-.PHONY : src/nr/mib.c.i
+openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.i
 
-src/nr/mib.s: src/nr/mib.c.s
-.PHONY : src/nr/mib.s
+openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.s: openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.s
 
 # target to generate assembly for a file
-src/nr/mib.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/mib.c.s
-.PHONY : src/nr/mib.c.s
+openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.s
 
-src/nr/nr_fft.o: src/nr/nr_fft.c.o
-.PHONY : src/nr/nr_fft.o
+openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.o: openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.o
 
 # target to build an object file
-src/nr/nr_fft.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_fft.c.o
-.PHONY : src/nr/nr_fft.c.o
+openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.o
 
-src/nr/nr_fft.i: src/nr/nr_fft.c.i
-.PHONY : src/nr/nr_fft.i
+openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.i: openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.i
 
 # target to preprocess a source file
-src/nr/nr_fft.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_fft.c.i
-.PHONY : src/nr/nr_fft.c.i
+openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.i
 
-src/nr/nr_fft.s: src/nr/nr_fft.c.s
-.PHONY : src/nr/nr_fft.s
+openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.s: openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.s
 
 # target to generate assembly for a file
-src/nr/nr_fft.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_fft.c.s
-.PHONY : src/nr/nr_fft.c.s
+openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.s
 
-src/nr/nr_grid.o: src/nr/nr_grid.c.o
-.PHONY : src/nr/nr_grid.o
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.o: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.o
 
 # target to build an object file
-src/nr/nr_grid.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_grid.c.o
-.PHONY : src/nr/nr_grid.c.o
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.o
 
-src/nr/nr_grid.i: src/nr/nr_grid.c.i
-.PHONY : src/nr/nr_grid.i
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.i: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.i
 
 # target to preprocess a source file
-src/nr/nr_grid.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_grid.c.i
-.PHONY : src/nr/nr_grid.c.i
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.i
 
-src/nr/nr_grid.s: src/nr/nr_grid.c.s
-.PHONY : src/nr/nr_grid.s
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.s: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.s
 
 # target to generate assembly for a file
-src/nr/nr_grid.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_grid.c.s
-.PHONY : src/nr/nr_grid.c.s
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.s
 
-src/nr/nr_sequence.o: src/nr/nr_sequence.c.o
-.PHONY : src/nr/nr_sequence.o
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.o: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.o
 
 # target to build an object file
-src/nr/nr_sequence.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.o
-.PHONY : src/nr/nr_sequence.c.o
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.o
 
-src/nr/nr_sequence.i: src/nr/nr_sequence.c.i
-.PHONY : src/nr/nr_sequence.i
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.i: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.i
 
 # target to preprocess a source file
-src/nr/nr_sequence.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.i
-.PHONY : src/nr/nr_sequence.c.i
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.i
 
-src/nr/nr_sequence.s: src/nr/nr_sequence.c.s
-.PHONY : src/nr/nr_sequence.s
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.s: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.s
 
 # target to generate assembly for a file
-src/nr/nr_sequence.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/nr_sequence.c.s
-.PHONY : src/nr/nr_sequence.c.s
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.s
 
-src/nr/pbch_decode.o: src/nr/pbch_decode.c.o
-.PHONY : src/nr/pbch_decode.o
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.o: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.o
 
 # target to build an object file
-src/nr/pbch_decode.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.o
-.PHONY : src/nr/pbch_decode.c.o
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.o
 
-src/nr/pbch_decode.i: src/nr/pbch_decode.c.i
-.PHONY : src/nr/pbch_decode.i
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.i: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.i
 
 # target to preprocess a source file
-src/nr/pbch_decode.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.i
-.PHONY : src/nr/pbch_decode.c.i
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.i
 
-src/nr/pbch_decode.s: src/nr/pbch_decode.c.s
-.PHONY : src/nr/pbch_decode.s
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.s: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.s
 
 # target to generate assembly for a file
-src/nr/pbch_decode.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_decode.c.s
-.PHONY : src/nr/pbch_decode.c.s
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.s
 
-src/nr/pbch_dmrs.o: src/nr/pbch_dmrs.c.o
-.PHONY : src/nr/pbch_dmrs.o
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.o: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.o
 
 # target to build an object file
-src/nr/pbch_dmrs.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.o
-.PHONY : src/nr/pbch_dmrs.c.o
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.o
 
-src/nr/pbch_dmrs.i: src/nr/pbch_dmrs.c.i
-.PHONY : src/nr/pbch_dmrs.i
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.i: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.i
 
 # target to preprocess a source file
-src/nr/pbch_dmrs.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.i
-.PHONY : src/nr/pbch_dmrs.c.i
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.i
 
-src/nr/pbch_dmrs.s: src/nr/pbch_dmrs.c.s
-.PHONY : src/nr/pbch_dmrs.s
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.s: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.s
 
 # target to generate assembly for a file
-src/nr/pbch_dmrs.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_dmrs.c.s
-.PHONY : src/nr/pbch_dmrs.c.s
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.s
 
-src/nr/pbch_re.o: src/nr/pbch_re.c.o
-.PHONY : src/nr/pbch_re.o
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.o: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.o
 
 # target to build an object file
-src/nr/pbch_re.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_re.c.o
-.PHONY : src/nr/pbch_re.c.o
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.o
 
-src/nr/pbch_re.i: src/nr/pbch_re.c.i
-.PHONY : src/nr/pbch_re.i
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.i: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.i
 
 # target to preprocess a source file
-src/nr/pbch_re.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_re.c.i
-.PHONY : src/nr/pbch_re.c.i
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.i
 
-src/nr/pbch_re.s: src/nr/pbch_re.c.s
-.PHONY : src/nr/pbch_re.s
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.s: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.s
 
 # target to generate assembly for a file
-src/nr/pbch_re.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/pbch_re.c.s
-.PHONY : src/nr/pbch_re.c.s
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.s
 
-src/nr/polar.o: src/nr/polar.c.o
-.PHONY : src/nr/polar.o
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.o: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.o
 
 # target to build an object file
-src/nr/polar.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/polar.c.o
-.PHONY : src/nr/polar.c.o
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.o
 
-src/nr/polar.i: src/nr/polar.c.i
-.PHONY : src/nr/polar.i
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.i: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.i
 
 # target to preprocess a source file
-src/nr/polar.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/polar.c.i
-.PHONY : src/nr/polar.c.i
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.i
 
-src/nr/polar.s: src/nr/polar.c.s
-.PHONY : src/nr/polar.s
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.s: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.s
 
 # target to generate assembly for a file
-src/nr/polar.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/polar.c.s
-.PHONY : src/nr/polar.c.s
+openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.s
 
-src/nr/ssb_sync.o: src/nr/ssb_sync.c.o
-.PHONY : src/nr/ssb_sync.o
+openair1/PHY/NR_POSITIONING/tests/test_prs_toa.o: openair1/PHY/NR_POSITIONING/tests/test_prs_toa.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_prs_toa.o
 
 # target to build an object file
-src/nr/ssb_sync.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.o
-.PHONY : src/nr/ssb_sync.c.o
+openair1/PHY/NR_POSITIONING/tests/test_prs_toa.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_prs_toa.dir/build.make CMakeFiles/test_prs_toa.dir/openair1/PHY/NR_POSITIONING/tests/test_prs_toa.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_prs_toa.c.o
 
-src/nr/ssb_sync.i: src/nr/ssb_sync.c.i
-.PHONY : src/nr/ssb_sync.i
+openair1/PHY/NR_POSITIONING/tests/test_prs_toa.i: openair1/PHY/NR_POSITIONING/tests/test_prs_toa.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_prs_toa.i
 
 # target to preprocess a source file
-src/nr/ssb_sync.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.i
-.PHONY : src/nr/ssb_sync.c.i
+openair1/PHY/NR_POSITIONING/tests/test_prs_toa.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_prs_toa.dir/build.make CMakeFiles/test_prs_toa.dir/openair1/PHY/NR_POSITIONING/tests/test_prs_toa.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_prs_toa.c.i
 
-src/nr/ssb_sync.s: src/nr/ssb_sync.c.s
-.PHONY : src/nr/ssb_sync.s
+openair1/PHY/NR_POSITIONING/tests/test_prs_toa.s: openair1/PHY/NR_POSITIONING/tests/test_prs_toa.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_prs_toa.s
 
 # target to generate assembly for a file
-src/nr/ssb_sync.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/src/nr/ssb_sync.c.s
-.PHONY : src/nr/ssb_sync.c.s
+openair1/PHY/NR_POSITIONING/tests/test_prs_toa.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_prs_toa.dir/build.make CMakeFiles/test_prs_toa.dir/openair1/PHY/NR_POSITIONING/tests/test_prs_toa.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_prs_toa.c.s
 
-src/pipeline/offline_runner.o: src/pipeline/offline_runner.c.o
-.PHONY : src/pipeline/offline_runner.o
+openair1/PHY/NR_POSITIONING/tests/test_solver.o: openair1/PHY/NR_POSITIONING/tests/test_solver.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_solver.o
 
 # target to build an object file
-src/pipeline/offline_runner.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_pipeline.dir/build.make CMakeFiles/toa_pipeline.dir/src/pipeline/offline_runner.c.o
-.PHONY : src/pipeline/offline_runner.c.o
+openair1/PHY/NR_POSITIONING/tests/test_solver.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_solver.dir/build.make CMakeFiles/test_solver.dir/openair1/PHY/NR_POSITIONING/tests/test_solver.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_solver.c.o
 
-src/pipeline/offline_runner.i: src/pipeline/offline_runner.c.i
-.PHONY : src/pipeline/offline_runner.i
+openair1/PHY/NR_POSITIONING/tests/test_solver.i: openair1/PHY/NR_POSITIONING/tests/test_solver.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_solver.i
 
 # target to preprocess a source file
-src/pipeline/offline_runner.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_pipeline.dir/build.make CMakeFiles/toa_pipeline.dir/src/pipeline/offline_runner.c.i
-.PHONY : src/pipeline/offline_runner.c.i
+openair1/PHY/NR_POSITIONING/tests/test_solver.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_solver.dir/build.make CMakeFiles/test_solver.dir/openair1/PHY/NR_POSITIONING/tests/test_solver.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_solver.c.i
 
-src/pipeline/offline_runner.s: src/pipeline/offline_runner.c.s
-.PHONY : src/pipeline/offline_runner.s
+openair1/PHY/NR_POSITIONING/tests/test_solver.s: openair1/PHY/NR_POSITIONING/tests/test_solver.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_solver.s
 
 # target to generate assembly for a file
-src/pipeline/offline_runner.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_pipeline.dir/build.make CMakeFiles/toa_pipeline.dir/src/pipeline/offline_runner.c.s
-.PHONY : src/pipeline/offline_runner.c.s
+openair1/PHY/NR_POSITIONING/tests/test_solver.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_solver.dir/build.make CMakeFiles/test_solver.dir/openair1/PHY/NR_POSITIONING/tests/test_solver.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_solver.c.s
 
-src/radio/radio_factory.o: src/radio/radio_factory.c.o
-.PHONY : src/radio/radio_factory.o
+openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.o: openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.o
 
 # target to build an object file
-src/radio/radio_factory.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_factory.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/radio/radio_factory.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_factory.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_factory.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/radio/radio_factory.c.o
-.PHONY : src/radio/radio_factory.c.o
+openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_sync.dir/build.make CMakeFiles/test_ssb_sync.dir/openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.o
 
-src/radio/radio_factory.i: src/radio/radio_factory.c.i
-.PHONY : src/radio/radio_factory.i
+openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.i: openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.i
 
 # target to preprocess a source file
-src/radio/radio_factory.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_factory.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/radio/radio_factory.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_factory.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_factory.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/radio/radio_factory.c.i
-.PHONY : src/radio/radio_factory.c.i
+openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_sync.dir/build.make CMakeFiles/test_ssb_sync.dir/openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.i
 
-src/radio/radio_factory.s: src/radio/radio_factory.c.s
-.PHONY : src/radio/radio_factory.s
+openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.s: openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.s
 
 # target to generate assembly for a file
-src/radio/radio_factory.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_factory.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/radio/radio_factory.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_factory.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_factory.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/radio/radio_factory.c.s
-.PHONY : src/radio/radio_factory.c.s
+openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_sync.dir/build.make CMakeFiles/test_ssb_sync.dir/openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.s
 
-src/radio/radio_lime.o: src/radio/radio_lime.c.o
-.PHONY : src/radio/radio_lime.o
+openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.o: openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.o
 
 # target to build an object file
-src/radio/radio_lime.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_lime.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/radio/radio_lime.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_lime.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_lime.c.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/radio/radio_lime.c.o
-.PHONY : src/radio/radio_lime.c.o
+openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_toa.dir/build.make CMakeFiles/test_ssb_toa.dir/openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.c.o
 
-src/radio/radio_lime.i: src/radio/radio_lime.c.i
-.PHONY : src/radio/radio_lime.i
+openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.i: openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.i
 
 # target to preprocess a source file
-src/radio/radio_lime.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_lime.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/radio/radio_lime.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_lime.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_lime.c.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/radio/radio_lime.c.i
-.PHONY : src/radio/radio_lime.c.i
+openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_toa.dir/build.make CMakeFiles/test_ssb_toa.dir/openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.c.i
 
-src/radio/radio_lime.s: src/radio/radio_lime.c.s
-.PHONY : src/radio/radio_lime.s
+openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.s: openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.s
 
 # target to generate assembly for a file
-src/radio/radio_lime.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/src/radio/radio_lime.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/src/radio/radio_lime.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/src/radio/radio_lime.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/src/radio/radio_lime.c.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/src/radio/radio_lime.c.s
-.PHONY : src/radio/radio_lime.c.s
+openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_toa.dir/build.make CMakeFiles/test_ssb_toa.dir/openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.c.s
 
-src/recorder/iq_recorder.o: src/recorder/iq_recorder.c.o
-.PHONY : src/recorder/iq_recorder.o
+radio/LIME/lime_lib.o: radio/LIME/lime_lib.cpp.o
+.PHONY : radio/LIME/lime_lib.o
 
 # target to build an object file
-src/recorder/iq_recorder.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/recorder/iq_recorder.c.o
-.PHONY : src/recorder/iq_recorder.c.o
+radio/LIME/lime_lib.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_radio.dir/build.make CMakeFiles/nr_radio.dir/radio/LIME/lime_lib.cpp.o
+.PHONY : radio/LIME/lime_lib.cpp.o
 
-src/recorder/iq_recorder.i: src/recorder/iq_recorder.c.i
-.PHONY : src/recorder/iq_recorder.i
+radio/LIME/lime_lib.i: radio/LIME/lime_lib.cpp.i
+.PHONY : radio/LIME/lime_lib.i
 
 # target to preprocess a source file
-src/recorder/iq_recorder.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/recorder/iq_recorder.c.i
-.PHONY : src/recorder/iq_recorder.c.i
+radio/LIME/lime_lib.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_radio.dir/build.make CMakeFiles/nr_radio.dir/radio/LIME/lime_lib.cpp.i
+.PHONY : radio/LIME/lime_lib.cpp.i
 
-src/recorder/iq_recorder.s: src/recorder/iq_recorder.c.s
-.PHONY : src/recorder/iq_recorder.s
+radio/LIME/lime_lib.s: radio/LIME/lime_lib.cpp.s
+.PHONY : radio/LIME/lime_lib.s
 
 # target to generate assembly for a file
-src/recorder/iq_recorder.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/src/recorder/iq_recorder.c.s
-.PHONY : src/recorder/iq_recorder.c.s
+radio/LIME/lime_lib.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_radio.dir/build.make CMakeFiles/nr_radio.dir/radio/LIME/lime_lib.cpp.s
+.PHONY : radio/LIME/lime_lib.cpp.s
 
-src/toa/prs_detector.o: src/toa/prs_detector.c.o
-.PHONY : src/toa/prs_detector.o
+radio/USRP/usrp_lib.o: radio/USRP/usrp_lib.cpp.o
+.PHONY : radio/USRP/usrp_lib.o
 
 # target to build an object file
-src/toa/prs_detector.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/prs_detector.c.o
-.PHONY : src/toa/prs_detector.c.o
+radio/USRP/usrp_lib.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_radio.dir/build.make CMakeFiles/nr_radio.dir/radio/USRP/usrp_lib.cpp.o
+.PHONY : radio/USRP/usrp_lib.cpp.o
 
-src/toa/prs_detector.i: src/toa/prs_detector.c.i
-.PHONY : src/toa/prs_detector.i
+radio/USRP/usrp_lib.i: radio/USRP/usrp_lib.cpp.i
+.PHONY : radio/USRP/usrp_lib.i
 
 # target to preprocess a source file
-src/toa/prs_detector.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/prs_detector.c.i
-.PHONY : src/toa/prs_detector.c.i
+radio/USRP/usrp_lib.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_radio.dir/build.make CMakeFiles/nr_radio.dir/radio/USRP/usrp_lib.cpp.i
+.PHONY : radio/USRP/usrp_lib.cpp.i
 
-src/toa/prs_detector.s: src/toa/prs_detector.c.s
-.PHONY : src/toa/prs_detector.s
+radio/USRP/usrp_lib.s: radio/USRP/usrp_lib.cpp.s
+.PHONY : radio/USRP/usrp_lib.s
 
 # target to generate assembly for a file
-src/toa/prs_detector.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/prs_detector.c.s
-.PHONY : src/toa/prs_detector.c.s
+radio/USRP/usrp_lib.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_radio.dir/build.make CMakeFiles/nr_radio.dir/radio/USRP/usrp_lib.cpp.s
+.PHONY : radio/USRP/usrp_lib.cpp.s
 
-src/toa/toa_context.o: src/toa/toa_context.c.o
-.PHONY : src/toa/toa_context.o
+tools/replay_toa_iq.o: tools/replay_toa_iq.c.o
+.PHONY : tools/replay_toa_iq.o
 
 # target to build an object file
-src/toa/toa_context.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_context.c.o
-.PHONY : src/toa/toa_context.c.o
+tools/replay_toa_iq.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/replay_toa_iq.dir/build.make CMakeFiles/replay_toa_iq.dir/tools/replay_toa_iq.c.o
+.PHONY : tools/replay_toa_iq.c.o
 
-src/toa/toa_context.i: src/toa/toa_context.c.i
-.PHONY : src/toa/toa_context.i
-
-# target to preprocess a source file
-src/toa/toa_context.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_context.c.i
-.PHONY : src/toa/toa_context.c.i
-
-src/toa/toa_context.s: src/toa/toa_context.c.s
-.PHONY : src/toa/toa_context.s
-
-# target to generate assembly for a file
-src/toa/toa_context.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_context.c.s
-.PHONY : src/toa/toa_context.c.s
-
-src/toa/toa_estimator.o: src/toa/toa_estimator.c.o
-.PHONY : src/toa/toa_estimator.o
-
-# target to build an object file
-src/toa/toa_estimator.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_estimator.c.o
-.PHONY : src/toa/toa_estimator.c.o
-
-src/toa/toa_estimator.i: src/toa/toa_estimator.c.i
-.PHONY : src/toa/toa_estimator.i
+tools/replay_toa_iq.i: tools/replay_toa_iq.c.i
+.PHONY : tools/replay_toa_iq.i
 
 # target to preprocess a source file
-src/toa/toa_estimator.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_estimator.c.i
-.PHONY : src/toa/toa_estimator.c.i
+tools/replay_toa_iq.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/replay_toa_iq.dir/build.make CMakeFiles/replay_toa_iq.dir/tools/replay_toa_iq.c.i
+.PHONY : tools/replay_toa_iq.c.i
 
-src/toa/toa_estimator.s: src/toa/toa_estimator.c.s
-.PHONY : src/toa/toa_estimator.s
-
-# target to generate assembly for a file
-src/toa/toa_estimator.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_estimator.c.s
-.PHONY : src/toa/toa_estimator.c.s
-
-src/toa/toa_pipeline.o: src/toa/toa_pipeline.c.o
-.PHONY : src/toa/toa_pipeline.o
-
-# target to build an object file
-src/toa/toa_pipeline.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_pipeline.c.o
-.PHONY : src/toa/toa_pipeline.c.o
-
-src/toa/toa_pipeline.i: src/toa/toa_pipeline.c.i
-.PHONY : src/toa/toa_pipeline.i
-
-# target to preprocess a source file
-src/toa/toa_pipeline.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_pipeline.c.i
-.PHONY : src/toa/toa_pipeline.c.i
-
-src/toa/toa_pipeline.s: src/toa/toa_pipeline.c.s
-.PHONY : src/toa/toa_pipeline.s
+tools/replay_toa_iq.s: tools/replay_toa_iq.c.s
+.PHONY : tools/replay_toa_iq.s
 
 # target to generate assembly for a file
-src/toa/toa_pipeline.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_pipeline.c.s
-.PHONY : src/toa/toa_pipeline.c.s
-
-src/toa/toa_solver_wls.o: src/toa/toa_solver_wls.c.o
-.PHONY : src/toa/toa_solver_wls.o
-
-# target to build an object file
-src/toa/toa_solver_wls.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_solver_wls.c.o
-.PHONY : src/toa/toa_solver_wls.c.o
-
-src/toa/toa_solver_wls.i: src/toa/toa_solver_wls.c.i
-.PHONY : src/toa/toa_solver_wls.i
-
-# target to preprocess a source file
-src/toa/toa_solver_wls.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_solver_wls.c.i
-.PHONY : src/toa/toa_solver_wls.c.i
-
-src/toa/toa_solver_wls.s: src/toa/toa_solver_wls.c.s
-.PHONY : src/toa/toa_solver_wls.s
-
-# target to generate assembly for a file
-src/toa/toa_solver_wls.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/src/toa/toa_solver_wls.c.s
-.PHONY : src/toa/toa_solver_wls.c.s
+tools/replay_toa_iq.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/replay_toa_iq.dir/build.make CMakeFiles/replay_toa_iq.dir/tools/replay_toa_iq.c.s
+.PHONY : tools/replay_toa_iq.c.s
 
 # Help Target
 help:
@@ -1203,125 +1009,111 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... nr_core"
-	@echo "... nr_mib_decode"
-	@echo "... nr_ssb_live_gscn"
-	@echo "... nr_ssb_scan"
-	@echo "... nr_ssb_selftest"
-	@echo "... nr_synth_ssb"
-	@echo "... record_lime_gscn_scan"
-	@echo "... record_lime_iq"
-	@echo "... test_radio_lifecycle"
-	@echo "... toa_core"
-	@echo "... toa_io"
-	@echo "... toa_pipeline"
-	@echo "... toa_prs_offline"
-	@echo "... toa_run_realtime"
-	@echo "... demo/nr_mib_decode.o"
-	@echo "... demo/nr_mib_decode.i"
-	@echo "... demo/nr_mib_decode.s"
-	@echo "... demo/nr_ssb_live_gscn.o"
-	@echo "... demo/nr_ssb_live_gscn.i"
-	@echo "... demo/nr_ssb_live_gscn.s"
-	@echo "... demo/nr_ssb_scan.o"
-	@echo "... demo/nr_ssb_scan.i"
-	@echo "... demo/nr_ssb_scan.s"
-	@echo "... demo/nr_ssb_selftest.o"
-	@echo "... demo/nr_ssb_selftest.i"
-	@echo "... demo/nr_ssb_selftest.s"
-	@echo "... demo/nr_synth_ssb.o"
-	@echo "... demo/nr_synth_ssb.i"
-	@echo "... demo/nr_synth_ssb.s"
-	@echo "... demo/record_lime_gscn_scan.o"
-	@echo "... demo/record_lime_gscn_scan.i"
-	@echo "... demo/record_lime_gscn_scan.s"
-	@echo "... demo/record_lime_iq.o"
-	@echo "... demo/record_lime_iq.i"
-	@echo "... demo/record_lime_iq.s"
-	@echo "... demo/test_radio_lifecycle.o"
-	@echo "... demo/test_radio_lifecycle.i"
-	@echo "... demo/test_radio_lifecycle.s"
-	@echo "... demo/toa_prs_offline.o"
-	@echo "... demo/toa_prs_offline.i"
-	@echo "... demo/toa_prs_offline.s"
-	@echo "... demo/toa_run_realtime.o"
-	@echo "... demo/toa_run_realtime.i"
-	@echo "... demo/toa_run_realtime.s"
-	@echo "... src/common/cli.o"
-	@echo "... src/common/cli.i"
-	@echo "... src/common/cli.s"
-	@echo "... src/common/log.o"
-	@echo "... src/common/log.i"
-	@echo "... src/common/log.s"
-	@echo "... src/common/ring_buffer.o"
-	@echo "... src/common/ring_buffer.i"
-	@echo "... src/common/ring_buffer.s"
-	@echo "... src/io/capture_session.o"
-	@echo "... src/io/capture_session.i"
-	@echo "... src/io/capture_session.s"
-	@echo "... src/io/iq_meta.o"
-	@echo "... src/io/iq_meta.i"
-	@echo "... src/io/iq_meta.s"
-	@echo "... src/io/iq_reader.o"
-	@echo "... src/io/iq_reader.i"
-	@echo "... src/io/iq_reader.s"
-	@echo "... src/nr/gscn.o"
-	@echo "... src/nr/gscn.i"
-	@echo "... src/nr/gscn.s"
-	@echo "... src/nr/mib.o"
-	@echo "... src/nr/mib.i"
-	@echo "... src/nr/mib.s"
-	@echo "... src/nr/nr_fft.o"
-	@echo "... src/nr/nr_fft.i"
-	@echo "... src/nr/nr_fft.s"
-	@echo "... src/nr/nr_grid.o"
-	@echo "... src/nr/nr_grid.i"
-	@echo "... src/nr/nr_grid.s"
-	@echo "... src/nr/nr_sequence.o"
-	@echo "... src/nr/nr_sequence.i"
-	@echo "... src/nr/nr_sequence.s"
-	@echo "... src/nr/pbch_decode.o"
-	@echo "... src/nr/pbch_decode.i"
-	@echo "... src/nr/pbch_decode.s"
-	@echo "... src/nr/pbch_dmrs.o"
-	@echo "... src/nr/pbch_dmrs.i"
-	@echo "... src/nr/pbch_dmrs.s"
-	@echo "... src/nr/pbch_re.o"
-	@echo "... src/nr/pbch_re.i"
-	@echo "... src/nr/pbch_re.s"
-	@echo "... src/nr/polar.o"
-	@echo "... src/nr/polar.i"
-	@echo "... src/nr/polar.s"
-	@echo "... src/nr/ssb_sync.o"
-	@echo "... src/nr/ssb_sync.i"
-	@echo "... src/nr/ssb_sync.s"
-	@echo "... src/pipeline/offline_runner.o"
-	@echo "... src/pipeline/offline_runner.i"
-	@echo "... src/pipeline/offline_runner.s"
-	@echo "... src/radio/radio_factory.o"
-	@echo "... src/radio/radio_factory.i"
-	@echo "... src/radio/radio_factory.s"
-	@echo "... src/radio/radio_lime.o"
-	@echo "... src/radio/radio_lime.i"
-	@echo "... src/radio/radio_lime.s"
-	@echo "... src/recorder/iq_recorder.o"
-	@echo "... src/recorder/iq_recorder.i"
-	@echo "... src/recorder/iq_recorder.s"
-	@echo "... src/toa/prs_detector.o"
-	@echo "... src/toa/prs_detector.i"
-	@echo "... src/toa/prs_detector.s"
-	@echo "... src/toa/toa_context.o"
-	@echo "... src/toa/toa_context.i"
-	@echo "... src/toa/toa_context.s"
-	@echo "... src/toa/toa_estimator.o"
-	@echo "... src/toa/toa_estimator.i"
-	@echo "... src/toa/toa_estimator.s"
-	@echo "... src/toa/toa_pipeline.o"
-	@echo "... src/toa/toa_pipeline.i"
-	@echo "... src/toa/toa_pipeline.s"
-	@echo "... src/toa/toa_solver_wls.o"
-	@echo "... src/toa/toa_solver_wls.i"
-	@echo "... src/toa/toa_solver_wls.s"
+	@echo "... nr-ssb-anchor"
+	@echo "... nr-toa-uesoftmodem"
+	@echo "... nr_positioning"
+	@echo "... nr_radio"
+	@echo "... replay_toa_iq"
+	@echo "... test_prs_toa"
+	@echo "... test_solver"
+	@echo "... test_ssb_sync"
+	@echo "... test_ssb_toa"
+	@echo "... executables/nr-ssb-anchor.o"
+	@echo "... executables/nr-ssb-anchor.i"
+	@echo "... executables/nr-ssb-anchor.s"
+	@echo "... executables/nr-toa-uesoftmodem.o"
+	@echo "... executables/nr-toa-uesoftmodem.i"
+	@echo "... executables/nr-toa-uesoftmodem.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_anchor_db.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_anchor_db.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_anchor_db.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_anchor_write.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_anchor_write.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_anchor_write.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_iq_ring.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_iq_ring.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_iq_ring.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_pos_solver.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_pos_solver.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_pos_solver.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_radio_if.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_radio_if.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_radio_if.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_trace_sink.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_trace_sink.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_trace_sink.s"
+	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.o"
+	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.i"
+	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.s"
+	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.o"
+	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.i"
+	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.s"
+	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.o"
+	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.i"
+	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.s"
+	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.o"
+	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.i"
+	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.s"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.o"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.i"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.s"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.o"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.i"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.s"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.o"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.i"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.s"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.o"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.i"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.s"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.o"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.i"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.s"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.o"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.i"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.s"
+	@echo "... openair1/PHY/NR_POSITIONING/tests/test_prs_toa.o"
+	@echo "... openair1/PHY/NR_POSITIONING/tests/test_prs_toa.i"
+	@echo "... openair1/PHY/NR_POSITIONING/tests/test_prs_toa.s"
+	@echo "... openair1/PHY/NR_POSITIONING/tests/test_solver.o"
+	@echo "... openair1/PHY/NR_POSITIONING/tests/test_solver.i"
+	@echo "... openair1/PHY/NR_POSITIONING/tests/test_solver.s"
+	@echo "... openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.o"
+	@echo "... openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.i"
+	@echo "... openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.s"
+	@echo "... openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.o"
+	@echo "... openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.i"
+	@echo "... openair1/PHY/NR_POSITIONING/tests/test_ssb_toa.s"
+	@echo "... radio/LIME/lime_lib.o"
+	@echo "... radio/LIME/lime_lib.i"
+	@echo "... radio/LIME/lime_lib.s"
+	@echo "... radio/USRP/usrp_lib.o"
+	@echo "... radio/USRP/usrp_lib.i"
+	@echo "... radio/USRP/usrp_lib.s"
+	@echo "... tools/replay_toa_iq.o"
+	@echo "... tools/replay_toa_iq.i"
+	@echo "... tools/replay_toa_iq.s"
 .PHONY : help
 
 

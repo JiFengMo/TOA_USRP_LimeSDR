@@ -63,20 +63,15 @@ CMAKE_BINARY_DIR = /home/jfm/桌面/TOA_USRP_LimeSDR/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/toa_io.dir/all
-all: CMakeFiles/toa_pipeline.dir/all
-all: CMakeFiles/record_lime_iq.dir/all
-all: CMakeFiles/record_lime_gscn_scan.dir/all
-all: CMakeFiles/test_radio_lifecycle.dir/all
-all: CMakeFiles/nr_core.dir/all
-all: CMakeFiles/toa_core.dir/all
-all: CMakeFiles/toa_prs_offline.dir/all
-all: CMakeFiles/toa_run_realtime.dir/all
-all: CMakeFiles/nr_ssb_scan.dir/all
-all: CMakeFiles/nr_ssb_live_gscn.dir/all
-all: CMakeFiles/nr_mib_decode.dir/all
-all: CMakeFiles/nr_ssb_selftest.dir/all
-all: CMakeFiles/nr_synth_ssb.dir/all
+all: CMakeFiles/nr_radio.dir/all
+all: CMakeFiles/nr_positioning.dir/all
+all: CMakeFiles/nr-toa-uesoftmodem.dir/all
+all: CMakeFiles/nr-ssb-anchor.dir/all
+all: CMakeFiles/replay_toa_iq.dir/all
+all: CMakeFiles/test_ssb_sync.dir/all
+all: CMakeFiles/test_ssb_toa.dir/all
+all: CMakeFiles/test_prs_toa.dir/all
+all: CMakeFiles/test_solver.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -84,394 +79,257 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/toa_io.dir/clean
-clean: CMakeFiles/toa_pipeline.dir/clean
-clean: CMakeFiles/record_lime_iq.dir/clean
-clean: CMakeFiles/record_lime_gscn_scan.dir/clean
-clean: CMakeFiles/test_radio_lifecycle.dir/clean
-clean: CMakeFiles/nr_core.dir/clean
-clean: CMakeFiles/toa_core.dir/clean
-clean: CMakeFiles/toa_prs_offline.dir/clean
-clean: CMakeFiles/toa_run_realtime.dir/clean
-clean: CMakeFiles/nr_ssb_scan.dir/clean
-clean: CMakeFiles/nr_ssb_live_gscn.dir/clean
-clean: CMakeFiles/nr_mib_decode.dir/clean
-clean: CMakeFiles/nr_ssb_selftest.dir/clean
-clean: CMakeFiles/nr_synth_ssb.dir/clean
+clean: CMakeFiles/nr_radio.dir/clean
+clean: CMakeFiles/nr_positioning.dir/clean
+clean: CMakeFiles/nr-toa-uesoftmodem.dir/clean
+clean: CMakeFiles/nr-ssb-anchor.dir/clean
+clean: CMakeFiles/replay_toa_iq.dir/clean
+clean: CMakeFiles/test_ssb_sync.dir/clean
+clean: CMakeFiles/test_ssb_toa.dir/clean
+clean: CMakeFiles/test_prs_toa.dir/clean
+clean: CMakeFiles/test_solver.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/toa_io.dir
+# Target rules for target CMakeFiles/nr_radio.dir
 
 # All Build rule for target.
-CMakeFiles/toa_io.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=55,56,57,58,59 "Built target toa_io"
-.PHONY : CMakeFiles/toa_io.dir/all
+CMakeFiles/nr_radio.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_radio.dir/build.make CMakeFiles/nr_radio.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_radio.dir/build.make CMakeFiles/nr_radio.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=29,30,31 "Built target nr_radio"
+.PHONY : CMakeFiles/nr_radio.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/toa_io.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 5
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/toa_io.dir/all
+CMakeFiles/nr_radio.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 3
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/nr_radio.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 0
-.PHONY : CMakeFiles/toa_io.dir/rule
+.PHONY : CMakeFiles/nr_radio.dir/rule
 
 # Convenience name for target.
-toa_io: CMakeFiles/toa_io.dir/rule
-.PHONY : toa_io
+nr_radio: CMakeFiles/nr_radio.dir/rule
+.PHONY : nr_radio
 
 # clean rule for target.
-CMakeFiles/toa_io.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_io.dir/build.make CMakeFiles/toa_io.dir/clean
-.PHONY : CMakeFiles/toa_io.dir/clean
+CMakeFiles/nr_radio.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_radio.dir/build.make CMakeFiles/nr_radio.dir/clean
+.PHONY : CMakeFiles/nr_radio.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/toa_pipeline.dir
+# Target rules for target CMakeFiles/nr_positioning.dir
 
 # All Build rule for target.
-CMakeFiles/toa_pipeline.dir/all: CMakeFiles/toa_io.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_pipeline.dir/build.make CMakeFiles/toa_pipeline.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_pipeline.dir/build.make CMakeFiles/toa_pipeline.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=60,61 "Built target toa_pipeline"
-.PHONY : CMakeFiles/toa_pipeline.dir/all
+CMakeFiles/nr_positioning.dir/all: CMakeFiles/nr_radio.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28 "Built target nr_positioning"
+.PHONY : CMakeFiles/nr_positioning.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/toa_pipeline.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 7
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/toa_pipeline.dir/all
+CMakeFiles/nr_positioning.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 27
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/nr_positioning.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 0
-.PHONY : CMakeFiles/toa_pipeline.dir/rule
+.PHONY : CMakeFiles/nr_positioning.dir/rule
 
 # Convenience name for target.
-toa_pipeline: CMakeFiles/toa_pipeline.dir/rule
-.PHONY : toa_pipeline
+nr_positioning: CMakeFiles/nr_positioning.dir/rule
+.PHONY : nr_positioning
 
 # clean rule for target.
-CMakeFiles/toa_pipeline.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_pipeline.dir/build.make CMakeFiles/toa_pipeline.dir/clean
-.PHONY : CMakeFiles/toa_pipeline.dir/clean
+CMakeFiles/nr_positioning.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/clean
+.PHONY : CMakeFiles/nr_positioning.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/record_lime_iq.dir
+# Target rules for target CMakeFiles/nr-toa-uesoftmodem.dir
 
 # All Build rule for target.
-CMakeFiles/record_lime_iq.dir/all: CMakeFiles/toa_io.dir/all
-CMakeFiles/record_lime_iq.dir/all: CMakeFiles/nr_core.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=36,37,38,39,40,41 "Built target record_lime_iq"
-.PHONY : CMakeFiles/record_lime_iq.dir/all
+CMakeFiles/nr-toa-uesoftmodem.dir/all: CMakeFiles/nr_positioning.dir/all
+CMakeFiles/nr-toa-uesoftmodem.dir/all: CMakeFiles/nr_radio.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-toa-uesoftmodem.dir/build.make CMakeFiles/nr-toa-uesoftmodem.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-toa-uesoftmodem.dir/build.make CMakeFiles/nr-toa-uesoftmodem.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=3,4 "Built target nr-toa-uesoftmodem"
+.PHONY : CMakeFiles/nr-toa-uesoftmodem.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/record_lime_iq.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 22
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/record_lime_iq.dir/all
+CMakeFiles/nr-toa-uesoftmodem.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 29
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/nr-toa-uesoftmodem.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 0
-.PHONY : CMakeFiles/record_lime_iq.dir/rule
+.PHONY : CMakeFiles/nr-toa-uesoftmodem.dir/rule
 
 # Convenience name for target.
-record_lime_iq: CMakeFiles/record_lime_iq.dir/rule
-.PHONY : record_lime_iq
+nr-toa-uesoftmodem: CMakeFiles/nr-toa-uesoftmodem.dir/rule
+.PHONY : nr-toa-uesoftmodem
 
 # clean rule for target.
-CMakeFiles/record_lime_iq.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_iq.dir/build.make CMakeFiles/record_lime_iq.dir/clean
-.PHONY : CMakeFiles/record_lime_iq.dir/clean
+CMakeFiles/nr-toa-uesoftmodem.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-toa-uesoftmodem.dir/build.make CMakeFiles/nr-toa-uesoftmodem.dir/clean
+.PHONY : CMakeFiles/nr-toa-uesoftmodem.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/record_lime_gscn_scan.dir
+# Target rules for target CMakeFiles/nr-ssb-anchor.dir
 
 # All Build rule for target.
-CMakeFiles/record_lime_gscn_scan.dir/all: CMakeFiles/toa_io.dir/all
-CMakeFiles/record_lime_gscn_scan.dir/all: CMakeFiles/nr_core.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=30,31,32,33,34,35 "Built target record_lime_gscn_scan"
-.PHONY : CMakeFiles/record_lime_gscn_scan.dir/all
+CMakeFiles/nr-ssb-anchor.dir/all: CMakeFiles/nr_positioning.dir/all
+CMakeFiles/nr-ssb-anchor.dir/all: CMakeFiles/nr_radio.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-ssb-anchor.dir/build.make CMakeFiles/nr-ssb-anchor.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-ssb-anchor.dir/build.make CMakeFiles/nr-ssb-anchor.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=1,2 "Built target nr-ssb-anchor"
+.PHONY : CMakeFiles/nr-ssb-anchor.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/record_lime_gscn_scan.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 22
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/record_lime_gscn_scan.dir/all
+CMakeFiles/nr-ssb-anchor.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 29
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/nr-ssb-anchor.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 0
-.PHONY : CMakeFiles/record_lime_gscn_scan.dir/rule
+.PHONY : CMakeFiles/nr-ssb-anchor.dir/rule
 
 # Convenience name for target.
-record_lime_gscn_scan: CMakeFiles/record_lime_gscn_scan.dir/rule
-.PHONY : record_lime_gscn_scan
+nr-ssb-anchor: CMakeFiles/nr-ssb-anchor.dir/rule
+.PHONY : nr-ssb-anchor
 
 # clean rule for target.
-CMakeFiles/record_lime_gscn_scan.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/record_lime_gscn_scan.dir/build.make CMakeFiles/record_lime_gscn_scan.dir/clean
-.PHONY : CMakeFiles/record_lime_gscn_scan.dir/clean
+CMakeFiles/nr-ssb-anchor.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-ssb-anchor.dir/build.make CMakeFiles/nr-ssb-anchor.dir/clean
+.PHONY : CMakeFiles/nr-ssb-anchor.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/test_radio_lifecycle.dir
+# Target rules for target CMakeFiles/replay_toa_iq.dir
 
 # All Build rule for target.
-CMakeFiles/test_radio_lifecycle.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=42,43,44,45,46 "Built target test_radio_lifecycle"
-.PHONY : CMakeFiles/test_radio_lifecycle.dir/all
+CMakeFiles/replay_toa_iq.dir/all: CMakeFiles/nr_positioning.dir/all
+CMakeFiles/replay_toa_iq.dir/all: CMakeFiles/nr_radio.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/replay_toa_iq.dir/build.make CMakeFiles/replay_toa_iq.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/replay_toa_iq.dir/build.make CMakeFiles/replay_toa_iq.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=32,33 "Built target replay_toa_iq"
+.PHONY : CMakeFiles/replay_toa_iq.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/test_radio_lifecycle.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 5
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_radio_lifecycle.dir/all
+CMakeFiles/replay_toa_iq.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 29
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/replay_toa_iq.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 0
-.PHONY : CMakeFiles/test_radio_lifecycle.dir/rule
+.PHONY : CMakeFiles/replay_toa_iq.dir/rule
 
 # Convenience name for target.
-test_radio_lifecycle: CMakeFiles/test_radio_lifecycle.dir/rule
-.PHONY : test_radio_lifecycle
+replay_toa_iq: CMakeFiles/replay_toa_iq.dir/rule
+.PHONY : replay_toa_iq
 
 # clean rule for target.
-CMakeFiles/test_radio_lifecycle.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_radio_lifecycle.dir/build.make CMakeFiles/test_radio_lifecycle.dir/clean
-.PHONY : CMakeFiles/test_radio_lifecycle.dir/clean
+CMakeFiles/replay_toa_iq.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/replay_toa_iq.dir/build.make CMakeFiles/replay_toa_iq.dir/clean
+.PHONY : CMakeFiles/replay_toa_iq.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/nr_core.dir
+# Target rules for target CMakeFiles/test_ssb_sync.dir
 
 # All Build rule for target.
-CMakeFiles/nr_core.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target nr_core"
-.PHONY : CMakeFiles/nr_core.dir/all
+CMakeFiles/test_ssb_sync.dir/all: CMakeFiles/nr_positioning.dir/all
+CMakeFiles/test_ssb_sync.dir/all: CMakeFiles/nr_radio.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_sync.dir/build.make CMakeFiles/test_ssb_sync.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_sync.dir/build.make CMakeFiles/test_ssb_sync.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=38,39 "Built target test_ssb_sync"
+.PHONY : CMakeFiles/test_ssb_sync.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/nr_core.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 11
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/nr_core.dir/all
+CMakeFiles/test_ssb_sync.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 29
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_ssb_sync.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 0
-.PHONY : CMakeFiles/nr_core.dir/rule
+.PHONY : CMakeFiles/test_ssb_sync.dir/rule
 
 # Convenience name for target.
-nr_core: CMakeFiles/nr_core.dir/rule
-.PHONY : nr_core
+test_ssb_sync: CMakeFiles/test_ssb_sync.dir/rule
+.PHONY : test_ssb_sync
 
 # clean rule for target.
-CMakeFiles/nr_core.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_core.dir/build.make CMakeFiles/nr_core.dir/clean
-.PHONY : CMakeFiles/nr_core.dir/clean
+CMakeFiles/test_ssb_sync.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_sync.dir/build.make CMakeFiles/test_ssb_sync.dir/clean
+.PHONY : CMakeFiles/test_ssb_sync.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/toa_core.dir
+# Target rules for target CMakeFiles/test_ssb_toa.dir
 
 # All Build rule for target.
-CMakeFiles/toa_core.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=47,48,49,50,51,52,53,54 "Built target toa_core"
-.PHONY : CMakeFiles/toa_core.dir/all
+CMakeFiles/test_ssb_toa.dir/all: CMakeFiles/nr_positioning.dir/all
+CMakeFiles/test_ssb_toa.dir/all: CMakeFiles/nr_radio.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_toa.dir/build.make CMakeFiles/test_ssb_toa.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_toa.dir/build.make CMakeFiles/test_ssb_toa.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=40,41 "Built target test_ssb_toa"
+.PHONY : CMakeFiles/test_ssb_toa.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/toa_core.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 8
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/toa_core.dir/all
+CMakeFiles/test_ssb_toa.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 29
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_ssb_toa.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 0
-.PHONY : CMakeFiles/toa_core.dir/rule
+.PHONY : CMakeFiles/test_ssb_toa.dir/rule
 
 # Convenience name for target.
-toa_core: CMakeFiles/toa_core.dir/rule
-.PHONY : toa_core
+test_ssb_toa: CMakeFiles/test_ssb_toa.dir/rule
+.PHONY : test_ssb_toa
 
 # clean rule for target.
-CMakeFiles/toa_core.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_core.dir/build.make CMakeFiles/toa_core.dir/clean
-.PHONY : CMakeFiles/toa_core.dir/clean
+CMakeFiles/test_ssb_toa.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_toa.dir/build.make CMakeFiles/test_ssb_toa.dir/clean
+.PHONY : CMakeFiles/test_ssb_toa.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/toa_prs_offline.dir
+# Target rules for target CMakeFiles/test_prs_toa.dir
 
 # All Build rule for target.
-CMakeFiles/toa_prs_offline.dir/all: CMakeFiles/toa_io.dir/all
-CMakeFiles/toa_prs_offline.dir/all: CMakeFiles/toa_pipeline.dir/all
-CMakeFiles/toa_prs_offline.dir/all: CMakeFiles/toa_core.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=62,63,64 "Built target toa_prs_offline"
-.PHONY : CMakeFiles/toa_prs_offline.dir/all
+CMakeFiles/test_prs_toa.dir/all: CMakeFiles/nr_positioning.dir/all
+CMakeFiles/test_prs_toa.dir/all: CMakeFiles/nr_radio.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_prs_toa.dir/build.make CMakeFiles/test_prs_toa.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_prs_toa.dir/build.make CMakeFiles/test_prs_toa.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=34,35 "Built target test_prs_toa"
+.PHONY : CMakeFiles/test_prs_toa.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/toa_prs_offline.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 18
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/toa_prs_offline.dir/all
+CMakeFiles/test_prs_toa.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 29
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_prs_toa.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 0
-.PHONY : CMakeFiles/toa_prs_offline.dir/rule
+.PHONY : CMakeFiles/test_prs_toa.dir/rule
 
 # Convenience name for target.
-toa_prs_offline: CMakeFiles/toa_prs_offline.dir/rule
-.PHONY : toa_prs_offline
+test_prs_toa: CMakeFiles/test_prs_toa.dir/rule
+.PHONY : test_prs_toa
 
 # clean rule for target.
-CMakeFiles/toa_prs_offline.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_prs_offline.dir/build.make CMakeFiles/toa_prs_offline.dir/clean
-.PHONY : CMakeFiles/toa_prs_offline.dir/clean
+CMakeFiles/test_prs_toa.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_prs_toa.dir/build.make CMakeFiles/test_prs_toa.dir/clean
+.PHONY : CMakeFiles/test_prs_toa.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/toa_run_realtime.dir
+# Target rules for target CMakeFiles/test_solver.dir
 
 # All Build rule for target.
-CMakeFiles/toa_run_realtime.dir/all: CMakeFiles/toa_core.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=65,66,67,68 "Built target toa_run_realtime"
-.PHONY : CMakeFiles/toa_run_realtime.dir/all
+CMakeFiles/test_solver.dir/all: CMakeFiles/nr_positioning.dir/all
+CMakeFiles/test_solver.dir/all: CMakeFiles/nr_radio.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_solver.dir/build.make CMakeFiles/test_solver.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_solver.dir/build.make CMakeFiles/test_solver.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=36,37 "Built target test_solver"
+.PHONY : CMakeFiles/test_solver.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/toa_run_realtime.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 12
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/toa_run_realtime.dir/all
+CMakeFiles/test_solver.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 29
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/test_solver.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 0
-.PHONY : CMakeFiles/toa_run_realtime.dir/rule
+.PHONY : CMakeFiles/test_solver.dir/rule
 
 # Convenience name for target.
-toa_run_realtime: CMakeFiles/toa_run_realtime.dir/rule
-.PHONY : toa_run_realtime
+test_solver: CMakeFiles/test_solver.dir/rule
+.PHONY : test_solver
 
 # clean rule for target.
-CMakeFiles/toa_run_realtime.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/toa_run_realtime.dir/build.make CMakeFiles/toa_run_realtime.dir/clean
-.PHONY : CMakeFiles/toa_run_realtime.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/nr_ssb_scan.dir
-
-# All Build rule for target.
-CMakeFiles/nr_ssb_scan.dir/all: CMakeFiles/toa_io.dir/all
-CMakeFiles/nr_ssb_scan.dir/all: CMakeFiles/toa_pipeline.dir/all
-CMakeFiles/nr_ssb_scan.dir/all: CMakeFiles/nr_core.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=22,23,24,25 "Built target nr_ssb_scan"
-.PHONY : CMakeFiles/nr_ssb_scan.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/nr_ssb_scan.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 22
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/nr_ssb_scan.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 0
-.PHONY : CMakeFiles/nr_ssb_scan.dir/rule
-
-# Convenience name for target.
-nr_ssb_scan: CMakeFiles/nr_ssb_scan.dir/rule
-.PHONY : nr_ssb_scan
-
-# clean rule for target.
-CMakeFiles/nr_ssb_scan.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_scan.dir/build.make CMakeFiles/nr_ssb_scan.dir/clean
-.PHONY : CMakeFiles/nr_ssb_scan.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/nr_ssb_live_gscn.dir
-
-# All Build rule for target.
-CMakeFiles/nr_ssb_live_gscn.dir/all: CMakeFiles/nr_core.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=16,17,18,19,20,21 "Built target nr_ssb_live_gscn"
-.PHONY : CMakeFiles/nr_ssb_live_gscn.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/nr_ssb_live_gscn.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 17
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/nr_ssb_live_gscn.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 0
-.PHONY : CMakeFiles/nr_ssb_live_gscn.dir/rule
-
-# Convenience name for target.
-nr_ssb_live_gscn: CMakeFiles/nr_ssb_live_gscn.dir/rule
-.PHONY : nr_ssb_live_gscn
-
-# clean rule for target.
-CMakeFiles/nr_ssb_live_gscn.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_live_gscn.dir/build.make CMakeFiles/nr_ssb_live_gscn.dir/clean
-.PHONY : CMakeFiles/nr_ssb_live_gscn.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/nr_mib_decode.dir
-
-# All Build rule for target.
-CMakeFiles/nr_mib_decode.dir/all: CMakeFiles/toa_io.dir/all
-CMakeFiles/nr_mib_decode.dir/all: CMakeFiles/toa_pipeline.dir/all
-CMakeFiles/nr_mib_decode.dir/all: CMakeFiles/nr_core.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=12,13,14,15 "Built target nr_mib_decode"
-.PHONY : CMakeFiles/nr_mib_decode.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/nr_mib_decode.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 22
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/nr_mib_decode.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 0
-.PHONY : CMakeFiles/nr_mib_decode.dir/rule
-
-# Convenience name for target.
-nr_mib_decode: CMakeFiles/nr_mib_decode.dir/rule
-.PHONY : nr_mib_decode
-
-# clean rule for target.
-CMakeFiles/nr_mib_decode.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_mib_decode.dir/build.make CMakeFiles/nr_mib_decode.dir/clean
-.PHONY : CMakeFiles/nr_mib_decode.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/nr_ssb_selftest.dir
-
-# All Build rule for target.
-CMakeFiles/nr_ssb_selftest.dir/all: CMakeFiles/nr_core.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_selftest.dir/build.make CMakeFiles/nr_ssb_selftest.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_selftest.dir/build.make CMakeFiles/nr_ssb_selftest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=26,27 "Built target nr_ssb_selftest"
-.PHONY : CMakeFiles/nr_ssb_selftest.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/nr_ssb_selftest.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 13
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/nr_ssb_selftest.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 0
-.PHONY : CMakeFiles/nr_ssb_selftest.dir/rule
-
-# Convenience name for target.
-nr_ssb_selftest: CMakeFiles/nr_ssb_selftest.dir/rule
-.PHONY : nr_ssb_selftest
-
-# clean rule for target.
-CMakeFiles/nr_ssb_selftest.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_ssb_selftest.dir/build.make CMakeFiles/nr_ssb_selftest.dir/clean
-.PHONY : CMakeFiles/nr_ssb_selftest.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/nr_synth_ssb.dir
-
-# All Build rule for target.
-CMakeFiles/nr_synth_ssb.dir/all: CMakeFiles/toa_io.dir/all
-CMakeFiles/nr_synth_ssb.dir/all: CMakeFiles/nr_core.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_synth_ssb.dir/build.make CMakeFiles/nr_synth_ssb.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_synth_ssb.dir/build.make CMakeFiles/nr_synth_ssb.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=28,29 "Built target nr_synth_ssb"
-.PHONY : CMakeFiles/nr_synth_ssb.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/nr_synth_ssb.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 18
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/nr_synth_ssb.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles 0
-.PHONY : CMakeFiles/nr_synth_ssb.dir/rule
-
-# Convenience name for target.
-nr_synth_ssb: CMakeFiles/nr_synth_ssb.dir/rule
-.PHONY : nr_synth_ssb
-
-# clean rule for target.
-CMakeFiles/nr_synth_ssb.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_synth_ssb.dir/build.make CMakeFiles/nr_synth_ssb.dir/clean
-.PHONY : CMakeFiles/nr_synth_ssb.dir/clean
+CMakeFiles/test_solver.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_solver.dir/build.make CMakeFiles/test_solver.dir/clean
+.PHONY : CMakeFiles/test_solver.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

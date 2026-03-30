@@ -1,0 +1,1 @@
+/usr/bin/c++ "CMakeFiles/nr-toa-uesoftmodem.dir/executables/nr-toa-uesoftmodem.c.o" -o nr-toa-uesoftmodem  libnr_positioning.a libnr_radio.a -lm -lpthread 
