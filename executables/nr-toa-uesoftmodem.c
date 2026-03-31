@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <string.h>
 #include <unistd.h>
 #include <signal.h>
@@ -26,6 +27,7 @@ static void *sync_actor_thread(void *arg)
   uint64_t detect_total = 0;
   uint64_t nodetect_total = 0;
   uint32_t miss_streak = 0;
+  uint8_t prev_locked = 0;
 
   while (!oai_exit) {
     nr_iq_block_t *blk = NULL;
@@ -80,8 +82,16 @@ static void *sync_actor_thread(void *arg)
         miss_streak = 0;
       }
     }
+    if (!prev_locked && local.locked) {
+      printf("LOCK_EVENT: pci=%u offset=%d cfo=%.2f snr=%.2f metric=%.3f det=%llu nodet=%llu\n",
+             (unsigned)local.pci, local.coarse_offset_samp, local.cfo_hz,
+             local.snr_db, local.pss_metric,
+             (unsigned long long)detect_total,
+             (unsigned long long)nodetect_total);
+    }
+    prev_locked = local.locked;
     if ((sync_cnt % 50U) == 0U) {
-      printf("sync_result: %s locked=%u nid2=%u offset=%d cfo=%.2f snr=%.2f metric=%.3f miss_streak=%u det=%llu nodet=%llu dropped_sync=%llu dropped_meas=%llu dropped_solver=%llu\n",
+      printf("sync_result: %s locked=%u pci=%u offset=%d cfo=%.2f snr=%.2f metric=%.3f miss_streak=%u det=%llu nodet=%llu dropped_sync=%llu dropped_meas=%llu dropped_solver=%llu\n",
              local.locked ? "detected" : "not-detected",
              (unsigned)local.locked, (unsigned)local.pci, local.coarse_offset_samp,
              local.cfo_hz, local.snr_db, local.pss_metric, (unsigned)miss_streak,
@@ -231,6 +241,7 @@ static void *TOA_UE_thread(void *arg)
   UE->abs_samp_wr = 0;
   unsigned iter = 0;
   unsigned presync_no_lock_iter = 0;
+  unsigned presync_hold_after_lock = 0;
   unsigned sweep_idx = 0;
   unsigned sweep_rounds = 0;
   unsigned sweep_hold = 0;
@@ -238,16 +249,18 @@ static void *TOA_UE_thread(void *arg)
   float sweep_best_metric[NR_FREQ_SWEEP_POINTS];
   memset(sweep_best_metric, 0, sizeof(sweep_best_metric));
   const double f0 = UE->app_cfg.center_freq_hz;
-  const double step = 5.0e6;
-  sweep_freqs[0] = f0;
-  sweep_freqs[1] = f0 - step;
-  sweep_freqs[2] = f0 + step;
-  sweep_freqs[3] = f0 - 2.0 * step;
-  sweep_freqs[4] = f0 + 2.0 * step;
-  sweep_freqs[5] = f0 - 3.0 * step;
-  sweep_freqs[6] = f0 + 3.0 * step;
-  sweep_freqs[7] = f0 - 4.0 * step;
-  sweep_freqs[8] = f0 + 4.0 * step;
+  /* GSCN-like global sync raster: step is 1.44 MHz in FR1 (approx SSREF grid). */
+  const double gscn_grid_hz = 1.44e6;
+  const double ssref0_hz = 3000e6;
+  /* SSREF = 3000 MHz + N * 1.44 MHz, and (commonly) GSCN = 7499 + N. */
+  const long n0 = (long)llround((f0 - ssref0_hz) / gscn_grid_hz);
+  static const int dn[NR_FREQ_SWEEP_POINTS] = {0, -1, +1, -2, +2, -3, +3, -4, +4};
+  long sweep_gscn[NR_FREQ_SWEEP_POINTS];
+  for (unsigned i = 0; i < NR_FREQ_SWEEP_POINTS; i++) {
+    long N = n0 + (long)dn[i];
+    sweep_gscn[i] = 7499L + N;
+    sweep_freqs[i] = ssref0_hz + (double)N * gscn_grid_hz;
+  }
 
   while (!oai_exit) {
     switch (UE->state) {
@@ -263,16 +276,25 @@ static void *TOA_UE_thread(void *arg)
       int is_locked = UE->sync.locked;
       float cur_metric = UE->sync.pss_metric;
       pthread_mutex_unlock(&UE->sync_mtx);
+      if (is_locked) {
+        presync_hold_after_lock = 800U; /* Hold current freq after a lock event */
+      }
       if (cur_metric > sweep_best_metric[sweep_idx]) {
         sweep_best_metric[sweep_idx] = cur_metric;
       }
       if (sync_backpressure) {
-        usleep(1000);
+        /* Keep RX continuous; let queue drop policy handle backpressure. */
         break;
       }
       if (!is_locked) {
         presync_no_lock_iter++;
+        if (presync_hold_after_lock > 0U) {
+          presync_hold_after_lock--;
+        }
         if ((presync_no_lock_iter % 400U) == 0U) {
+          if (presync_hold_after_lock > 0U) {
+            break;
+          }
           if (sweep_rounds < NR_FREQ_SWEEP_POINTS) {
             sweep_idx = (sweep_idx + 1U) % NR_FREQ_SWEEP_POINTS;
             sweep_rounds++;
@@ -293,8 +315,9 @@ static void *TOA_UE_thread(void *arg)
             sweep_hold = 0;
           }
           if (nr_toa_radio_set_rx_freq(UE->dev, sweep_freqs[sweep_idx]) == 0) {
-            printf("freq_sweep: idx=%u rx_freq=%.0fHz best_metric=%.3f\n",
-                   sweep_idx, sweep_freqs[sweep_idx], sweep_best_metric[sweep_idx]);
+            printf("freq_sweep(GSCN): idx=%u gscn=%ld rx_freq=%.0fHz best_metric=%.3f\n",
+                   sweep_idx, (long)sweep_gscn[sweep_idx], sweep_freqs[sweep_idx],
+                   sweep_best_metric[sweep_idx]);
           }
         }
       } else {
@@ -336,7 +359,8 @@ static void *TOA_UE_thread(void *arg)
              (unsigned long long)UE->solver_jobs_dropped);
       pthread_mutex_unlock(&UE->sync_mtx);
     }
-    usleep(2000);
+    /* Give actor threads some CPU while keeping RX mostly continuous. */
+    usleep(200);
   }
 
   (void)TOA_THREAD_TOA_UE;

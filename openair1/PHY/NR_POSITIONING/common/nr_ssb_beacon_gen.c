@@ -31,7 +31,9 @@ int nr_ssb_ofdm_mod(const nr_ssb_grid_t *grid, nr_tx_burst_t *burst)
     return -1;
   }
   (void)grid;
-  /* V2: 4-symbol SSB-like burst with PSS on symbol #2. */
+  /* V3: 4-symbol SS/PBCH block with PSS on symbol #0 and SSS on symbol #2.
+   * (Until full grid mapping is implemented, keep a fixed nid1/nid2 so that
+   * the receiver can exercise the real PSS->SSS->PCI path.) */
   const uint32_t need = nr_v0_ssb_burst_len();
   if (burst->nsamps < need) {
     burst->nsamps = need;
@@ -39,6 +41,6 @@ int nr_ssb_ofdm_mod(const nr_ssb_grid_t *grid, nr_tx_burst_t *burst)
     burst->nsamps = need;
   }
   burst->tx_ant = 1;
-  (void)nr_v0_ssb_build_burst_iq(1, burst->tx[0], burst->nsamps, 12000.0f);
+  (void)nr_v0_ssb_build_burst_iq(0, 1, burst->tx[0], burst->nsamps, 12000.0f);
   return 0;
 }

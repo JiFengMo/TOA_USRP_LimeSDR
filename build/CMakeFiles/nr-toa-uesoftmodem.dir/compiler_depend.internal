@@ -14,6 +14,7 @@ CMakeFiles/nr-toa-uesoftmodem.dir/executables/nr-toa-uesoftmodem.c.o
  /usr/include/endian.h
  /usr/include/features-time64.h
  /usr/include/features.h
+ /usr/include/math.h
  /usr/include/pthread.h
  /usr/include/sched.h
  /usr/include/signal.h
@@ -34,10 +35,17 @@ CMakeFiles/nr-toa-uesoftmodem.dir/executables/nr-toa-uesoftmodem.c.o
  /usr/include/x86_64-linux-gnu/bits/environments.h
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h
  /usr/include/x86_64-linux-gnu/bits/floatn.h
+ /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h
+ /usr/include/x86_64-linux-gnu/bits/fp-fast.h
+ /usr/include/x86_64-linux-gnu/bits/fp-logb.h
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h
+ /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h
  /usr/include/x86_64-linux-gnu/bits/long-double.h
+ /usr/include/x86_64-linux-gnu/bits/math-vector.h
+ /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h
+ /usr/include/x86_64-linux-gnu/bits/mathcalls.h
  /usr/include/x86_64-linux-gnu/bits/posix_opt.h
  /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h
  /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h

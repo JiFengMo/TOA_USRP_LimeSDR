@@ -4,10 +4,12 @@
 #include "../COMMON/common_lib.h"
 
 #include <cmath>
+#include <chrono>
 #include <complex>
 #include <cstdio>
 #include <cstdlib>
 #include <string>
+#include <thread>
 #include <vector>
 
 #include <uhd/stream.hpp>
@@ -24,6 +26,8 @@ struct usrp_state_t {
   double sample_rate;
   bool started;
   bool rx_started;
+  uint64_t rx_overflow_cnt;
+  uint64_t rx_timeout_cnt;
 };
 
 extern "C" {
@@ -38,6 +42,8 @@ static int usrp_trx_config(openair0_device_t *device, openair0_config_t *cfg)
   st->sample_rate = (cfg->sample_rate > 0.0) ? cfg->sample_rate : 30.72e6;
   st->started = false;
   st->rx_started = false;
+  st->rx_overflow_cnt = 0;
+  st->rx_timeout_cnt = 0;
 
   try {
     const std::string args = (cfg->sdr_addrs && cfg->sdr_addrs[0] != '\0')
@@ -61,6 +67,8 @@ static int usrp_trx_config(openair0_device_t *device, openair0_config_t *cfg)
     st->usrp->set_tx_freq(uhd::tune_request_t(cfg->tx_freq_hz), 0);
     st->usrp->set_rx_gain(cfg->rx_gain_db, 0);
     st->usrp->set_tx_gain(cfg->tx_gain_db, 0);
+    /* Let LO settle before streaming and report lock status if available. */
+    std::this_thread::sleep_for(std::chrono::milliseconds(30));
 
     uhd::stream_args_t rx_args("sc16", "sc16");
     rx_args.channels = {0};
@@ -70,8 +78,26 @@ static int usrp_trx_config(openair0_device_t *device, openair0_config_t *cfg)
     tx_args.channels = {0};
     st->tx_stream = st->usrp->get_tx_stream(tx_args);
 
-    std::printf("USRP: configured (rate=%.0f, rx=%.0f, tx=%.0f)\n",
-                st->sample_rate, cfg->rx_freq_hz, cfg->tx_freq_hz);
+    const double rate_act = st->usrp->get_rx_rate(0);
+    const double rx_freq_act = st->usrp->get_rx_freq(0);
+    const double tx_freq_act = st->usrp->get_tx_freq(0);
+    const double rx_gain_act = st->usrp->get_rx_gain(0);
+    const double tx_gain_act = st->usrp->get_tx_gain(0);
+    const double rx_bw_act = st->usrp->get_rx_bandwidth(0);
+    bool lo_locked = true;
+    const auto sns = st->usrp->get_rx_sensor_names(0);
+    for (const auto &n : sns) {
+      if (n == "lo_locked") {
+        lo_locked = st->usrp->get_rx_sensor("lo_locked", 0).to_bool();
+        break;
+      }
+    }
+    std::printf(
+        "USRP: configured req(rate=%.0f rx=%.0f tx=%.0f gain=%.1f) "
+        "act(rate=%.0f rx=%.0f tx=%.0f rx_gain=%.1f tx_gain=%.1f rx_bw=%.0f) lo_locked=%d\n",
+        st->sample_rate, cfg->rx_freq_hz, cfg->tx_freq_hz, cfg->rx_gain_db,
+        rate_act, rx_freq_act, tx_freq_act, rx_gain_act, tx_gain_act, rx_bw_act,
+        lo_locked ? 1 : 0);
   } catch (const std::exception &e) {
     std::printf("USRP: trx_config exception: %s\n", e.what());
     return -1;
@@ -166,9 +192,16 @@ static int usrp_trx_read(openair0_device_t *device,
       const size_t got = st->rx_stream->recv(buffs, nsamps - total, md, 0.05, false);
 
       if (md.error_code == uhd::rx_metadata_t::ERROR_CODE_TIMEOUT) {
+        st->rx_timeout_cnt++;
         continue;
       }
       if (md.error_code == uhd::rx_metadata_t::ERROR_CODE_OVERFLOW) {
+        st->rx_overflow_cnt++;
+        if ((st->rx_overflow_cnt % 100U) == 1U) {
+          std::printf("USRP: RX overflow count=%llu timeout=%llu\n",
+                      (unsigned long long)st->rx_overflow_cnt,
+                      (unsigned long long)st->rx_timeout_cnt);
+        }
         continue;
       }
       if (md.error_code != uhd::rx_metadata_t::ERROR_CODE_NONE) {
@@ -243,7 +276,17 @@ static int usrp_set_rx_freq(openair0_device_t *device, double rx_freq_hz)
   try {
     st->usrp->set_rx_freq(uhd::tune_request_t(rx_freq_hz), 0);
     st->cfg.rx_freq_hz = rx_freq_hz;
-    std::printf("USRP: RX retuned to %.0f Hz\n", rx_freq_hz);
+    std::this_thread::sleep_for(std::chrono::milliseconds(15));
+    bool lo_locked = true;
+    const auto sns = st->usrp->get_rx_sensor_names(0);
+    for (const auto &n : sns) {
+      if (n == "lo_locked") {
+        lo_locked = st->usrp->get_rx_sensor("lo_locked", 0).to_bool();
+        break;
+      }
+    }
+    std::printf("USRP: RX retuned to %.0f Hz (act=%.0f lo_locked=%d)\n",
+                rx_freq_hz, st->usrp->get_rx_freq(0), lo_locked ? 1 : 0);
     return 0;
   } catch (const std::exception &e) {
     std::printf("USRP: set_rx_freq exception: %s\n", e.what());

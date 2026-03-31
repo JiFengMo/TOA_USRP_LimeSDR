@@ -36,6 +36,10 @@ int nr_toa_read_two_frames(nr_toa_ue_t *ue, nr_iq_ring_t *ring)
     return -1;
   }
 
+  /* Keep IQ processing in sync with the true RF sample rate. */
+  b1->fs_hz = ue->rf_cfg.sample_rate;
+  b2->fs_hz = ue->rf_cfg.sample_rate;
+
   if (nr_toa_radio_read(ue->dev, b1) != 0) {
     nr_iq_block_put(b1);
     nr_iq_block_put(b2);
@@ -70,6 +74,9 @@ int nr_toa_read_one_slot(nr_toa_ue_t *ue, nr_iq_ring_t *ring)
   if (!blk) {
     return -1;
   }
+
+  /* Keep IQ processing in sync with the true RF sample rate. */
+  blk->fs_hz = ue->rf_cfg.sample_rate;
 
   if (nr_toa_radio_read(ue->dev, blk) != 0) {
     nr_iq_block_put(blk);

@@ -15,7 +15,7 @@ int main(void)
   c16_t buf[2048];
   memset(buf, 0, sizeof(buf));
   const int ins = 100;
-  (void)nr_v0_ssb_build_burst_iq(1, &buf[ins], burst_len, 12000.0f);
+  (void)nr_v0_ssb_build_burst_iq(0, 1, &buf[ins], burst_len, 12000.0f);
   blk.rx[0] = buf;
 
   /* Positive case */
@@ -46,7 +46,7 @@ int main(void)
 
   /* Negative case: wrong nid2 waveform should not claim nid2=1 as best */
   memset(buf, 0, sizeof(buf));
-  (void)nr_v0_ssb_build_burst_iq(2, &buf[ins], burst_len, 12000.0f);
+  (void)nr_v0_ssb_build_burst_iq(0, 2, &buf[ins], burst_len, 12000.0f);
   if (nr_ssb_pss_search(&blk, hits, 4) != 0) {
     return 7;
   }

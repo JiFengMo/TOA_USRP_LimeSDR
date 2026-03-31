@@ -45,6 +45,7 @@ typedef struct {
   openair0_timestamp_t ts_first;
   uint64_t abs_samp0;
   uint32_t nsamps;
+  double fs_hz; /* Sampling rate (Hz), set by radio read path */
   uint8_t rx_ant;
   uint8_t overrun;
   c16_t *rx[NR_TOA_MAX_RX_ANT];
@@ -81,6 +82,7 @@ typedef struct {
   float rsrp_db;
   float snr_db;
   float pss_metric;
+  uint8_t pbch_confirmed; /* PBCH gate confirmation status (for lock consistency). */
   int64_t cum_tracking_shift_samp;
 } nr_sync_state_t;
 

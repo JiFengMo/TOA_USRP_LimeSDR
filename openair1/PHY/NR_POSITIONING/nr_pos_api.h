@@ -67,7 +67,8 @@ void nr_v0_pss_build_fd(int nid2, float *seq, uint32_t len);
 void nr_v0_pss_build_td_f(int nid2, float *td_i, float *td_q, uint32_t len);
 int nr_v0_pss_build_td_iq(int nid2, c16_t *out, uint32_t out_len,
                           float amp);
-int nr_v0_ssb_build_burst_iq(int nid2, c16_t *out, uint32_t out_len,
+void nr_v0_sss_build_td_f(int nid1, int nid2, float *td_i, float *td_q, uint32_t len);
+int nr_v0_ssb_build_burst_iq(int nid1, int nid2, c16_t *out, uint32_t out_len,
                              float amp);
 
 /* anchor_write */

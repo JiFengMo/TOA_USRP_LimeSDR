@@ -770,6 +770,7 @@ CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.
   /home/jfm/桌面/TOA_USRP_LimeSDR/radio/COMMON/common_lib.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
+  /usr/include/math.h \
   /usr/include/pthread.h \
   /usr/include/sched.h \
   /usr/include/stdc-predef.h \
@@ -782,8 +783,15 @@ CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.
   /usr/include/x86_64-linux-gnu/bits/endianness.h \
   /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
+  /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
   /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
+  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
   /usr/include/x86_64-linux-gnu/bits/long-double.h \
+  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
   /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
   /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
