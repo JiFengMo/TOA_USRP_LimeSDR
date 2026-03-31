@@ -9,11 +9,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options(-Wall -Wextra -Wpedantic)
 
 include_directories(${CMAKE_SOURCE_DIR})
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(UHD REQUIRED uhd)
 
 add_library(nr_radio STATIC
   radio/USRP/usrp_lib.cpp
   radio/LIME/lime_lib.cpp
 )
+target_include_directories(nr_radio PUBLIC ${UHD_INCLUDE_DIRS})
+target_link_directories(nr_radio PUBLIC ${UHD_LIBRARY_DIRS})
+target_link_libraries(nr_radio PUBLIC ${UHD_LIBRARIES})
 
 set(NR_POSITIONING_SOURCES
   openair1/PHY/NR_POSITIONING/common/nr_iq_ring.c

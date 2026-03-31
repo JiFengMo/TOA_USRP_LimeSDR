@@ -91,18 +91,26 @@ int nr_toa_enqueue_sync_job(nr_toa_ue_t *ue, nr_iq_block_t *blk)
   }
 
   pthread_mutex_lock(&ue->sync_mtx);
-  if (ue->sync_job_pending) {
+  if (ue->sync_q_count >= NR_SYNC_Q_DEPTH) {
+    /* Keep freshest IQ: drop oldest sync job when queue is full. */
+    nr_iq_block_t *old = ue->sync_q[ue->sync_q_head];
+    ue->sync_q_head = (ue->sync_q_head + 1U) % (uint32_t)NR_SYNC_Q_DEPTH;
+    ue->sync_q_count--;
     ue->sync_jobs_dropped++;
-    pthread_mutex_unlock(&ue->sync_mtx);
-    return -1;
+    if (old) {
+      nr_iq_block_put(old);
+    }
   }
 
   ue->sync_job_id = ue->next_sync_job_id++;
-  ue->sync_job_blk = blk;
-  ue->sync_job_pending = 1;
+  ue->sync_q_job_id[ue->sync_q_tail] = ue->sync_job_id;
+  ue->sync_q[ue->sync_q_tail] = blk;
+  ue->sync_q_tail = (ue->sync_q_tail + 1U) % (uint32_t)NR_SYNC_Q_DEPTH;
+  ue->sync_q_count++;
+  ue->sync_job_pending = (ue->sync_q_count > 0U) ? 1 : 0;
   ue->sync_job_done = 0;
 
-  /* Actor will put() after processing. */
+  /* Queue/actor owns one reference until popped and processed. */
   nr_iq_block_get(blk);
 
   pthread_cond_signal(&ue->sync_cv);

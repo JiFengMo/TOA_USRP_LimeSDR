@@ -1,9 +1,10 @@
 /**
- * Lime LMS / SoapyLMS7 backend ‚Äî OAI-style openair0_device_t.
+ * Lime LMS / SoapyLMS7 backend ?ù OAI-style openair0_device_t.
  * Keep Lime logic isolated; PHY/NR_POSITIONING stays backend-agnostic.
  */
 #include "../COMMON/common_lib.h"
 #include <cstdlib>
+#include <stdio.h>
 
 extern "C" {
 
@@ -44,7 +45,12 @@ static int lime_trx_read(openair0_device_t *device,
   (void)buff;
   (void)nsamps;
   (void)antenna;
-  return 0;
+  static int warned = 0;
+  if (!warned) {
+    warned = 1;
+    printf("Lime backend placeholder: lime_trx_read() not implemented (no IQ path)\n");
+  }
+  return -1;
 }
 
 static int lime_trx_write(openair0_device_t *device,
@@ -63,6 +69,13 @@ static int lime_trx_write(openair0_device_t *device,
   return 0;
 }
 
+static int lime_set_rx_freq(openair0_device_t *device, double rx_freq_hz)
+{
+  (void)device;
+  (void)rx_freq_hz;
+  return -1;
+}
+
 openair0_device_t *openair0_device_get_lime(openair0_config_t *cfg)
 {
   openair0_device_t *dev =
@@ -76,6 +89,7 @@ openair0_device_t *openair0_device_get_lime(openair0_config_t *cfg)
   dev->trx_end_func = lime_trx_end;
   dev->trx_read_func = lime_trx_read;
   dev->trx_write_func = lime_trx_write;
+  dev->trx_set_rx_freq_func = lime_set_rx_freq;
   dev->openair0_cfg = cfg;
   return dev;
 }

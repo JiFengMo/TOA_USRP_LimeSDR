@@ -1,4 +1,5 @@
 #include "openair1/PHY/NR_POSITIONING/nr_pos_types.h"
+#include "openair1/PHY/NR_POSITIONING/nr_pos_api.h"
 
 #include <string.h>
 
@@ -30,11 +31,14 @@ int nr_ssb_ofdm_mod(const nr_ssb_grid_t *grid, nr_tx_burst_t *burst)
     return -1;
   }
   (void)grid;
-  burst->nsamps = 4096;
-  burst->tx_ant = 1;
-  for (uint32_t i = 0; i < burst->nsamps; i++) {
-    burst->tx[0][i].r = (i % 16 == 0) ? 2047 : 0;
-    burst->tx[0][i].i = 0;
+  /* V2: 4-symbol SSB-like burst with PSS on symbol #2. */
+  const uint32_t need = nr_v0_ssb_burst_len();
+  if (burst->nsamps < need) {
+    burst->nsamps = need;
+  } else {
+    burst->nsamps = need;
   }
+  burst->tx_ant = 1;
+  (void)nr_v0_ssb_build_burst_iq(1, burst->tx[0], burst->nsamps, 12000.0f);
   return 0;
 }

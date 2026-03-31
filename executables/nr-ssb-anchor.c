@@ -54,7 +54,12 @@ static void *ANCHOR_main_thread(void *arg)
     }
 
     (void)nr_ssb_plan_next_epoch(&ctx->plan, epoch_id++);
-    ctx->plan.tx_hw_timestamp = now + period_samp;
+    /* In simulator path, schedule slightly ahead to avoid long initial silence. */
+    uint64_t lead_samp = (period_samp > 8192U) ? 8192U : (period_samp / 2U);
+    if (lead_samp == 0U) {
+      lead_samp = 1024U;
+    }
+    ctx->plan.tx_hw_timestamp = now + lead_samp;
 
     ctx->burst.ts_first = ctx->plan.tx_hw_timestamp;
     (void)nr_anchor_write_burst(ctx->dev, &ctx->plan, &ctx->burst);

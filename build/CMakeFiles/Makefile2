@@ -146,8 +146,8 @@ CMakeFiles/nr_positioning.dir/clean:
 # Target rules for target CMakeFiles/nr-toa-uesoftmodem.dir
 
 # All Build rule for target.
-CMakeFiles/nr-toa-uesoftmodem.dir/all: CMakeFiles/nr_positioning.dir/all
 CMakeFiles/nr-toa-uesoftmodem.dir/all: CMakeFiles/nr_radio.dir/all
+CMakeFiles/nr-toa-uesoftmodem.dir/all: CMakeFiles/nr_positioning.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-toa-uesoftmodem.dir/build.make CMakeFiles/nr-toa-uesoftmodem.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-toa-uesoftmodem.dir/build.make CMakeFiles/nr-toa-uesoftmodem.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=3,4 "Built target nr-toa-uesoftmodem"
@@ -173,8 +173,8 @@ CMakeFiles/nr-toa-uesoftmodem.dir/clean:
 # Target rules for target CMakeFiles/nr-ssb-anchor.dir
 
 # All Build rule for target.
-CMakeFiles/nr-ssb-anchor.dir/all: CMakeFiles/nr_positioning.dir/all
 CMakeFiles/nr-ssb-anchor.dir/all: CMakeFiles/nr_radio.dir/all
+CMakeFiles/nr-ssb-anchor.dir/all: CMakeFiles/nr_positioning.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-ssb-anchor.dir/build.make CMakeFiles/nr-ssb-anchor.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr-ssb-anchor.dir/build.make CMakeFiles/nr-ssb-anchor.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=1,2 "Built target nr-ssb-anchor"
@@ -200,8 +200,8 @@ CMakeFiles/nr-ssb-anchor.dir/clean:
 # Target rules for target CMakeFiles/replay_toa_iq.dir
 
 # All Build rule for target.
-CMakeFiles/replay_toa_iq.dir/all: CMakeFiles/nr_positioning.dir/all
 CMakeFiles/replay_toa_iq.dir/all: CMakeFiles/nr_radio.dir/all
+CMakeFiles/replay_toa_iq.dir/all: CMakeFiles/nr_positioning.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/replay_toa_iq.dir/build.make CMakeFiles/replay_toa_iq.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/replay_toa_iq.dir/build.make CMakeFiles/replay_toa_iq.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=32,33 "Built target replay_toa_iq"
@@ -227,8 +227,8 @@ CMakeFiles/replay_toa_iq.dir/clean:
 # Target rules for target CMakeFiles/test_ssb_sync.dir
 
 # All Build rule for target.
-CMakeFiles/test_ssb_sync.dir/all: CMakeFiles/nr_positioning.dir/all
 CMakeFiles/test_ssb_sync.dir/all: CMakeFiles/nr_radio.dir/all
+CMakeFiles/test_ssb_sync.dir/all: CMakeFiles/nr_positioning.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_sync.dir/build.make CMakeFiles/test_ssb_sync.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_sync.dir/build.make CMakeFiles/test_ssb_sync.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=38,39 "Built target test_ssb_sync"
@@ -254,8 +254,8 @@ CMakeFiles/test_ssb_sync.dir/clean:
 # Target rules for target CMakeFiles/test_ssb_toa.dir
 
 # All Build rule for target.
-CMakeFiles/test_ssb_toa.dir/all: CMakeFiles/nr_positioning.dir/all
 CMakeFiles/test_ssb_toa.dir/all: CMakeFiles/nr_radio.dir/all
+CMakeFiles/test_ssb_toa.dir/all: CMakeFiles/nr_positioning.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_toa.dir/build.make CMakeFiles/test_ssb_toa.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_ssb_toa.dir/build.make CMakeFiles/test_ssb_toa.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=40,41 "Built target test_ssb_toa"
@@ -281,8 +281,8 @@ CMakeFiles/test_ssb_toa.dir/clean:
 # Target rules for target CMakeFiles/test_prs_toa.dir
 
 # All Build rule for target.
-CMakeFiles/test_prs_toa.dir/all: CMakeFiles/nr_positioning.dir/all
 CMakeFiles/test_prs_toa.dir/all: CMakeFiles/nr_radio.dir/all
+CMakeFiles/test_prs_toa.dir/all: CMakeFiles/nr_positioning.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_prs_toa.dir/build.make CMakeFiles/test_prs_toa.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_prs_toa.dir/build.make CMakeFiles/test_prs_toa.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=34,35 "Built target test_prs_toa"
@@ -308,8 +308,8 @@ CMakeFiles/test_prs_toa.dir/clean:
 # Target rules for target CMakeFiles/test_solver.dir
 
 # All Build rule for target.
-CMakeFiles/test_solver.dir/all: CMakeFiles/nr_positioning.dir/all
 CMakeFiles/test_solver.dir/all: CMakeFiles/nr_radio.dir/all
+CMakeFiles/test_solver.dir/all: CMakeFiles/nr_positioning.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_solver.dir/build.make CMakeFiles/test_solver.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_solver.dir/build.make CMakeFiles/test_solver.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=36,37 "Built target test_solver"

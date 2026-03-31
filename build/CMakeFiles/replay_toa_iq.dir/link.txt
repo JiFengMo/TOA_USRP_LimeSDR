@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/replay_toa_iq.dir/tools/replay_toa_iq.c.o -o replay_toa_iq  libnr_positioning.a libnr_radio.a -lm -lpthread 
+/usr/bin/c++ CMakeFiles/replay_toa_iq.dir/tools/replay_toa_iq.c.o -o replay_toa_iq   -L/usr/local/lib  -Wl,-rpath,/usr/local/lib libnr_positioning.a libnr_radio.a -luhd -lboost_system -lm -lpthread 

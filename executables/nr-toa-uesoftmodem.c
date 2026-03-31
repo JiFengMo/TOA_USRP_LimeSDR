@@ -10,7 +10,8 @@
 #include <signal.h>
 
 volatile int oai_exit;
-#define NR_SYNC_LOST_MISS_THRESH 5U
+#define NR_SYNC_LOST_MISS_THRESH 24U
+#define NR_FREQ_SWEEP_POINTS 9U
 
 static void nr_toa_sig_handler(int signo)
 {
@@ -28,9 +29,10 @@ static void *sync_actor_thread(void *arg)
 
   while (!oai_exit) {
     nr_iq_block_t *blk = NULL;
+    uint64_t sync_job_id = 0;
 
     pthread_mutex_lock(&UE->sync_mtx);
-    while (!oai_exit && UE->sync_job_pending == 0) {
+    while (!oai_exit && UE->sync_q_count == 0U) {
       pthread_cond_wait(&UE->sync_cv, &UE->sync_mtx);
     }
     if (oai_exit) {
@@ -38,9 +40,14 @@ static void *sync_actor_thread(void *arg)
       break;
     }
 
-    blk = UE->sync_job_blk;
-    UE->sync_job_blk = NULL;
-    UE->sync_job_pending = 0;
+    blk = UE->sync_q[UE->sync_q_head];
+    sync_job_id = UE->sync_q_job_id[UE->sync_q_head];
+    UE->sync_q[UE->sync_q_head] = NULL;
+    UE->sync_q_head = (UE->sync_q_head + 1U) % (uint32_t)NR_SYNC_Q_DEPTH;
+    UE->sync_q_count--;
+    UE->sync_job_id = sync_job_id;
+    UE->sync_job_blk = blk;
+    UE->sync_job_pending = (UE->sync_q_count > 0U) ? 1 : 0;
     pthread_mutex_unlock(&UE->sync_mtx);
 
     nr_sync_state_t local = UE->sync;
@@ -223,6 +230,24 @@ static void *TOA_UE_thread(void *arg)
   UE->samples_per_frame = 2 * nsamps;
   UE->abs_samp_wr = 0;
   unsigned iter = 0;
+  unsigned presync_no_lock_iter = 0;
+  unsigned sweep_idx = 0;
+  unsigned sweep_rounds = 0;
+  unsigned sweep_hold = 0;
+  double sweep_freqs[NR_FREQ_SWEEP_POINTS];
+  float sweep_best_metric[NR_FREQ_SWEEP_POINTS];
+  memset(sweep_best_metric, 0, sizeof(sweep_best_metric));
+  const double f0 = UE->app_cfg.center_freq_hz;
+  const double step = 5.0e6;
+  sweep_freqs[0] = f0;
+  sweep_freqs[1] = f0 - step;
+  sweep_freqs[2] = f0 + step;
+  sweep_freqs[3] = f0 - 2.0 * step;
+  sweep_freqs[4] = f0 + 2.0 * step;
+  sweep_freqs[5] = f0 - 3.0 * step;
+  sweep_freqs[6] = f0 + 3.0 * step;
+  sweep_freqs[7] = f0 - 4.0 * step;
+  sweep_freqs[8] = f0 + 4.0 * step;
 
   while (!oai_exit) {
     switch (UE->state) {
@@ -233,6 +258,48 @@ static void *TOA_UE_thread(void *arg)
       break;
 
     case TOA_STATE_PRESYNC:
+      pthread_mutex_lock(&UE->sync_mtx);
+      int sync_backpressure = (UE->sync_q_count >= (NR_SYNC_Q_DEPTH / 2U));
+      int is_locked = UE->sync.locked;
+      float cur_metric = UE->sync.pss_metric;
+      pthread_mutex_unlock(&UE->sync_mtx);
+      if (cur_metric > sweep_best_metric[sweep_idx]) {
+        sweep_best_metric[sweep_idx] = cur_metric;
+      }
+      if (sync_backpressure) {
+        usleep(1000);
+        break;
+      }
+      if (!is_locked) {
+        presync_no_lock_iter++;
+        if ((presync_no_lock_iter % 400U) == 0U) {
+          if (sweep_rounds < NR_FREQ_SWEEP_POINTS) {
+            sweep_idx = (sweep_idx + 1U) % NR_FREQ_SWEEP_POINTS;
+            sweep_rounds++;
+          } else if (sweep_hold < 5U) {
+            /* Stay on the current best for a few cycles. */
+            unsigned best_i = 0;
+            float best_m = sweep_best_metric[0];
+            for (unsigned i = 1; i < NR_FREQ_SWEEP_POINTS; i++) {
+              if (sweep_best_metric[i] > best_m) {
+                best_m = sweep_best_metric[i];
+                best_i = i;
+              }
+            }
+            sweep_idx = best_i;
+            sweep_hold++;
+          } else {
+            sweep_idx = (sweep_idx + 1U) % NR_FREQ_SWEEP_POINTS;
+            sweep_hold = 0;
+          }
+          if (nr_toa_radio_set_rx_freq(UE->dev, sweep_freqs[sweep_idx]) == 0) {
+            printf("freq_sweep: idx=%u rx_freq=%.0fHz best_metric=%.3f\n",
+                   sweep_idx, sweep_freqs[sweep_idx], sweep_best_metric[sweep_idx]);
+          }
+        }
+      } else {
+        presync_no_lock_iter = 0;
+      }
       (void)nr_toa_read_two_frames(UE, &UE->iq_ring);
       pthread_mutex_lock(&UE->sync_mtx);
       UE->state = UE->sync.locked ? TOA_STATE_LOCKED : TOA_STATE_PRESYNC;
@@ -286,7 +353,7 @@ int main(int argc, char **argv)
 
   const char *cfgpath =
       (argc > 1) ? argv[1]
-                 : "targets/PROJECTS/NR-TOA/CONF/ue.toa.ssb.limesdr.conf";
+                 : "targets/PROJECTS/NR-TOA/CONF/ue.toa.ssb.usrpb210.conf";
   if (nr_toa_load_config(cfgpath, &ue.app_cfg) != 0) {
     return 1;
   }
@@ -339,6 +406,11 @@ int main(int argc, char **argv)
   ue.sync_job_done = 0;
   ue.sync_job_blk = NULL;
   ue.sync_job_id = 0;
+  ue.sync_q_head = 0;
+  ue.sync_q_tail = 0;
+  ue.sync_q_count = 0;
+  memset(ue.sync_q, 0, sizeof(ue.sync_q));
+  memset(ue.sync_q_job_id, 0, sizeof(ue.sync_q_job_id));
   ue.next_sync_job_id = 1;
   ue.sync_jobs_dropped = 0;
 
@@ -385,6 +457,15 @@ int main(int argc, char **argv)
   /* Make sure actors are not stuck in cond waits. */
   pthread_mutex_lock(&ue.sync_mtx);
   ue.sync_job_pending = 0;
+  while (ue.sync_q_count > 0U) {
+    nr_iq_block_t *old = ue.sync_q[ue.sync_q_head];
+    ue.sync_q[ue.sync_q_head] = NULL;
+    ue.sync_q_head = (ue.sync_q_head + 1U) % (uint32_t)NR_SYNC_Q_DEPTH;
+    ue.sync_q_count--;
+    if (old) {
+      nr_iq_block_put(old);
+    }
+  }
   pthread_cond_broadcast(&ue.sync_cv);
   pthread_mutex_unlock(&ue.sync_mtx);
 

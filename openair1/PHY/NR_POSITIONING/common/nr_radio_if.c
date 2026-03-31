@@ -59,6 +59,9 @@ int nr_toa_radio_read(openair0_device_t *dev, nr_iq_block_t *blk)
   if (ret < 0) {
     return -1;
   }
+  if ((uint32_t)ret != blk->nsamps) {
+    return -1;
+  }
   blk->ts_first = ts;
   blk->abs_samp0 = (uint64_t)ts;
   return 0;
@@ -79,4 +82,12 @@ int nr_toa_radio_write(openair0_device_t *dev, const nr_iq_block_t *blk)
   }
   openair0_timestamp_t ts = blk->ts_first;
   return dev->trx_write_func(dev, &ts, buf, blk->nsamps, 0, 0);
+}
+
+int nr_toa_radio_set_rx_freq(openair0_device_t *dev, double rx_freq_hz)
+{
+  if (!dev || !dev->trx_set_rx_freq_func || !(rx_freq_hz > 0.0)) {
+    return -1;
+  }
+  return dev->trx_set_rx_freq_func(dev, rx_freq_hz);
 }

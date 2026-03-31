@@ -224,6 +224,18 @@ NR_TOA_USRP_LimeSDR_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 NR_TOA_USRP_LimeSDR_SOURCE_DIR:STATIC=/home/jfm/桌面/TOA_USRP_LimeSDR
 
+//Arguments to supply to pkg-config
+PKG_CONFIG_ARGN:STRING=
+
+//pkg-config executable
+PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
+
+//Path to a library.
+pkgcfg_lib_UHD_boost_system:FILEPATH=/usr/lib/x86_64-linux-gnu/libboost_system.so
+
+//Path to a library.
+pkgcfg_lib_UHD_uhd:FILEPATH=/usr/local/lib/libuhd.so
+
 
 ########################
 # INTERNAL cache entries
@@ -374,6 +386,54 @@ CMAKE_TAPI-ADVANCED:INTERNAL=1
 CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//Details about finding PkgConfig
+FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig:INTERNAL=[/usr/bin/pkg-config][v1.8.1()]
+//ADVANCED property for variable: PKG_CONFIG_ARGN
+PKG_CONFIG_ARGN-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PKG_CONFIG_EXECUTABLE
+PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
+UHD_CFLAGS:INTERNAL=-I/usr/local/include;-I/usr/include
+UHD_CFLAGS_I:INTERNAL=
+UHD_CFLAGS_OTHER:INTERNAL=
+UHD_FOUND:INTERNAL=1
+UHD_INCLUDEDIR:INTERNAL=/usr/local/include
+UHD_INCLUDE_DIRS:INTERNAL=/usr/local/include;/usr/include
+UHD_LDFLAGS:INTERNAL=-L/usr/local/lib;-luhd;-lboost_system
+UHD_LDFLAGS_OTHER:INTERNAL=
+UHD_LIBDIR:INTERNAL=/usr/local/lib
+UHD_LIBRARIES:INTERNAL=uhd;boost_system
+UHD_LIBRARY_DIRS:INTERNAL=/usr/local/lib
+UHD_LIBS:INTERNAL=
+UHD_LIBS_L:INTERNAL=
+UHD_LIBS_OTHER:INTERNAL=
+UHD_LIBS_PATHS:INTERNAL=
+UHD_MODULE_NAME:INTERNAL=uhd
+UHD_PREFIX:INTERNAL=/usr/local
+UHD_STATIC_CFLAGS:INTERNAL=-I/usr/local/include;-I/usr/include
+UHD_STATIC_CFLAGS_I:INTERNAL=
+UHD_STATIC_CFLAGS_OTHER:INTERNAL=
+UHD_STATIC_INCLUDE_DIRS:INTERNAL=/usr/local/include;/usr/include
+UHD_STATIC_LDFLAGS:INTERNAL=-L/usr/local/lib;-luhd;-lboost_system;-L/usr/lib/x86_64-linux-gnu
+UHD_STATIC_LDFLAGS_OTHER:INTERNAL=
+UHD_STATIC_LIBDIR:INTERNAL=
+UHD_STATIC_LIBRARIES:INTERNAL=uhd;boost_system
+UHD_STATIC_LIBRARY_DIRS:INTERNAL=/usr/local/lib;/usr/lib/x86_64-linux-gnu
+UHD_STATIC_LIBS:INTERNAL=
+UHD_STATIC_LIBS_L:INTERNAL=
+UHD_STATIC_LIBS_OTHER:INTERNAL=
+UHD_STATIC_LIBS_PATHS:INTERNAL=
+UHD_VERSION:INTERNAL=4.8.0.HEAD-0-g308126a4
+UHD_uhd_INCLUDEDIR:INTERNAL=
+UHD_uhd_LIBDIR:INTERNAL=
+UHD_uhd_PREFIX:INTERNAL=
+UHD_uhd_VERSION:INTERNAL=
 //linker supports push/pop state
 _CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED:INTERNAL=TRUE
+__pkg_config_arguments_UHD:INTERNAL=REQUIRED;uhd
+__pkg_config_checked_UHD:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_UHD_boost_system
+pkgcfg_lib_UHD_boost_system-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_UHD_uhd
+pkgcfg_lib_UHD_uhd-ADVANCED:INTERNAL=1
+prefix_result:INTERNAL=/usr/local/lib
 

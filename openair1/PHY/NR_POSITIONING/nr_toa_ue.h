@@ -44,6 +44,14 @@ typedef struct nr_toa_ue {
   int sync_job_done;
   nr_iq_block_t *sync_job_blk;
   uint64_t sync_job_id;
+#ifndef NR_SYNC_Q_DEPTH
+#define NR_SYNC_Q_DEPTH 8
+#endif
+  nr_iq_block_t *sync_q[NR_SYNC_Q_DEPTH];
+  uint64_t sync_q_job_id[NR_SYNC_Q_DEPTH];
+  uint32_t sync_q_head;
+  uint32_t sync_q_tail;
+  uint32_t sync_q_count;
 
   pthread_mutex_t meas_mtx;
   pthread_cond_t meas_cv;

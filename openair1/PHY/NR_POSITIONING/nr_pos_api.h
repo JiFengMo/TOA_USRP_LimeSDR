@@ -43,6 +43,7 @@ int nr_toa_radio_init(openair0_device_t **dev, openair0_config_t *cfg);
 int nr_toa_radio_start(openair0_device_t *dev);
 int nr_toa_radio_read(openair0_device_t *dev, nr_iq_block_t *blk);
 int nr_toa_radio_write(openair0_device_t *dev, const nr_iq_block_t *blk);
+int nr_toa_radio_set_rx_freq(openair0_device_t *dev, double rx_freq_hz);
 
 /* clock_mgr */
 int nr_toa_wait_clock_lock(openair0_device_t *dev, nr_clock_status_t *st);
@@ -57,6 +58,17 @@ int nr_ssb_plan_next_epoch(nr_ssb_tx_plan_t *plan, uint64_t epoch_id);
 int nr_ssb_gen_ref(uint16_t pci, uint8_t ssb_idx, nr_ssb_ref_t *ref);
 int nr_ssb_build_grid(const nr_ssb_ref_t *ref, nr_ssb_grid_t *grid);
 int nr_ssb_ofdm_mod(const nr_ssb_grid_t *grid, nr_tx_burst_t *burst);
+
+/* ssb_ref (shared PSS/OFDM reference) */
+uint32_t nr_v0_pss_td_len(void);
+uint32_t nr_v0_ssb_sym_len(void);
+uint32_t nr_v0_ssb_burst_len(void);
+void nr_v0_pss_build_fd(int nid2, float *seq, uint32_t len);
+void nr_v0_pss_build_td_f(int nid2, float *td_i, float *td_q, uint32_t len);
+int nr_v0_pss_build_td_iq(int nid2, c16_t *out, uint32_t out_len,
+                          float amp);
+int nr_v0_ssb_build_burst_iq(int nid2, c16_t *out, uint32_t out_len,
+                             float amp);
 
 /* anchor_write */
 int nr_anchor_write_burst(openair0_device_t *dev,

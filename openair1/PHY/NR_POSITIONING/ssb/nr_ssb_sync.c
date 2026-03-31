@@ -1,81 +1,61 @@
 #include "openair1/PHY/NR_POSITIONING/nr_pos_types.h"
+#include "openair1/PHY/NR_POSITIONING/nr_pos_api.h"
 
 #include <math.h>
 #include <stdint.h>
 #include <string.h>
 
-#define NR_V0_PSS_LEN 127
-#define NR_V0_NFFT 256
-#define NR_V0_CP 20
-#define NR_V0_PSS_TD_LEN (NR_V0_NFFT + NR_V0_CP)
 #define NR_V0_MIN_PWR 5000.0
+#define NR_V0_FS_HZ 30720000.0
 
-static void nr_v0_build_pss_seq(int nid2, float *seq)
+static float nr_v0_corr_metric_comp(const c16_t *x,
+                                    uint32_t pss_start,
+                                    const float *pss_i,
+                                    const float *pss_q,
+                                    uint32_t ref_len,
+                                    float cfo_hz)
 {
-  uint8_t x[NR_V0_PSS_LEN];
-  memset(x, 0, sizeof(x));
-
-  /* m-sequence init for PSS */
-  x[0] = 1;
-  x[1] = 0;
-  x[2] = 0;
-  x[3] = 0;
-  x[4] = 0;
-  x[5] = 0;
-  x[6] = 0;
-
-  /* x(n+7) = x(n+4) xor x(n), period 127 */
-  for (int n = 0; n < NR_V0_PSS_LEN - 7; n++) {
-    x[n + 7] = (uint8_t)((x[n + 4] + x[n]) & 1U);
+  const double w = 2.0 * M_PI * (double)cfo_hz / NR_V0_FS_HZ;
+  double cr = 0.0;
+  double ci = 0.0;
+  double px = 0.0;
+  double pp = 0.0;
+  for (uint32_t k = 0; k < ref_len; k++) {
+    double xr = (double)x[pss_start + k].r;
+    double xq = (double)x[pss_start + k].i;
+    if (cfo_hz != 0.0f) {
+      double ph = w * (double)k;
+      double c = cos(ph);
+      double s = sin(ph);
+      double tr = xr * c + xq * s;
+      double tq = -xr * s + xq * c;
+      xr = tr;
+      xq = tq;
+    }
+    double pr = (double)pss_i[k];
+    double pq = (double)pss_q[k];
+    cr += xr * pr + xq * pq;
+    ci += xq * pr - xr * pq;
+    px += xr * xr + xq * xq;
+    pp += pr * pr + pq * pq;
   }
-
-  int shift = (43 * (nid2 % 3)) % NR_V0_PSS_LEN;
-  for (int n = 0; n < NR_V0_PSS_LEN; n++) {
-    int idx = (n + shift) % NR_V0_PSS_LEN;
-    seq[n] = x[idx] ? -1.0f : 1.0f; /* BPSK mapping */
-  }
+  return (float)(sqrt(cr * cr + ci * ci) / (sqrt(px * pp) + 1e-9));
 }
 
-static void nr_v0_build_pss_td(int nid2, float *td_i, float *td_q)
+static float nr_v0_estimate_cfo_hz(const c16_t *x, uint32_t pss_start, uint32_t len)
 {
-  float pss[NR_V0_PSS_LEN];
-  float Xr[NR_V0_NFFT];
-  float Xi[NR_V0_NFFT];
-  nr_v0_build_pss_seq(nid2, pss);
-  memset(Xr, 0, sizeof(Xr));
-  memset(Xi, 0, sizeof(Xi));
-
-  const int k0 = -(NR_V0_PSS_LEN / 2);
-  for (int m = 0; m < NR_V0_PSS_LEN; m++) {
-    int k = k0 + m;
-    int bin = (k >= 0) ? k : (NR_V0_NFFT + k);
-    if (bin >= 0 && bin < NR_V0_NFFT) {
-      Xr[bin] = pss[m];
-    }
+  double sr = 0.0;
+  double si = 0.0;
+  for (uint32_t n = 1; n < len; n++) {
+    double ar = (double)x[pss_start + n].r;
+    double ai = (double)x[pss_start + n].i;
+    double br = (double)x[pss_start + n - 1U].r;
+    double bi = (double)x[pss_start + n - 1U].i;
+    sr += ar * br + ai * bi;
+    si += ai * br - ar * bi;
   }
-
-  float xr[NR_V0_NFFT];
-  float xq[NR_V0_NFFT];
-  for (int n = 0; n < NR_V0_NFFT; n++) {
-    double sr = 0.0;
-    double si = 0.0;
-    for (int k = 0; k < NR_V0_NFFT; k++) {
-      double ph = 2.0 * M_PI * (double)(k * n) / (double)NR_V0_NFFT;
-      sr += Xr[k] * cos(ph) - Xi[k] * sin(ph);
-      si += Xr[k] * sin(ph) + Xi[k] * cos(ph);
-    }
-    xr[n] = (float)(sr / (double)NR_V0_NFFT);
-    xq[n] = (float)(si / (double)NR_V0_NFFT);
-  }
-
-  for (int n = 0; n < NR_V0_CP; n++) {
-    td_i[n] = xr[NR_V0_NFFT - NR_V0_CP + n];
-    td_q[n] = xq[NR_V0_NFFT - NR_V0_CP + n];
-  }
-  for (int n = 0; n < NR_V0_NFFT; n++) {
-    td_i[NR_V0_CP + n] = xr[n];
-    td_q[NR_V0_CP + n] = xq[n];
-  }
+  double ph = atan2(si, sr);
+  return (float)(ph * NR_V0_FS_HZ / (2.0 * M_PI));
 }
 
 int nr_ssb_pss_search(const nr_iq_block_t *blk, nr_pss_hit_t *hits, int max_hits)
@@ -83,8 +63,11 @@ int nr_ssb_pss_search(const nr_iq_block_t *blk, nr_pss_hit_t *hits, int max_hits
   if (!blk || !hits || max_hits <= 0) {
     return -1;
   }
+  const uint32_t ref_len = nr_v0_pss_td_len();
+  const uint32_t sym_len = nr_v0_ssb_sym_len();
+  const uint32_t burst_len = nr_v0_ssb_burst_len();
   memset(hits, 0, sizeof(nr_pss_hit_t) * (size_t)max_hits);
-  if (!blk->rx[0] || blk->nsamps < NR_V0_PSS_TD_LEN + 1U) {
+  if (!blk->rx[0] || blk->nsamps < burst_len + 1U) {
     return -1;
   }
 
@@ -100,48 +83,44 @@ int nr_ssb_pss_search(const nr_iq_block_t *blk, nr_pss_hit_t *hits, int max_hits
     return -1;
   }
 
-  float pss_i[3][NR_V0_PSS_TD_LEN];
-  float pss_q[3][NR_V0_PSS_TD_LEN];
+  float pss_i[3][512];
+  float pss_q[3][512];
+  if (ref_len > 512U) {
+    return -1;
+  }
   for (int nid2 = 0; nid2 < 3; nid2++) {
-    nr_v0_build_pss_td(nid2, pss_i[nid2], pss_q[nid2]);
+    nr_v0_pss_build_td_f(nid2, pss_i[nid2], pss_q[nid2], ref_len);
   }
 
   int found = 0;
-  for (uint32_t n = 0; n + NR_V0_PSS_TD_LEN < blk->nsamps; n++) {
+  double metric_sum = 0.0;
+  double metric_sq = 0.0;
+  uint64_t metric_cnt = 0;
+  /* Scan SSB burst start, correlate PSS only at symbol #2. */
+  for (uint32_t n = 0; n + burst_len < blk->nsamps; n++) {
+    const uint32_t pss_start = n + 2U * sym_len;
     for (int nid2 = 0; nid2 < 3; nid2++) {
-      double cr = 0.0;
-      double ci = 0.0;
-      double px = 0.0;
-      double pp = 0.0;
-      for (int k = 0; k < NR_V0_PSS_TD_LEN; k++) {
-        double xr = (double)x[n + (uint32_t)k].r;
-        double xq = (double)x[n + (uint32_t)k].i;
-        double pr = (double)pss_i[nid2][k];
-        double pq = (double)pss_q[nid2][k];
-        cr += xr * pr + xq * pq;
-        ci += xq * pr - xr * pq;
-        px += xr * xr + xq * xq;
-        pp += pr * pr + pq * pq;
-      }
-      double metric = sqrt(cr * cr + ci * ci) / (sqrt(px * pp) + 1e-9);
-      if (metric > 0.20) {
-        int insert = found < max_hits ? found : (max_hits - 1);
-        if (insert >= 0) {
-          /* keep hits sorted by metric descending */
-          while (insert > 0 && hits[insert - 1].metric < (float)metric) {
-            if (insert < max_hits) {
-              hits[insert] = hits[insert - 1];
-            }
-            insert--;
-          }
+      float metric = nr_v0_corr_metric_comp(x, pss_start, pss_i[nid2], pss_q[nid2],
+                                            ref_len, 0.0f);
+      metric_sum += metric;
+      metric_sq += (double)metric * (double)metric;
+      metric_cnt++;
+      int insert = found < max_hits ? found : (max_hits - 1);
+      if (insert >= 0) {
+        /* keep hits sorted by metric descending */
+        while (insert > 0 && hits[insert - 1].metric < metric) {
           if (insert < max_hits) {
-            hits[insert].peak_samp = (int32_t)n;
-            hits[insert].coarse_cfo_hz = 0.0f;
-            hits[insert].metric = (float)metric;
-            hits[insert].nid2 = (uint8_t)nid2;
-            if (found < max_hits) {
-              found++;
-            }
+            hits[insert] = hits[insert - 1];
+          }
+          insert--;
+        }
+        if (insert < max_hits) {
+          hits[insert].peak_samp = (int32_t)n;
+          hits[insert].coarse_cfo_hz = 0.0f;
+          hits[insert].metric = metric;
+          hits[insert].nid2 = (uint8_t)nid2;
+          if (found < max_hits) {
+            found++;
           }
         }
       }
@@ -150,6 +129,35 @@ int nr_ssb_pss_search(const nr_iq_block_t *blk, nr_pss_hit_t *hits, int max_hits
   if (found <= 0) {
     return -1;
   }
+  double mean = (metric_cnt > 0) ? (metric_sum / (double)metric_cnt) : 0.0;
+  double var = (metric_cnt > 1)
+                   ? (metric_sq / (double)metric_cnt - mean * mean)
+                   : 0.0;
+  if (var < 0.0) {
+    var = 0.0;
+  }
+  const float adaptive_th = (float)fmax(0.20, mean + 4.0 * sqrt(var));
+  if (hits[0].metric < adaptive_th) {
+    return -1;
+  }
+
+  /* Estimate coarse CFO then re-score top candidate with compensation. */
+  uint32_t pss0 = (uint32_t)hits[0].peak_samp + 2U * sym_len;
+  float cfo = nr_v0_estimate_cfo_hz(x, pss0, ref_len);
+  if (cfo > 15000.0f) cfo = 15000.0f;
+  if (cfo < -15000.0f) cfo = -15000.0f;
+  float best_m = -1.0f;
+  uint8_t best_nid2 = hits[0].nid2;
+  for (int nid2 = 0; nid2 < 3; nid2++) {
+    float m = nr_v0_corr_metric_comp(x, pss0, pss_i[nid2], pss_q[nid2], ref_len, cfo);
+    if (m > best_m) {
+      best_m = m;
+      best_nid2 = (uint8_t)nid2;
+    }
+  }
+  hits[0].nid2 = best_nid2;
+  hits[0].metric = best_m;
+  hits[0].coarse_cfo_hz = cfo;
   return 0;
 }
 
