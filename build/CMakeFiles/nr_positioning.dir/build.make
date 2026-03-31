@@ -251,10 +251,24 @@ CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpe
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c -o CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.s
 
+CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.o: CMakeFiles/nr_positioning.dir/flags.make
+CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c
+CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.o: CMakeFiles/nr_positioning.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.o -MF CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.o.d -o CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c
+
+CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c > CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.i
+
+CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c -o CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.s
+
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.o: CMakeFiles/nr_positioning.dir/flags.make
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.o: CMakeFiles/nr_positioning.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.o -MF CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.o.d -o CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c
 
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.i: cmake_force
@@ -268,7 +282,7 @@ CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.s: cm
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.o: CMakeFiles/nr_positioning.dir/flags.make
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.o: CMakeFiles/nr_positioning.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.o -MF CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.o.d -o CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c
 
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.i: cmake_force
@@ -282,7 +296,7 @@ CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.s: c
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.o: CMakeFiles/nr_positioning.dir/flags.make
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.o: CMakeFiles/nr_positioning.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.o -MF CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.o.d -o CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c
 
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.i: cmake_force
@@ -296,7 +310,7 @@ CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.s
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.o: CMakeFiles/nr_positioning.dir/flags.make
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.o: CMakeFiles/nr_positioning.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.o -MF CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.o.d -o CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c
 
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.i: cmake_force
@@ -310,7 +324,7 @@ CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.s: 
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.o: CMakeFiles/nr_positioning.dir/flags.make
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.o: CMakeFiles/nr_positioning.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.o -MF CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.o.d -o CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c
 
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.i: cmake_force
@@ -324,7 +338,7 @@ CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.s
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.o: CMakeFiles/nr_positioning.dir/flags.make
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.o: CMakeFiles/nr_positioning.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.o -MF CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.o.d -o CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c
 
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.i: cmake_force
@@ -338,7 +352,7 @@ CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c.
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.o: CMakeFiles/nr_positioning.dir/flags.make
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.o: CMakeFiles/nr_positioning.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.o -MF CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.o.d -o CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c
 
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.i: cmake_force
@@ -352,7 +366,7 @@ CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c.s
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.o: CMakeFiles/nr_positioning.dir/flags.make
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.o: CMakeFiles/nr_positioning.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.o -MF CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.o.d -o CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c
 
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.i: cmake_force
@@ -366,7 +380,7 @@ CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.s: 
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.o: CMakeFiles/nr_positioning.dir/flags.make
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.o: CMakeFiles/nr_positioning.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.o -MF CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.o.d -o CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c
 
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.i: cmake_force
@@ -380,7 +394,7 @@ CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.s
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.o: CMakeFiles/nr_positioning.dir/flags.make
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.o: /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.o: CMakeFiles/nr_positioning.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building C object CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.o -MF CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.o.d -o CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.o -c /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c
 
 CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.i: cmake_force
@@ -406,6 +420,7 @@ nr_positioning_OBJECTS = \
 "CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c.o" \
 "CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.o" \
 "CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.o" \
+"CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.o" \
 "CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.o" \
 "CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.o" \
 "CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.o" \
@@ -433,6 +448,7 @@ libnr_positioning.a: CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/c
 libnr_positioning.a: CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c.o
 libnr_positioning.a: CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.o
 libnr_positioning.a: CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c.o
+libnr_positioning.a: CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.o
 libnr_positioning.a: CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c.o
 libnr_positioning.a: CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c.o
 libnr_positioning.a: CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.o
@@ -445,7 +461,7 @@ libnr_positioning.a: CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/p
 libnr_positioning.a: CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.o
 libnr_positioning.a: CMakeFiles/nr_positioning.dir/build.make
 libnr_positioning.a: CMakeFiles/nr_positioning.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Linking CXX static library libnr_positioning.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/jfm/桌面/TOA_USRP_LimeSDR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Linking CXX static library libnr_positioning.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/nr_positioning.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/nr_positioning.dir/link.txt --verbose=$(VERBOSE)
 

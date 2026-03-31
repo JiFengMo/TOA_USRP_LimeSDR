@@ -689,6 +689,30 @@ openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.s
 .PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.s
 
+openair1/PHY/NR_POSITIONING/ssb/nr_pbch.o: openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_pbch.o
+
+# target to build an object file
+openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.o
+
+openair1/PHY/NR_POSITIONING/ssb/nr_pbch.i: openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_pbch.i
+
+# target to preprocess a source file
+openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.i
+
+openair1/PHY/NR_POSITIONING/ssb/nr_pbch.s: openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_pbch.s
+
+# target to generate assembly for a file
+openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.s
+
 openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.o: openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.o
 .PHONY : openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.o
 
@@ -1075,6 +1099,9 @@ help:
 	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.o"
 	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.i"
 	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.s"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_pbch.o"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_pbch.i"
+	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_pbch.s"
 	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.o"
 	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.i"
 	@echo "... openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.s"

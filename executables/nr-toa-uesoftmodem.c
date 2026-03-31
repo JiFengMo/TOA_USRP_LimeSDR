@@ -12,7 +12,9 @@
 
 volatile int oai_exit;
 #define NR_SYNC_LOST_MISS_THRESH 24U
-#define NR_FREQ_SWEEP_POINTS 9U
+#define NR_FREQ_SWEEP_POINTS 17U
+#define NR_FREQ_SWEEP_STEP_ITERS 20U
+#define NR_UE_LOOP_LOG_EVERY 1000U
 
 static void nr_toa_sig_handler(int signo)
 {
@@ -83,17 +85,22 @@ static void *sync_actor_thread(void *arg)
       }
     }
     if (!prev_locked && local.locked) {
-      printf("LOCK_EVENT: pci=%u offset=%d cfo=%.2f snr=%.2f metric=%.3f det=%llu nodet=%llu\n",
+      printf("SSB_LOCK_EVENT: pci=%u offset=%d cfo=%.2f snr=%.2f metric=%.3f pbch=%u mib=%u sfn=%u mib_payload=0x%06x det=%llu nodet=%llu\n",
              (unsigned)local.pci, local.coarse_offset_samp, local.cfo_hz,
              local.snr_db, local.pss_metric,
+             (unsigned)local.pbch_ok, (unsigned)local.mib_ok,
+             (unsigned)local.sfn, (unsigned)local.mib_payload,
              (unsigned long long)detect_total,
              (unsigned long long)nodetect_total);
     }
     prev_locked = local.locked;
     if ((sync_cnt % 50U) == 0U) {
-      printf("sync_result: %s locked=%u pci=%u offset=%d cfo=%.2f snr=%.2f metric=%.3f miss_streak=%u det=%llu nodet=%llu dropped_sync=%llu dropped_meas=%llu dropped_solver=%llu\n",
+      printf("sync_result: %s ssb_locked=%u pbch=%u mib=%u pci=%u ssb=%u sfn=%u mib_payload=0x%06x offset=%d cfo=%.2f snr=%.2f metric=%.3f miss_streak=%u det=%llu nodet=%llu dropped_sync=%llu dropped_meas=%llu dropped_solver=%llu\n",
              local.locked ? "detected" : "not-detected",
-             (unsigned)local.locked, (unsigned)local.pci, local.coarse_offset_samp,
+             (unsigned)local.locked, (unsigned)local.pbch_ok,
+             (unsigned)local.mib_ok, (unsigned)local.pci,
+             (unsigned)local.ssb_index, (unsigned)local.sfn,
+             (unsigned)local.mib_payload, local.coarse_offset_samp,
              local.cfo_hz, local.snr_db, local.pss_metric, (unsigned)miss_streak,
              (unsigned long long)detect_total, (unsigned long long)nodetect_total,
              (unsigned long long)UE->sync_jobs_dropped,
@@ -235,7 +242,8 @@ static void *TOA_UE_thread(void *arg)
 {
   PHY_VARS_NR_TOA_UE *UE = (PHY_VARS_NR_TOA_UE *)arg;
 
-  const uint32_t nsamps = 4096; /* Phase-0: fixed IQ window size. */
+  const uint32_t ssb_need = nr_v0_ssb_burst_len_fs(UE->app_cfg.sample_rate_hz);
+  const uint32_t nsamps = (ssb_need > 4096U) ? (2U * ssb_need) : 4096U;
   UE->samples_per_slot = nsamps;
   UE->samples_per_frame = 2 * nsamps;
   UE->abs_samp_wr = 0;
@@ -254,10 +262,14 @@ static void *TOA_UE_thread(void *arg)
   const double ssref0_hz = 3000e6;
   /* SSREF = 3000 MHz + N * 1.44 MHz, and (commonly) GSCN = 7499 + N. */
   const long n0 = (long)llround((f0 - ssref0_hz) / gscn_grid_hz);
-  static const int dn[NR_FREQ_SWEEP_POINTS] = {0, -1, +1, -2, +2, -3, +3, -4, +4};
   long sweep_gscn[NR_FREQ_SWEEP_POINTS];
   for (unsigned i = 0; i < NR_FREQ_SWEEP_POINTS; i++) {
-    long N = n0 + (long)dn[i];
+    long off = 0;
+    if (i > 0U) {
+      const long k = (long)((i + 1U) / 2U);
+      off = (i & 1U) ? -k : k;
+    }
+    long N = n0 + off;
     sweep_gscn[i] = 7499L + N;
     sweep_freqs[i] = ssref0_hz + (double)N * gscn_grid_hz;
   }
@@ -273,10 +285,13 @@ static void *TOA_UE_thread(void *arg)
     case TOA_STATE_PRESYNC:
       pthread_mutex_lock(&UE->sync_mtx);
       int sync_backpressure = (UE->sync_q_count >= (NR_SYNC_Q_DEPTH / 2U));
-      int is_locked = UE->sync.locked;
+      int has_real_lock = (UE->sync.locked &&
+                           UE->sync.pbch_ok &&
+                           UE->sync.pbch_confirmed &&
+                           UE->sync.mib_ok);
       float cur_metric = UE->sync.pss_metric;
       pthread_mutex_unlock(&UE->sync_mtx);
-      if (is_locked) {
+      if (has_real_lock) {
         presync_hold_after_lock = 800U; /* Hold current freq after a lock event */
       }
       if (cur_metric > sweep_best_metric[sweep_idx]) {
@@ -286,12 +301,12 @@ static void *TOA_UE_thread(void *arg)
         /* Keep RX continuous; let queue drop policy handle backpressure. */
         break;
       }
-      if (!is_locked) {
+      if (!has_real_lock) {
         presync_no_lock_iter++;
         if (presync_hold_after_lock > 0U) {
           presync_hold_after_lock--;
         }
-        if ((presync_no_lock_iter % 400U) == 0U) {
+        if ((presync_no_lock_iter % NR_FREQ_SWEEP_STEP_ITERS) == 0U) {
           if (presync_hold_after_lock > 0U) {
             break;
           }
@@ -325,7 +340,12 @@ static void *TOA_UE_thread(void *arg)
       }
       (void)nr_toa_read_two_frames(UE, &UE->iq_ring);
       pthread_mutex_lock(&UE->sync_mtx);
-      UE->state = UE->sync.locked ? TOA_STATE_LOCKED : TOA_STATE_PRESYNC;
+      UE->state = (UE->sync.locked &&
+                   UE->sync.pbch_ok &&
+                   UE->sync.pbch_confirmed &&
+                   UE->sync.mib_ok)
+                      ? TOA_STATE_LOCKED
+                      : TOA_STATE_PRESYNC;
       pthread_mutex_unlock(&UE->sync_mtx);
       break;
 
@@ -349,7 +369,7 @@ static void *TOA_UE_thread(void *arg)
     }
 
     iter++;
-    if ((iter % 200) == 0) {
+    if ((iter % NR_UE_LOOP_LOG_EVERY) == 0U) {
       pthread_mutex_lock(&UE->sync_mtx);
       printf("UE loop: state=%d locked=%u cum_tracking_shift_samp=%lld dropped_sync=%llu dropped_meas=%llu dropped_solver=%llu\n",
              (int)UE->state, (unsigned)UE->sync.locked,
@@ -402,6 +422,14 @@ int main(int argc, char **argv)
          (unsigned)ue.app_cfg.meas_mode,
          ue.app_cfg.anchor_db_path,
          ue.n_anchors);
+  if (ue.app_cfg.mode == NR_TOA_MODE_SSB_TOA) {
+    printf("NR-TOA note: SSB mode now attempts real PBCH/MIB decode; treat ssb_locked=1 with mib=0 as a decode failure, not a successful cell accept.\n");
+  }
+  if (ue.app_cfg.iq_dump_enable) {
+    const char *dump_dir = getenv("NR_TOA_IQ_DUMP_DIR");
+    printf("NR-TOA note: IQ near-miss dump enabled, dir=%s\n",
+           (dump_dir && dump_dir[0] != '\0') ? dump_dir : "/tmp/nr_toa_iq");
+  }
   if (nr_toa_build_rf_cfg(&ue.app_cfg, &ue.rf_cfg) != 0) {
     return 1;
   }

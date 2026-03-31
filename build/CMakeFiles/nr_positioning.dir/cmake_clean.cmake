@@ -33,6 +33,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_provider.c.o.d"
   "CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.o"
   "CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c.o.d"
+  "CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.o"
+  "CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c.o.d"
   "CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.o"
   "CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c.o.d"
   "CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c.o"

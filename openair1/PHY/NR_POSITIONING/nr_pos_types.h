@@ -21,6 +21,15 @@ typedef struct {
 } cf32_t;
 
 typedef enum {
+  NR_PBCH_FAIL_NONE = 0,
+  NR_PBCH_FAIL_WINDOW,
+  NR_PBCH_FAIL_DEMOD,
+  NR_PBCH_FAIL_DMRS_WEAK,
+  NR_PBCH_FAIL_DMRS_AMBIG,
+  NR_PBCH_FAIL_BCH
+} nr_pbch_fail_stage_t;
+
+typedef enum {
   TOA_STATE_INIT = 0,
   TOA_STATE_WAIT_CLOCK,
   TOA_STATE_PRESYNC,
@@ -72,7 +81,10 @@ typedef struct {
 
 typedef struct {
   uint8_t locked;
+  uint8_t nid2;
+  uint16_t nid1;
   uint16_t pci;
+  uint16_t pci_full;
   uint8_t ssb_index;
   int32_t coarse_offset_samp;
   float frac_offset_samp;
@@ -82,7 +94,16 @@ typedef struct {
   float rsrp_db;
   float snr_db;
   float pss_metric;
+  uint8_t pbch_ok;
   uint8_t pbch_confirmed; /* PBCH gate confirmation status (for lock consistency). */
+  uint8_t mib_ok;         /* True only when a real PBCH/MIB decode has completed. */
+  uint32_t mib_payload;   /* Reserved for future decoded MIB payload bits. */
+  float pbch_metric;
+  float pbch_metric_second;
+  uint8_t pbch_fail_stage;
+  float lock_confidence;
+  int32_t last_gscn;
+  uint8_t overflow_seen;
   int64_t cum_tracking_shift_samp;
 } nr_sync_state_t;
 
@@ -111,11 +132,13 @@ typedef struct {
 
 typedef struct {
   cf32_t *h_ls;
+  uint8_t *valid_re;
   uint32_t n_re;
 } nr_chest_t;
 
 typedef struct {
   cf32_t *h_full;
+  uint8_t *valid_re;
   uint32_t n_re;
 } nr_chest_full_t;
 

@@ -60,16 +60,38 @@ int nr_ssb_build_grid(const nr_ssb_ref_t *ref, nr_ssb_grid_t *grid);
 int nr_ssb_ofdm_mod(const nr_ssb_grid_t *grid, nr_tx_burst_t *burst);
 
 /* ssb_ref (shared PSS/OFDM reference) */
+#define NR_V0_SYNTH_PBCH_SSB_IDX 0U
+#define NR_V0_SYNTH_PBCH_SFN 341U
+#define NR_V0_SYNTH_PBCH_HRF 0U
+#define NR_V0_SYNTH_PBCH_MIB_PAYLOAD 0x552345U
+
 uint32_t nr_v0_pss_td_len(void);
 uint32_t nr_v0_ssb_sym_len(void);
 uint32_t nr_v0_ssb_burst_len(void);
+uint32_t nr_v0_ssb_nfft(double fs_hz);
+uint32_t nr_v0_ssb_cp_len(double fs_hz);
+uint32_t nr_v0_ssb_sym_len_fs(double fs_hz);
+uint32_t nr_v0_ssb_burst_len_fs(double fs_hz);
 void nr_v0_pss_build_fd(int nid2, float *seq, uint32_t len);
+void nr_v0_sss_build_fd(int nid1, int nid2, float *seq, uint32_t len);
 void nr_v0_pss_build_td_f(int nid2, float *td_i, float *td_q, uint32_t len);
+void nr_v0_pss_build_td_f_fs(int nid2, double fs_hz, float *td_i, float *td_q, uint32_t len);
 int nr_v0_pss_build_td_iq(int nid2, c16_t *out, uint32_t out_len,
                           float amp);
 void nr_v0_sss_build_td_f(int nid1, int nid2, float *td_i, float *td_q, uint32_t len);
+void nr_v0_sss_build_td_f_fs(int nid1, int nid2, double fs_hz,
+                             float *td_i, float *td_q, uint32_t len);
 int nr_v0_ssb_build_burst_iq(int nid1, int nid2, c16_t *out, uint32_t out_len,
                              float amp);
+int nr_v0_pbch_dmrs_build(int pci, int ssb_idx, int n_hf,
+                          float *seq_i, float *seq_q, uint32_t max_len);
+uint32_t nr_pbch_dmrs_re_positions(uint8_t v, uint16_t *rel_idx, uint8_t *sym_idx,
+                                   uint32_t max_len);
+uint32_t nr_pbch_data_re_positions(uint8_t v, uint16_t *rel_idx, uint8_t *sym_idx,
+                                   uint32_t max_len);
+int nr_pbch_bch_encode(uint16_t pci, uint8_t ssb_idx, uint16_t sfn, uint8_t hrf,
+                       uint32_t mib_payload, uint8_t *coded_bits, uint32_t max_bits);
+int nr_pbch_bch_decode(const float *llr, uint32_t llr_len, nr_sync_state_t *sync);
 
 /* anchor_write */
 int nr_anchor_write_burst(openair0_device_t *dev,
@@ -93,10 +115,11 @@ int nr_ssb_check_lost_lock(const nr_sync_state_t *sync);
 /* ssb_extract */
 int nr_ssb_extract_window(const nr_iq_block_t *blk, const nr_sync_state_t *sync,
                           nr_ssb_window_t *win);
-int nr_ssb_demod(const nr_ssb_window_t *win, nr_ssb_grid_t *grid);
+int nr_ssb_demod(const nr_iq_block_t *blk, const nr_ssb_window_t *win,
+                 float cfo_hz, nr_ssb_grid_t *grid);
 
 /* ssb_chest */
-int nr_ssb_ls_estimate(const nr_ssb_grid_t *grid, nr_chest_t *h);
+int nr_ssb_ls_estimate(const nr_ssb_grid_t *grid, const nr_sync_state_t *sync, nr_chest_t *h);
 int nr_ssb_interp_channel(const nr_chest_t *h, nr_chest_full_t *hf);
 int nr_ssb_build_cir(const nr_chest_full_t *hf, nr_cir_t *cir);
 

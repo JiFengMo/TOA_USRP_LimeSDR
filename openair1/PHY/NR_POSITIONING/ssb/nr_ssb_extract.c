@@ -1,5 +1,7 @@
 #include "openair1/PHY/NR_POSITIONING/nr_pos_types.h"
+#include "openair1/PHY/NR_POSITIONING/nr_pos_api.h"
 
+#include <math.h>
 #include <string.h>
 
 int nr_ssb_extract_window(const nr_iq_block_t *blk, const nr_sync_state_t *sync,
@@ -17,20 +19,59 @@ int nr_ssb_extract_window(const nr_iq_block_t *blk, const nr_sync_state_t *sync,
     start = 0;
   }
   win->start_samp = (uint32_t)start;
-  win->len_samp = (blk->nsamps - win->start_samp > 512U) ? 512U : (blk->nsamps - win->start_samp);
+  const uint32_t want = nr_v0_ssb_burst_len_fs(blk->fs_hz);
+  const uint32_t rem = blk->nsamps - win->start_samp;
+  win->len_samp = (rem > want) ? want : rem;
   return 0;
 }
 
-int nr_ssb_demod(const nr_ssb_window_t *win, nr_ssb_grid_t *grid)
+int nr_ssb_demod(const nr_iq_block_t *blk, const nr_ssb_window_t *win,
+                 float cfo_hz, nr_ssb_grid_t *grid)
 {
-  if (!win || !grid) {
+  if (!blk || !blk->rx[0] || !win || !grid) {
     return -1;
   }
   memset(grid, 0, sizeof(*grid));
-  for (int r = 0; r < NR_SSB_RE_ROWS; r++) {
-    for (int c = 0; c < NR_SSB_RE_COLS; c++) {
-      grid->re[r][c].r = (float)((win->start_samp + (uint32_t)c + (uint32_t)r) % 13U) * 0.01f;
-      grid->re[r][c].i = 0.0f;
+  const uint32_t nfft = nr_v0_ssb_nfft(blk->fs_hz);
+  const uint32_t cp = nr_v0_ssb_cp_len(blk->fs_hz);
+  const uint32_t sym_len = nfft + cp;
+  const double fs_hz = (blk->fs_hz > 0.0) ? blk->fs_hz : 30720000.0;
+  const double w = -2.0 * M_PI * (double)cfo_hz / fs_hz;
+  if (win->len_samp < NR_SSB_RE_ROWS * sym_len) {
+    return -1;
+  }
+
+  for (int sym = 0; sym < NR_SSB_RE_ROWS; sym++) {
+    const uint32_t sym_start = win->start_samp + (uint32_t)sym * sym_len;
+    const uint32_t fft_start = sym_start + cp;
+    if ((uint64_t)fft_start + nfft > blk->nsamps) {
+      return -1;
+    }
+    for (int rel = 0; rel < NR_SSB_RE_COLS; rel++) {
+      const int k = rel - 120;
+      double sr = 0.0;
+      double si = 0.0;
+      for (uint32_t n = 0; n < nfft; n++) {
+        const c16_t s = blk->rx[0][fft_start + n];
+        double xr = (double)s.r;
+        double xq = (double)s.i;
+        if (cfo_hz != 0.0f) {
+          const double ph_cfo = w * (double)((uint64_t)sym * sym_len + n);
+          const double cc = cos(ph_cfo);
+          const double ss = sin(ph_cfo);
+          const double tr = xr * cc - xq * ss;
+          const double tq = xr * ss + xq * cc;
+          xr = tr;
+          xq = tq;
+        }
+        const double ph = -2.0 * M_PI * (double)k * (double)n / (double)nfft;
+        const double c = cos(ph);
+        const double sgn = sin(ph);
+        sr += xr * c - xq * sgn;
+        si += xr * sgn + xq * c;
+      }
+      grid->re[sym][rel].r = (float)(sr / (double)nfft);
+      grid->re[sym][rel].i = (float)(si / (double)nfft);
     }
   }
   grid->valid = 1;

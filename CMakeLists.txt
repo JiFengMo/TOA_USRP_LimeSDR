@@ -34,6 +34,7 @@ set(NR_POSITIONING_SOURCES
   openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c
   openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c
   openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c
+  openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c
   openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c
   openair1/PHY/NR_POSITIONING/ssb/nr_ssb_sync.c
   openair1/PHY/NR_POSITIONING/ssb/nr_ssb_extract.c
