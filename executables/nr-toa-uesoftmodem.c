@@ -10,6 +10,7 @@
 #include <signal.h>
 
 volatile int oai_exit;
+#define NR_SYNC_LOST_MISS_THRESH 5U
 
 static void nr_toa_sig_handler(int signo)
 {
@@ -21,6 +22,9 @@ static void *sync_actor_thread(void *arg)
 {
   PHY_VARS_NR_TOA_UE *UE = (PHY_VARS_NR_TOA_UE *)arg;
   uint64_t sync_cnt = 0;
+  uint64_t detect_total = 0;
+  uint64_t nodetect_total = 0;
+  uint32_t miss_streak = 0;
 
   while (!oai_exit) {
     nr_iq_block_t *blk = NULL;
@@ -59,14 +63,25 @@ static void *sync_actor_thread(void *arg)
     if (UE->provider && UE->provider->acquire) {
       int rc = UE->provider->acquire(UE->provider_ctx, blk, &local);
       if (rc != 0) {
-        local.locked = 0;
+        nodetect_total++;
+        miss_streak++;
+        if (miss_streak >= NR_SYNC_LOST_MISS_THRESH) {
+          local.locked = 0;
+        }
+      } else {
+        detect_total++;
+        miss_streak = 0;
       }
     }
     if ((sync_cnt % 50U) == 0U) {
-      printf("sync_result: %s locked=%u pci=%u offset=%d cfo=%.2f snr=%.2f\n",
+      printf("sync_result: %s locked=%u nid2=%u offset=%d cfo=%.2f snr=%.2f metric=%.3f miss_streak=%u det=%llu nodet=%llu dropped_sync=%llu dropped_meas=%llu dropped_solver=%llu\n",
              local.locked ? "detected" : "not-detected",
              (unsigned)local.locked, (unsigned)local.pci, local.coarse_offset_samp,
-             local.cfo_hz, local.snr_db);
+             local.cfo_hz, local.snr_db, local.pss_metric, (unsigned)miss_streak,
+             (unsigned long long)detect_total, (unsigned long long)nodetect_total,
+             (unsigned long long)UE->sync_jobs_dropped,
+             (unsigned long long)UE->meas_jobs_dropped,
+             (unsigned long long)UE->solver_jobs_dropped);
     }
     sync_cnt++;
 
@@ -186,11 +201,13 @@ static void *solver_actor_thread(void *arg)
       (void)nr_pos_solve_wls(&in, &sol);
       (void)nr_pos_validate_solution(&sol);
       (void)nr_trace_solution(&sol);
-      printf("solver_thread: job=%llu epoch=%llu num_meas=%u sol.valid=%u\n",
-             (unsigned long long)meas_job_id,
-             (unsigned long long)epoch.epoch_id,
-             (unsigned)epoch.num_meas,
-             (unsigned)sol.valid);
+      if (sol.valid) {
+        printf("solver_thread: job=%llu epoch=%llu num_meas=%u sol.valid=%u\n",
+               (unsigned long long)meas_job_id,
+               (unsigned long long)epoch.epoch_id,
+               (unsigned)epoch.num_meas,
+               (unsigned)sol.valid);
+      }
     }
   }
 
@@ -244,9 +261,12 @@ static void *TOA_UE_thread(void *arg)
     iter++;
     if ((iter % 200) == 0) {
       pthread_mutex_lock(&UE->sync_mtx);
-      printf("UE loop: state=%d locked=%u cum_tracking_shift_samp=%lld\n",
+      printf("UE loop: state=%d locked=%u cum_tracking_shift_samp=%lld dropped_sync=%llu dropped_meas=%llu dropped_solver=%llu\n",
              (int)UE->state, (unsigned)UE->sync.locked,
-             (long long)UE->sync.cum_tracking_shift_samp);
+             (long long)UE->sync.cum_tracking_shift_samp,
+             (unsigned long long)UE->sync_jobs_dropped,
+             (unsigned long long)UE->meas_jobs_dropped,
+             (unsigned long long)UE->solver_jobs_dropped);
       pthread_mutex_unlock(&UE->sync_mtx);
     }
     usleep(2000);

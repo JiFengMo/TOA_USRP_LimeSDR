@@ -1,5 +1,5 @@
 /**
- * USRP backend (UHD) 闁炽儻鎷� placeholder wiring to openair0_device_t.
+ * USRP backend (UHD) 闁炽儻鎷�? placeholder wiring to openair0_device_t.
  * Full implementation mirrors OAI usrp_lib.cpp.
  */
 #include "../COMMON/common_lib.h"
@@ -16,6 +16,11 @@ typedef struct {
   int started;
   uint64_t read_count;
 } usrp_sim_state_t;
+
+#define USRP_V0_PSS_LEN 127
+#define USRP_V0_NFFT 256
+#define USRP_V0_CP 20
+#define USRP_V0_PSS_TD_LEN (USRP_V0_NFFT + USRP_V0_CP)
 
 static void usrp_v0_build_pss_seq(int nid2, float *seq, int len)
 {
@@ -39,6 +44,48 @@ static void usrp_v0_build_pss_seq(int nid2, float *seq, int len)
   for (int n = 0; n < len; n++) {
     int idx = (n + shift) % 127;
     seq[n] = m[idx] ? -1.0f : 1.0f;
+  }
+}
+
+static void usrp_v0_build_pss_td(int nid2, float *td_i, float *td_q)
+{
+  float pss[USRP_V0_PSS_LEN];
+  float Xr[USRP_V0_NFFT];
+  float Xi[USRP_V0_NFFT];
+  usrp_v0_build_pss_seq(nid2, pss, USRP_V0_PSS_LEN);
+  memset(Xr, 0, sizeof(Xr));
+  memset(Xi, 0, sizeof(Xi));
+
+  const int k0 = -(USRP_V0_PSS_LEN / 2);
+  for (int m = 0; m < USRP_V0_PSS_LEN; m++) {
+    int k = k0 + m;
+    int bin = (k >= 0) ? k : (USRP_V0_NFFT + k);
+    if (bin >= 0 && bin < USRP_V0_NFFT) {
+      Xr[bin] = pss[m];
+    }
+  }
+
+  float xr[USRP_V0_NFFT];
+  float xq[USRP_V0_NFFT];
+  for (int n = 0; n < USRP_V0_NFFT; n++) {
+    double sr = 0.0;
+    double si = 0.0;
+    for (int k = 0; k < USRP_V0_NFFT; k++) {
+      double ph = 2.0 * M_PI * (double)(k * n) / (double)USRP_V0_NFFT;
+      sr += Xr[k] * cos(ph) - Xi[k] * sin(ph);
+      si += Xr[k] * sin(ph) + Xi[k] * cos(ph);
+    }
+    xr[n] = (float)(sr / (double)USRP_V0_NFFT);
+    xq[n] = (float)(si / (double)USRP_V0_NFFT);
+  }
+
+  for (int n = 0; n < USRP_V0_CP; n++) {
+    td_i[n] = xr[USRP_V0_NFFT - USRP_V0_CP + n];
+    td_q[n] = xq[USRP_V0_NFFT - USRP_V0_CP + n];
+  }
+  for (int n = 0; n < USRP_V0_NFFT; n++) {
+    td_i[USRP_V0_CP + n] = xr[n];
+    td_q[USRP_V0_CP + n] = xq[n];
   }
 }
 
@@ -98,10 +145,11 @@ static int usrp_trx_read(openair0_device_t *device,
 
   int16_t *iq = (int16_t *)buff[0];
   const uint32_t burst_pos = nsamps / 4U;
-  const uint32_t burst_len = 127U;
+  const uint32_t burst_len = USRP_V0_PSS_TD_LEN;
   const int burst_on = 1;
-  float pss[127];
-  usrp_v0_build_pss_seq((int)(st->read_count % 3U), pss, 127);
+  float pss_i[USRP_V0_PSS_TD_LEN];
+  float pss_q[USRP_V0_PSS_TD_LEN];
+  usrp_v0_build_pss_td((int)(st->read_count % 3U), pss_i, pss_q);
 
   for (uint32_t n = 0; n < nsamps; n++) {
     int16_t i = 0;
@@ -109,8 +157,8 @@ static int usrp_trx_read(openair0_device_t *device,
 
     if (burst_on && n >= burst_pos && n < burst_pos + burst_len) {
       uint32_t k = n - burst_pos;
-      i = (int16_t)(12000.0f * pss[k]);
-      q = 0;
+      i = (int16_t)(12000.0f * pss_i[k]);
+      q = (int16_t)(12000.0f * pss_q[k]);
     } else {
       i = (int16_t)(((int)(st->read_count + n) % 7) - 3) * 30;
       q = (int16_t)(((int)(st->read_count + 2U * n) % 7) - 3) * 30;

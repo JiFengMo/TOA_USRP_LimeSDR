@@ -80,6 +80,7 @@ typedef struct {
   uint16_t slot;
   float rsrp_db;
   float snr_db;
+  float pss_metric;
   int64_t cum_tracking_shift_samp;
 } nr_sync_state_t;
 
@@ -98,6 +99,7 @@ typedef struct {
   int32_t peak_samp;
   float coarse_cfo_hz;
   float metric;
+  uint8_t nid2;
 } nr_pss_hit_t;
 
 typedef struct {

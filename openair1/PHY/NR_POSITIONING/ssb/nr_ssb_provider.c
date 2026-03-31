@@ -1,6 +1,9 @@
 #include "openair1/PHY/NR_POSITIONING/nr_pos_provider_if.h"
 #include "openair1/PHY/NR_POSITIONING/nr_pos_api.h"
 
+#include <stdint.h>
+#include <stdio.h>
+
 static int ssb_init(void *ctx)
 {
   (void)ctx;
@@ -10,6 +13,7 @@ static int ssb_init(void *ctx)
 static int ssb_acquire(void *ctx, const nr_iq_block_t *blk, nr_sync_state_t *sync)
 {
   (void)ctx;
+  static uint32_t dbg_cnt = 0;
   if (!blk || !sync) {
     return -1;
   }
@@ -17,7 +21,16 @@ static int ssb_acquire(void *ctx, const nr_iq_block_t *blk, nr_sync_state_t *syn
   nr_pss_hit_t hits[4];
   if (nr_ssb_pss_search(blk, hits, 4) != 0) {
     sync->locked = 0;
+    if ((dbg_cnt++ % 100U) == 0U) {
+      printf("pss_search: not-detected\n");
+    }
     return -1;
+  }
+  if ((dbg_cnt++ % 100U) == 0U) {
+    printf("pss_hits: [0]nid2=%u off=%d m=%.3f [1]nid2=%u off=%d m=%.3f [2]nid2=%u off=%d m=%.3f\n",
+           (unsigned)hits[0].nid2, hits[0].peak_samp, hits[0].metric,
+           (unsigned)hits[1].nid2, hits[1].peak_samp, hits[1].metric,
+           (unsigned)hits[2].nid2, hits[2].peak_samp, hits[2].metric);
   }
   if (nr_ssb_refine_sync(blk, &hits[0], sync) != 0) {
     sync->locked = 0;
