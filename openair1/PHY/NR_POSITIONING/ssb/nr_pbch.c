@@ -611,7 +611,7 @@ int nr_pbch_bch_encode(uint16_t pci, uint8_t ssb_idx, uint16_t sfn, uint8_t hrf,
 
 int nr_pbch_bch_decode(const float *llr, uint32_t llr_len, nr_sync_state_t *sync)
 {
-  enum { NR_PBCH_FLIP_TRIES = 6 };
+  enum { NR_PBCH_FLIP_TRIES = 10, NR_PBCH_TRIPLE_TRIES = 4 };
   float llr_scr[NR_PBCH_E];
   float llr_rm[NR_PBCH_N];
   float llr_sub[NR_PBCH_N];
@@ -671,6 +671,26 @@ int nr_pbch_bch_decode(const float *llr, uint32_t llr_len, nr_sync_state_t *sync
                                    NULL, uhat, partial) == 0 &&
             nr_pbch_extract_candidate(uhat, info_pos, payload_crc, payload_plain, sync->pci) == 0) {
           goto pbch_crc_ok;
+        }
+      }
+    }
+
+    {
+      const uint32_t triple_count = (weak_count < NR_PBCH_TRIPLE_TRIES) ? weak_count : NR_PBCH_TRIPLE_TRIES;
+      uint16_t flip_pos3[3];
+      for (uint32_t i = 0U; i < triple_count; i++) {
+        for (uint32_t j = i + 1U; j < triple_count; j++) {
+          for (uint32_t k = j + 1U; k < triple_count; k++) {
+            memset(uhat, 0, sizeof(uhat));
+            flip_pos3[0] = weak_bits[i].pos;
+            flip_pos3[1] = weak_bits[j].pos;
+            flip_pos3[2] = weak_bits[k].pos;
+            if (nr_polar_sc_decode_rec(llr_sub, NR_PBCH_N, 0U, frozen, flip_pos3, 3U,
+                                       NULL, uhat, partial) == 0 &&
+                nr_pbch_extract_candidate(uhat, info_pos, payload_crc, payload_plain, sync->pci) == 0) {
+              goto pbch_crc_ok;
+            }
+          }
         }
       }
     }

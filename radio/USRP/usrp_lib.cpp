@@ -294,6 +294,28 @@ static int usrp_set_rx_freq(openair0_device_t *device, double rx_freq_hz)
   }
 }
 
+static int usrp_set_rx_gain(openair0_device_t *device, double rx_gain_db)
+{
+  if (!device || !device->priv || !(rx_gain_db >= 0.0)) {
+    return -1;
+  }
+  usrp_state_t *st = (usrp_state_t *)device->priv;
+  if (!st->usrp) {
+    return -1;
+  }
+  try {
+    st->usrp->set_rx_gain(rx_gain_db, 0);
+    st->cfg.rx_gain_db = rx_gain_db;
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    std::printf("USRP: RX gain set to %.1f dB (act=%.1f)\n",
+                rx_gain_db, st->usrp->get_rx_gain(0));
+    return 0;
+  } catch (const std::exception &e) {
+    std::printf("USRP: set_rx_gain exception: %s\n", e.what());
+    return -1;
+  }
+}
+
 openair0_device_t *openair0_device_get_usrp(openair0_config_t *cfg)
 {
   openair0_device_t *dev = (openair0_device_t *)calloc(1, sizeof(openair0_device_t));
@@ -307,6 +329,7 @@ openair0_device_t *openair0_device_get_usrp(openair0_config_t *cfg)
   dev->trx_read_func = usrp_trx_read;
   dev->trx_write_func = usrp_trx_write;
   dev->trx_set_rx_freq_func = usrp_set_rx_freq;
+  dev->trx_set_rx_gain_func = usrp_set_rx_gain;
   dev->openair0_cfg = cfg;
   dev->priv = (void *)(new usrp_state_t());
   if (!dev->priv) {

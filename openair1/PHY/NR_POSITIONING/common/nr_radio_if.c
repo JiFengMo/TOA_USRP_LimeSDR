@@ -91,3 +91,11 @@ int nr_toa_radio_set_rx_freq(openair0_device_t *dev, double rx_freq_hz)
   }
   return dev->trx_set_rx_freq_func(dev, rx_freq_hz);
 }
+
+int nr_toa_radio_set_rx_gain(openair0_device_t *dev, double rx_gain_db)
+{
+  if (!dev || !dev->trx_set_rx_gain_func || !(rx_gain_db >= 0.0)) {
+    return -1;
+  }
+  return dev->trx_set_rx_gain_func(dev, rx_gain_db);
+}

@@ -28,6 +28,8 @@ typedef struct nr_toa_ue {
   uint64_t abs_samp_wr;
   uint32_t samples_per_slot;
   uint32_t samples_per_frame;
+  double current_rx_freq_hz;
+  int32_t current_rx_gscn;
 
   /* Provider holds its own caches/state via ctx. */
   const nr_pos_provider_if_t *provider;
@@ -83,4 +85,3 @@ typedef struct nr_toa_ue {
 
   /* Current pending job identifiers: stored in sync_job_id / meas_job_id above. */
 } nr_toa_ue_t;
-

@@ -55,6 +55,8 @@ typedef struct {
   uint64_t abs_samp0;
   uint32_t nsamps;
   double fs_hz; /* Sampling rate (Hz), set by radio read path */
+  double rx_freq_hz; /* RF center frequency associated with this IQ capture. */
+  int32_t rx_gscn;   /* Sweep raster index/GSCN associated with this IQ capture. */
   uint8_t rx_ant;
   uint8_t overrun;
   c16_t *rx[NR_TOA_MAX_RX_ANT];
@@ -105,6 +107,10 @@ typedef struct {
   int32_t last_gscn;
   uint8_t overflow_seen;
   int64_t cum_tracking_shift_samp;
+  uint8_t pci_hyp_count;
+  uint16_t pci_hyp[4];
+  int16_t pci_hyp_delta[4];
+  float pci_hyp_metric[4];
 } nr_sync_state_t;
 
 typedef struct {

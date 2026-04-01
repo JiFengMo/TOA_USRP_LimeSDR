@@ -44,6 +44,7 @@ int nr_toa_radio_start(openair0_device_t *dev);
 int nr_toa_radio_read(openair0_device_t *dev, nr_iq_block_t *blk);
 int nr_toa_radio_write(openair0_device_t *dev, const nr_iq_block_t *blk);
 int nr_toa_radio_set_rx_freq(openair0_device_t *dev, double rx_freq_hz);
+int nr_toa_radio_set_rx_gain(openair0_device_t *dev, double rx_gain_db);
 
 /* clock_mgr */
 int nr_toa_wait_clock_lock(openair0_device_t *dev, nr_clock_status_t *st);

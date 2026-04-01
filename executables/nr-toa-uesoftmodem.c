@@ -12,9 +12,250 @@
 
 volatile int oai_exit;
 #define NR_SYNC_LOST_MISS_THRESH 24U
-#define NR_FREQ_SWEEP_POINTS 17U
 #define NR_FREQ_SWEEP_STEP_ITERS 20U
+#define NR_FREQ_SWEEP_STEP_ITERS_WIDE 5U
+#define NR_FREQ_SWEEP_BEST_DWELL 1U
+#define NR_GAIN_STEP_FULL_SWEEPS 1U
+#define NR_FREQ_SWEEP_NEARMISS_DWELL 3U
+#define NR_FREQ_SWEEP_HOT_DECAY 0.82f
+#define NR_FREQ_SWEEP_GAIN_MEMORY 0.72f
 #define NR_UE_LOOP_LOG_EVERY 1000U
+
+typedef struct {
+  unsigned points;
+  double *freqs_hz;
+  long *gscn;
+} nr_freq_sweep_plan_t;
+
+typedef struct {
+  unsigned count;
+  double values_db[16];
+} nr_gain_plan_t;
+
+static int nr_toa_build_sweep_plan(double center_freq_hz,
+                                   double sample_rate_hz,
+                                   nr_freq_sweep_plan_t *plan)
+{
+  const double gscn_grid_hz = 1.44e6;
+  const double ssref0_hz = 3000e6;
+  const double n78_lo_hz = 3300e6;
+  const double n78_hi_hz = 3800e6;
+  if (!plan) {
+    return -1;
+  }
+  memset(plan, 0, sizeof(*plan));
+
+  if (center_freq_hz >= n78_lo_hz && center_freq_hz <= n78_hi_hz) {
+    const double target_step_hz = fmin(fmax(sample_rate_hz * 0.5, gscn_grid_hz), 5.76e6);
+    const long gscn_step = (long)fmax(1.0, llround(target_step_hz / gscn_grid_hz));
+    const long coarse_mult = 4L;
+    const long coarse_step = gscn_step * coarse_mult;
+    const long n_lo = (long)ceil((n78_lo_hz - ssref0_hz) / gscn_grid_hz);
+    const long n_hi = (long)floor((n78_hi_hz - ssref0_hz) / gscn_grid_hz);
+    const long n0 = (long)llround((center_freq_hz - ssref0_hz) / gscn_grid_hz);
+    const unsigned raw_points = (unsigned)((n_hi - n_lo) + 1L);
+    long *ordered_n = NULL;
+    unsigned fill = 0U;
+    if (raw_points == 0U) {
+      return -1;
+    }
+    plan->freqs_hz = (double *)calloc(raw_points, sizeof(*plan->freqs_hz));
+    plan->gscn = (long *)calloc(raw_points, sizeof(*plan->gscn));
+    ordered_n = (long *)calloc(raw_points, sizeof(*ordered_n));
+    if (!plan->freqs_hz || !plan->gscn || !ordered_n) {
+      free(plan->freqs_hz);
+      free(plan->gscn);
+      free(ordered_n);
+      memset(plan, 0, sizeof(*plan));
+      return -1;
+    }
+
+    for (int pass = 0; pass < 2 && fill < raw_points; pass++) {
+      const long step_n = (pass == 0) ? coarse_step : gscn_step;
+      for (long d = 0L; fill < raw_points; d++) {
+        const long cand[2] = {n0 - d * step_n, n0 + d * step_n};
+        for (unsigned s = 0U; s < ((d == 0L) ? 1U : 2U); s++) {
+          const long n = cand[s];
+          int dup = 0;
+          if (n < n_lo || n > n_hi) {
+            continue;
+          }
+          for (unsigned k = 0U; k < fill; k++) {
+            if (ordered_n[k] == n) {
+              dup = 1;
+              break;
+            }
+          }
+          if (!dup) {
+            ordered_n[fill++] = n;
+          }
+        }
+        if ((n0 - d * step_n) < n_lo && (n0 + d * step_n) > n_hi) {
+          break;
+        }
+      }
+    }
+
+    plan->points = fill;
+    for (unsigned i = 0U; i < fill; i++) {
+      plan->gscn[i] = 7499L + ordered_n[i];
+      plan->freqs_hz[i] = ssref0_hz + (double)ordered_n[i] * gscn_grid_hz;
+    }
+    free(ordered_n);
+    return 0;
+  }
+
+  {
+    const unsigned raw_points = 17U;
+    const long n0 = (long)llround((center_freq_hz - ssref0_hz) / gscn_grid_hz);
+    plan->points = raw_points;
+    plan->freqs_hz = (double *)calloc(raw_points, sizeof(*plan->freqs_hz));
+    plan->gscn = (long *)calloc(raw_points, sizeof(*plan->gscn));
+    if (!plan->freqs_hz || !plan->gscn) {
+      free(plan->freqs_hz);
+      free(plan->gscn);
+      memset(plan, 0, sizeof(*plan));
+      return -1;
+    }
+    for (unsigned i = 0U; i < raw_points; i++) {
+      long off = 0;
+      if (i > 0U) {
+        const long k = (long)((i + 1U) / 2U);
+        off = (i & 1U) ? -k : k;
+      }
+      plan->gscn[i] = 7499L + n0 + off;
+      plan->freqs_hz[i] = ssref0_hz + (double)(n0 + off) * gscn_grid_hz;
+    }
+    return 0;
+  }
+}
+
+static void nr_toa_free_sweep_plan(nr_freq_sweep_plan_t *plan)
+{
+  if (!plan) {
+    return;
+  }
+  free(plan->freqs_hz);
+  free(plan->gscn);
+  memset(plan, 0, sizeof(*plan));
+}
+
+static void nr_toa_build_gain_plan(double base_gain_db, nr_gain_plan_t *plan)
+{
+  double g = 0.0;
+  if (!plan) {
+    return;
+  }
+  memset(plan, 0, sizeof(*plan));
+  g = (base_gain_db >= 0.0) ? base_gain_db : 35.0;
+  if (g < 20.0) {
+    g = 20.0;
+  }
+  for (; g <= 65.0 && plan->count < (sizeof(plan->values_db) / sizeof(plan->values_db[0])); g += 3.0) {
+    plan->values_db[plan->count++] = g;
+  }
+  if (plan->count == 0U) {
+    plan->values_db[plan->count++] = (base_gain_db >= 0.0) ? base_gain_db : 35.0;
+  }
+}
+
+static float nr_toa_sync_evidence_score(const nr_sync_state_t *sync)
+{
+  float score = 0.0f;
+  if (!sync) {
+    return 0.0f;
+  }
+  score = 0.60f * sync->pss_metric + 0.10f * sync->snr_db;
+  if (sync->locked) {
+    score += 0.04f;
+  }
+  switch ((nr_pbch_fail_stage_t)sync->pbch_fail_stage) {
+    case NR_PBCH_FAIL_BCH:
+      score += 1.10f * sync->pbch_metric + 0.12f;
+      break;
+    case NR_PBCH_FAIL_DMRS_AMBIG:
+      score += 0.75f * sync->pbch_metric + 0.05f;
+      break;
+    case NR_PBCH_FAIL_DMRS_WEAK:
+      score += 0.45f * sync->pbch_metric;
+      break;
+    default:
+      score += 0.20f * sync->pbch_metric;
+      break;
+  }
+  if (sync->pbch_ok) {
+    score += 2.0f;
+  }
+  if (sync->mib_ok) {
+    score += 4.0f;
+  }
+  if (score < 0.0f) {
+    score = 0.0f;
+  }
+  return score;
+}
+
+static int nr_toa_sync_is_nearmiss(const nr_sync_state_t *sync)
+{
+  if (!sync) {
+    return 0;
+  }
+  if (sync->pbch_fail_stage == NR_PBCH_FAIL_BCH && sync->pbch_metric >= 0.17f) {
+    return 1;
+  }
+  if (sync->pbch_fail_stage == NR_PBCH_FAIL_DMRS_AMBIG &&
+      sync->pbch_metric >= 0.24f &&
+      sync->pss_metric >= 0.20f &&
+      sync->snr_db >= 1.0f) {
+    return 1;
+  }
+  if (sync->pbch_ok || sync->mib_ok) {
+    return 1;
+  }
+  return 0;
+}
+
+static unsigned nr_toa_select_focus_index(const float *metric,
+                                          const float *heat,
+                                          const float *pbch_best,
+                                          const uint16_t *near_hits,
+                                          unsigned points)
+{
+  unsigned best_i = 0U;
+  float best_score = -1.0f;
+  if (!metric || !heat || !pbch_best || !near_hits || points == 0U) {
+    return 0U;
+  }
+  for (unsigned i = 0U; i < points; i++) {
+    const float score = 0.50f * metric[i] +
+                        0.95f * heat[i] +
+                        0.55f * pbch_best[i] +
+                        0.03f * (float)near_hits[i];
+    if (score > best_score) {
+      best_score = score;
+      best_i = i;
+    }
+  }
+  return best_i;
+}
+
+static unsigned nr_toa_find_gscn_index(const nr_freq_sweep_plan_t *plan,
+                                       int32_t gscn,
+                                       unsigned fallback_idx)
+{
+  if (!plan || plan->points == 0U || !plan->gscn) {
+    return fallback_idx;
+  }
+  if (gscn < 0) {
+    return fallback_idx;
+  }
+  for (unsigned i = 0U; i < plan->points; i++) {
+    if ((int32_t)plan->gscn[i] == gscn) {
+      return i;
+    }
+  }
+  return fallback_idx;
+}
 
 static void nr_toa_sig_handler(int signo)
 {
@@ -253,26 +494,60 @@ static void *TOA_UE_thread(void *arg)
   unsigned sweep_idx = 0;
   unsigned sweep_rounds = 0;
   unsigned sweep_hold = 0;
-  double sweep_freqs[NR_FREQ_SWEEP_POINTS];
-  float sweep_best_metric[NR_FREQ_SWEEP_POINTS];
-  memset(sweep_best_metric, 0, sizeof(sweep_best_metric));
-  const double f0 = UE->app_cfg.center_freq_hz;
-  /* GSCN-like global sync raster: step is 1.44 MHz in FR1 (approx SSREF grid). */
-  const double gscn_grid_hz = 1.44e6;
-  const double ssref0_hz = 3000e6;
-  /* SSREF = 3000 MHz + N * 1.44 MHz, and (commonly) GSCN = 7499 + N. */
-  const long n0 = (long)llround((f0 - ssref0_hz) / gscn_grid_hz);
-  long sweep_gscn[NR_FREQ_SWEEP_POINTS];
-  for (unsigned i = 0; i < NR_FREQ_SWEEP_POINTS; i++) {
-    long off = 0;
-    if (i > 0U) {
-      const long k = (long)((i + 1U) / 2U);
-      off = (i & 1U) ? -k : k;
-    }
-    long N = n0 + off;
-    sweep_gscn[i] = 7499L + N;
-    sweep_freqs[i] = ssref0_hz + (double)N * gscn_grid_hz;
+  unsigned sweep_step_iters = NR_FREQ_SWEEP_STEP_ITERS;
+  unsigned gain_idx = 0U;
+  unsigned gain_full_sweeps = 0U;
+  unsigned hot_dwell_left = 0U;
+  unsigned hot_focus_idx = 0U;
+  nr_freq_sweep_plan_t sweep_plan;
+  nr_gain_plan_t gain_plan;
+  float *sweep_best_metric = NULL;
+  float *sweep_heat = NULL;
+  float *sweep_pbch_best = NULL;
+  uint16_t *sweep_near_hits = NULL;
+  memset(&sweep_plan, 0, sizeof(sweep_plan));
+  memset(&gain_plan, 0, sizeof(gain_plan));
+  if (nr_toa_build_sweep_plan(UE->app_cfg.center_freq_hz,
+                              UE->app_cfg.sample_rate_hz,
+                              &sweep_plan) != 0 ||
+      sweep_plan.points == 0U) {
+    printf("freq_sweep: failed to build sweep plan around %.0f Hz\n",
+           UE->app_cfg.center_freq_hz);
+    return NULL;
   }
+  sweep_best_metric = (float *)calloc(sweep_plan.points, sizeof(*sweep_best_metric));
+  if (!sweep_best_metric) {
+    nr_toa_free_sweep_plan(&sweep_plan);
+    return NULL;
+  }
+  sweep_heat = (float *)calloc(sweep_plan.points, sizeof(*sweep_heat));
+  sweep_pbch_best = (float *)calloc(sweep_plan.points, sizeof(*sweep_pbch_best));
+  sweep_near_hits = (uint16_t *)calloc(sweep_plan.points, sizeof(*sweep_near_hits));
+  if (!sweep_heat || !sweep_pbch_best || !sweep_near_hits) {
+    free(sweep_best_metric);
+    free(sweep_heat);
+    free(sweep_pbch_best);
+    free(sweep_near_hits);
+    nr_toa_free_sweep_plan(&sweep_plan);
+    return NULL;
+  }
+  if (sweep_plan.points > 33U) {
+    sweep_step_iters = NR_FREQ_SWEEP_STEP_ITERS_WIDE;
+  }
+  nr_toa_build_gain_plan(UE->app_cfg.rx_gain_db, &gain_plan);
+  printf("freq_sweep: plan_points=%u center=%.0fHz first=%.0fHz last=%.0fHz step_iters=%u\n",
+         sweep_plan.points, UE->app_cfg.center_freq_hz,
+         sweep_plan.freqs_hz[0],
+         sweep_plan.freqs_hz[sweep_plan.points - 1U],
+         sweep_step_iters);
+  printf("rx_gain_plan: count=%u start=%.1f end=%.1f current=%.1f\n",
+         gain_plan.count,
+         gain_plan.values_db[0],
+         gain_plan.values_db[gain_plan.count - 1U],
+         UE->app_cfg.rx_gain_db);
+  fflush(stdout);
+  UE->current_rx_freq_hz = UE->app_cfg.center_freq_hz;
+  UE->current_rx_gscn = (int32_t)sweep_plan.gscn[0];
 
   while (!oai_exit) {
     switch (UE->state) {
@@ -282,61 +557,131 @@ static void *TOA_UE_thread(void *arg)
       }
       break;
 
-    case TOA_STATE_PRESYNC:
+    case TOA_STATE_PRESYNC: {
+      nr_sync_state_t cur_sync;
       pthread_mutex_lock(&UE->sync_mtx);
       int sync_backpressure = (UE->sync_q_count >= (NR_SYNC_Q_DEPTH / 2U));
       int has_real_lock = (UE->sync.locked &&
                            UE->sync.pbch_ok &&
                            UE->sync.pbch_confirmed &&
                            UE->sync.mib_ok);
-      float cur_metric = UE->sync.pss_metric;
+      cur_sync = UE->sync;
+      float cur_metric = cur_sync.pss_metric;
+      float cur_evidence = nr_toa_sync_evidence_score(&cur_sync);
+      int cur_nearmiss = nr_toa_sync_is_nearmiss(&cur_sync);
+      unsigned evidence_idx = nr_toa_find_gscn_index(&sweep_plan, cur_sync.last_gscn, sweep_idx);
       pthread_mutex_unlock(&UE->sync_mtx);
       if (has_real_lock) {
         presync_hold_after_lock = 800U; /* Hold current freq after a lock event */
       }
-      if (cur_metric > sweep_best_metric[sweep_idx]) {
-        sweep_best_metric[sweep_idx] = cur_metric;
+      if (cur_metric > sweep_best_metric[evidence_idx]) {
+        sweep_best_metric[evidence_idx] = cur_metric;
       }
-      if (sync_backpressure) {
-        /* Keep RX continuous; let queue drop policy handle backpressure. */
-        break;
+      const float prev_heat = sweep_heat[evidence_idx];
+      const float prev_pbch_best = sweep_pbch_best[evidence_idx];
+      sweep_heat[evidence_idx] = fmaxf(cur_evidence, sweep_heat[evidence_idx] * NR_FREQ_SWEEP_HOT_DECAY);
+      if (cur_sync.pbch_metric > sweep_pbch_best[evidence_idx]) {
+        sweep_pbch_best[evidence_idx] = cur_sync.pbch_metric;
+      }
+      if (cur_nearmiss &&
+          (cur_evidence > (prev_heat + 0.015f) ||
+           cur_sync.pbch_metric > (prev_pbch_best + 0.010f) ||
+           sweep_near_hits[evidence_idx] == 0U)) {
+        if (sweep_near_hits[evidence_idx] < 65535U) {
+          sweep_near_hits[evidence_idx]++;
+        }
+        if (hot_dwell_left < NR_FREQ_SWEEP_NEARMISS_DWELL) {
+          hot_dwell_left = NR_FREQ_SWEEP_NEARMISS_DWELL;
+          hot_focus_idx = evidence_idx;
+          printf("freq_hotspot: idx=%u gscn=%ld rx_freq=%.0fHz score=%.3f pci=%u stage=%u near=%u\n",
+                 evidence_idx,
+                 (long)sweep_plan.gscn[evidence_idx],
+                 sweep_plan.freqs_hz[evidence_idx],
+                 cur_evidence,
+                 (unsigned)cur_sync.pci,
+                 (unsigned)cur_sync.pbch_fail_stage,
+                 (unsigned)sweep_near_hits[evidence_idx]);
+        }
       }
       if (!has_real_lock) {
         presync_no_lock_iter++;
         if (presync_hold_after_lock > 0U) {
           presync_hold_after_lock--;
         }
-        if ((presync_no_lock_iter % NR_FREQ_SWEEP_STEP_ITERS) == 0U) {
+        if ((presync_no_lock_iter % sweep_step_iters) == 0U) {
           if (presync_hold_after_lock > 0U) {
             break;
           }
-          if (sweep_rounds < NR_FREQ_SWEEP_POINTS) {
-            sweep_idx = (sweep_idx + 1U) % NR_FREQ_SWEEP_POINTS;
+          if (hot_dwell_left > 0U) {
+            hot_dwell_left--;
+            sweep_idx = hot_focus_idx;
+            if ((iter % 64U) == 0U) {
+              printf("freq_hold: idx=%u gscn=%ld rx_freq=%.0fHz dwell_left=%u heat=%.3f pbch=%.3f near=%u\n",
+                     sweep_idx,
+                     (long)sweep_plan.gscn[sweep_idx],
+                     sweep_plan.freqs_hz[sweep_idx],
+                     hot_dwell_left,
+                     sweep_heat[sweep_idx],
+                     sweep_pbch_best[sweep_idx],
+                     (unsigned)sweep_near_hits[sweep_idx]);
+            }
+          } else if (sweep_rounds < sweep_plan.points) {
+            sweep_idx = (sweep_idx + 1U) % sweep_plan.points;
             sweep_rounds++;
-          } else if (sweep_hold < 5U) {
-            /* Stay on the current best for a few cycles. */
-            unsigned best_i = 0;
-            float best_m = sweep_best_metric[0];
-            for (unsigned i = 1; i < NR_FREQ_SWEEP_POINTS; i++) {
-              if (sweep_best_metric[i] > best_m) {
-                best_m = sweep_best_metric[i];
-                best_i = i;
+          } else {
+            unsigned best_i = nr_toa_select_focus_index(sweep_best_metric,
+                                                        sweep_heat,
+                                                        sweep_pbch_best,
+                                                        sweep_near_hits,
+                                                        sweep_plan.points);
+            sweep_idx = best_i;
+            if (sweep_hold < NR_FREQ_SWEEP_BEST_DWELL) {
+              sweep_hold++;
+              if (sweep_hold == 1U) {
+                gain_full_sweeps++;
+              }
+            } else if ((gain_idx + 1U) < gain_plan.count &&
+                       gain_full_sweeps >= NR_GAIN_STEP_FULL_SWEEPS) {
+              gain_idx++;
+              if (nr_toa_radio_set_rx_gain(UE->dev, gain_plan.values_db[gain_idx]) == 0) {
+                UE->app_cfg.rx_gain_db = gain_plan.values_db[gain_idx];
+                UE->rf_cfg.rx_gain_db = gain_plan.values_db[gain_idx];
+                printf("rx_gain_step: idx=%u gain=%.1f dB after_full_sweep=%u\n",
+                       gain_idx, gain_plan.values_db[gain_idx], gain_full_sweeps);
+                fflush(stdout);
+              }
+              for (unsigned i = 0U; i < sweep_plan.points; i++) {
+                sweep_best_metric[i] *= 0.50f;
+                sweep_heat[i] *= NR_FREQ_SWEEP_GAIN_MEMORY;
+                sweep_pbch_best[i] *= NR_FREQ_SWEEP_GAIN_MEMORY;
+                sweep_near_hits[i] = (uint16_t)(sweep_near_hits[i] / 2U);
+              }
+              sweep_idx = 0U;
+              sweep_rounds = 0U;
+              sweep_hold = 0U;
+              gain_full_sweeps = 0U;
+              hot_dwell_left = 0U;
+              hot_focus_idx = 0U;
+            } else {
+              if ((gain_idx + 1U) >= gain_plan.count) {
+                sweep_idx = best_i;
               }
             }
-            sweep_idx = best_i;
-            sweep_hold++;
-          } else {
-            sweep_idx = (sweep_idx + 1U) % NR_FREQ_SWEEP_POINTS;
-            sweep_hold = 0;
           }
-          if (nr_toa_radio_set_rx_freq(UE->dev, sweep_freqs[sweep_idx]) == 0) {
+          if (nr_toa_radio_set_rx_freq(UE->dev, sweep_plan.freqs_hz[sweep_idx]) == 0) {
+            UE->current_rx_freq_hz = sweep_plan.freqs_hz[sweep_idx];
+            UE->current_rx_gscn = (int32_t)sweep_plan.gscn[sweep_idx];
             printf("freq_sweep(GSCN): idx=%u gscn=%ld rx_freq=%.0fHz best_metric=%.3f\n",
-                   sweep_idx, (long)sweep_gscn[sweep_idx], sweep_freqs[sweep_idx],
+                   sweep_idx, (long)sweep_plan.gscn[sweep_idx], sweep_plan.freqs_hz[sweep_idx],
                    sweep_best_metric[sweep_idx]);
           }
         }
       } else {
         presync_no_lock_iter = 0;
+      }
+      if (sync_backpressure) {
+        /* Allow sweep scheduling to continue even when actor queues are busy. */
+        break;
       }
       (void)nr_toa_read_two_frames(UE, &UE->iq_ring);
       pthread_mutex_lock(&UE->sync_mtx);
@@ -348,6 +693,7 @@ static void *TOA_UE_thread(void *arg)
                       : TOA_STATE_PRESYNC;
       pthread_mutex_unlock(&UE->sync_mtx);
       break;
+    }
 
     case TOA_STATE_LOCKED:
     case TOA_STATE_MEASURING:
@@ -383,6 +729,11 @@ static void *TOA_UE_thread(void *arg)
     usleep(200);
   }
 
+  free(sweep_best_metric);
+  free(sweep_heat);
+  free(sweep_pbch_best);
+  free(sweep_near_hits);
+  nr_toa_free_sweep_plan(&sweep_plan);
   (void)TOA_THREAD_TOA_UE;
   return NULL;
 }

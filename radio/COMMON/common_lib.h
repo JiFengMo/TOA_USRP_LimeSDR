@@ -59,6 +59,8 @@ typedef int (*trx_write_func_t)(struct openair0_device *device,
                                 int flags);
 typedef int (*trx_set_rx_freq_func_t)(struct openair0_device *device,
                                       double rx_freq_hz);
+typedef int (*trx_set_rx_gain_func_t)(struct openair0_device *device,
+                                      double rx_gain_db);
 
 typedef struct openair0_device {
   void *priv;
@@ -70,6 +72,7 @@ typedef struct openair0_device {
   trx_read_func_t trx_read_func;
   trx_write_func_t trx_write_func;
   trx_set_rx_freq_func_t trx_set_rx_freq_func;
+  trx_set_rx_gain_func_t trx_set_rx_gain_func;
 } openair0_device_t;
 
 openair0_device_t *openair0_device_get_usrp(openair0_config_t *cfg);
