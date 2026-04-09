@@ -30,6 +30,7 @@ typedef struct nr_toa_ue {
   uint32_t samples_per_frame;
   double current_rx_freq_hz;
   int32_t current_rx_gscn;
+  uint8_t rf_settle_reads;
 
   /* Provider holds its own caches/state via ctx. */
   const nr_pos_provider_if_t *provider;

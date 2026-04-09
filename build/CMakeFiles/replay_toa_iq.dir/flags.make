@@ -6,5 +6,5 @@ C_DEFINES =
 
 C_INCLUDES = -I/home/jfm/桌面/TOA_USRP_LimeSDR
 
-C_FLAGS = -std=gnu11 -Wall -Wextra -Wpedantic
+C_FLAGS = -O2 -g -DNDEBUG -std=gnu11 -Wall -Wextra -Wpedantic
 

@@ -4,16 +4,30 @@
 #include <stdlib.h>
 #include <string.h>
 
-static int load_fs_from_meta(const char *iq_path, double *fs_hz)
+typedef struct {
+  double fs_hz;
+  double cfo_hz;
+  float pss_metric;
+  int coarse_offset_samp;
+  uint16_t pci;
+  uint8_t have_fs;
+  uint8_t have_cfo;
+  uint8_t have_pss_metric;
+  uint8_t have_coarse_offset;
+  uint8_t have_pci;
+} replay_meta_t;
+
+static int replay_load_meta(const char *iq_path, replay_meta_t *meta)
 {
   char meta_path[1024];
   size_t n = 0U;
   FILE *fp = NULL;
   char line[512];
 
-  if (!iq_path || !fs_hz) {
+  if (!iq_path || !meta) {
     return -1;
   }
+  memset(meta, 0, sizeof(*meta));
   snprintf(meta_path, sizeof(meta_path), "%s", iq_path);
   n = strlen(meta_path);
   if (n >= 4U && strcmp(meta_path + n - 4U, ".c16") == 0) {
@@ -28,13 +42,39 @@ static int load_fs_from_meta(const char *iq_path, double *fs_hz)
   }
   while (fgets(line, sizeof(line), fp)) {
     if (strncmp(line, "fs_hz=", 6) == 0) {
-      *fs_hz = strtod(line + 6, NULL);
-      fclose(fp);
-      return (*fs_hz > 0.0) ? 0 : -1;
+      meta->fs_hz = strtod(line + 6, NULL);
+      meta->have_fs = (meta->fs_hz > 0.0);
+    } else if (strncmp(line, "cfo_hz=", 7) == 0) {
+      meta->cfo_hz = strtod(line + 7, NULL);
+      meta->have_cfo = 1U;
+    } else if (strncmp(line, "pss_metric=", 11) == 0) {
+      meta->pss_metric = strtof(line + 11, NULL);
+      meta->have_pss_metric = 1U;
+    } else if (strncmp(line, "coarse_offset_samp=", 19) == 0) {
+      meta->coarse_offset_samp = (int)strtol(line + 19, NULL, 10);
+      meta->have_coarse_offset = 1U;
+    } else if (strncmp(line, "pci=", 4) == 0) {
+      meta->pci = (uint16_t)strtoul(line + 4, NULL, 10);
+      meta->have_pci = 1U;
     }
   }
   fclose(fp);
-  return -1;
+  return meta->have_fs ? 0 : -1;
+}
+
+static void replay_force_target_pci(nr_sync_state_t *sync, uint16_t pci)
+{
+  if (!sync) {
+    return;
+  }
+  sync->pci = pci;
+  sync->pci_full = pci;
+  sync->nid2 = (uint8_t)(pci % 3U);
+  sync->nid1 = (uint16_t)(pci / 3U);
+  sync->pci_hyp_count = 1U;
+  sync->pci_hyp[0] = pci;
+  sync->pci_hyp_delta[0] = 0;
+  sync->pci_hyp_metric[0] = sync->pss_metric;
 }
 
 int main(int argc, char **argv)
@@ -47,6 +87,7 @@ int main(int argc, char **argv)
   double fs_hz = 0.0;
   nr_pss_hit_t hits[4];
   nr_sync_state_t best_sync;
+  replay_meta_t meta;
   int best_valid = 0;
   float best_score = -1.0f;
 
@@ -57,10 +98,12 @@ int main(int argc, char **argv)
 
   if (argc >= 3) {
     fs_hz = strtod(argv[2], NULL);
-  } else if (load_fs_from_meta(argv[1], &fs_hz) != 0) {
+  } else if (replay_load_meta(argv[1], &meta) != 0) {
     fprintf(stderr, "failed to infer fs_hz from %s.meta.txt; pass fs_hz explicitly\n",
             argv[1]);
     return 1;
+  } else {
+    fs_hz = meta.fs_hz;
   }
   if (!(fs_hz > 0.0)) {
     fprintf(stderr, "invalid fs_hz\n");
@@ -121,6 +164,40 @@ int main(int argc, char **argv)
          (unsigned)hits[2].nid2, hits[2].peak_samp, hits[2].metric);
 
   memset(&best_sync, 0, sizeof(best_sync));
+  if (argc < 3 && meta.have_pci && meta.have_coarse_offset) {
+    nr_pss_hit_t seeded_hit;
+    nr_sync_state_t seeded_sync;
+    nr_sync_state_t probe;
+    float score = 0.0f;
+    int pbch_rc = -1;
+
+    memset(&seeded_hit, 0, sizeof(seeded_hit));
+    seeded_hit.peak_samp = meta.coarse_offset_samp;
+    seeded_hit.coarse_cfo_hz = meta.have_cfo ? (float)meta.cfo_hz : 0.0f;
+    seeded_hit.metric = meta.have_pss_metric ? meta.pss_metric : 0.0f;
+    seeded_hit.nid2 = (uint8_t)(meta.pci % 3U);
+
+    if (nr_ssb_refine_sync(blk, &seeded_hit, &seeded_sync) == 0) {
+      replay_force_target_pci(&seeded_sync, meta.pci);
+      printf("replay: meta-seed pci=%u off=%d cfo=%.2f pss=%.3f\n",
+             (unsigned)meta.pci, meta.coarse_offset_samp,
+             seeded_hit.coarse_cfo_hz, seeded_hit.metric);
+      probe = seeded_sync;
+      pbch_rc = nr_ssb_pbch_decode(blk, &probe);
+      printf("replay: meta-seed pbch=%s ssb=%u stage=%u dmrs=%.3f second=%.3f mib=%u sfn=%u payload=0x%06x\n",
+             (pbch_rc == 0 && probe.pbch_ok) ? "ok" : "fail",
+             (unsigned)probe.ssb_index, (unsigned)probe.pbch_fail_stage,
+             probe.pbch_metric, probe.pbch_metric_second,
+             (unsigned)probe.mib_ok, (unsigned)probe.sfn,
+             (unsigned)probe.mib_payload);
+      score = (pbch_rc == 0 && probe.pbch_ok)
+                  ? (2000.0f + probe.pbch_metric)
+                  : (probe.snr_db + probe.pbch_metric + 0.10f * probe.pss_metric);
+      best_sync = probe;
+      best_valid = 1;
+      best_score = score;
+    }
+  }
   for (int i = 0; i < 4; i++) {
     nr_sync_state_t cand;
     nr_sync_state_t probe;

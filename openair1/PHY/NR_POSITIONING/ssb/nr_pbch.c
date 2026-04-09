@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #define NR_PBCH_A 32U
@@ -12,6 +13,9 @@
 #define NR_PBCH_E 864U
 #define NR_PBCH_QPSK_RE (NR_PBCH_E / 2U)
 #define NR_PBCH_DMRS_RE 144U
+#define NR_PBCH_SCL_LIST 8U
+#define NR_PBCH_MAX_PATHS (2U * NR_PBCH_SCL_LIST)
+#define NR_PBCH_POLAR_LEVELS 10U
 
 static const uint8_t g_pbch_payload_g[NR_PBCH_A] = {
     16, 23, 18, 17, 8, 30, 10, 6,
@@ -72,7 +76,7 @@ static void nr_pbch_gen_prbs(uint32_t c_init, uint8_t *c, uint32_t len)
 
 static uint32_t nr_crc24c_bits(const uint8_t *bits, uint32_t len)
 {
-  const uint32_t poly = 0x1864CFBU;
+  const uint32_t poly = 0x1B2B117U;
   uint32_t crc = 0U;
   for (uint32_t i = 0; i < len; i++) {
     const uint32_t bit = bits[i] & 1U;
@@ -265,74 +269,62 @@ static void nr_polar_input_deinterleave(const uint8_t *in, uint32_t K, uint8_t *
   }
 }
 
-static double nr_polar_pw_score(uint32_t idx, uint32_t n)
+/* 3GPP TS 38.212 Table 5.3.1.2-1: Reliability sequence Q_0^{N-1} for N=512.
+ * Channels are ordered from least reliable to most reliable. */
+static const uint16_t g_Q_0_Nminus1_512[512] = {
+    0, 1, 2, 4, 8, 16, 32, 3, 5, 64, 9, 6, 17, 10, 18, 128, 12, 33, 65, 20, 256, 34, 24, 36, 7,
+    129, 66, 11, 40, 68, 130, 19, 13, 48, 14, 72, 257, 21, 132, 35, 258, 26, 80, 37, 25, 22, 136, 260, 264, 38,
+    96, 67, 41, 144, 28, 69, 42, 49, 74, 272, 160, 288, 192, 70, 44, 131, 81, 50, 73, 15, 320, 133, 52, 23, 134,
+    384, 76, 137, 82, 56, 27, 97, 39, 259, 84, 138, 145, 261, 29, 43, 98, 88, 140, 30, 146, 71, 262, 265, 161, 45,
+    100, 51, 148, 46, 75, 266, 273, 104, 162, 53, 193, 152, 77, 164, 268, 274, 54, 83, 57, 112, 135, 78, 289, 194, 85,
+    276, 58, 168, 139, 99, 86, 60, 280, 89, 290, 196, 141, 101, 147, 176, 142, 321, 31, 200, 90, 292, 322, 263, 149, 102,
+    105, 304, 296, 163, 92, 47, 267, 385, 324, 208, 386, 150, 153, 165, 106, 55, 328, 113, 154, 79, 269, 108, 224, 166, 195,
+    270, 275, 291, 59, 169, 114, 277, 156, 87, 197, 116, 170, 61, 281, 278, 177, 293, 388, 91, 198, 172, 120, 201, 336, 62,
+    282, 143, 103, 178, 294, 93, 202, 323, 392, 297, 107, 180, 151, 209, 284, 94, 204, 298, 400, 352, 325, 155, 210, 305, 300,
+    109, 184, 115, 167, 225, 326, 306, 157, 329, 110, 117, 212, 171, 330, 226, 387, 308, 216, 416, 271, 279, 158, 337, 118, 332,
+    389, 173, 121, 199, 179, 228, 338, 312, 390, 174, 393, 283, 122, 448, 353, 203, 63, 340, 394, 181, 295, 285, 232, 124, 205,
+    182, 286, 299, 354, 211, 401, 185, 396, 344, 240, 206, 95, 327, 402, 356, 307, 301, 417, 213, 186, 404, 227, 418, 302, 360,
+    111, 331, 214, 309, 188, 449, 217, 408, 229, 159, 420, 310, 333, 119, 339, 218, 368, 230, 391, 313, 450, 334, 233, 175, 123,
+    341, 220, 314, 424, 395, 355, 287, 183, 234, 125, 342, 316, 241, 345, 452, 397, 403, 207, 432, 357, 187, 236, 126, 242, 398,
+    346, 456, 358, 405, 303, 244, 189, 361, 215, 348, 419, 406, 464, 362, 409, 219, 311, 421, 410, 231, 248, 369, 190, 364, 335,
+    480, 315, 221, 370, 422, 425, 451, 235, 412, 343, 372, 317, 222, 426, 453, 237, 433, 347, 243, 454, 318, 376, 428, 238, 359,
+    457, 399, 434, 349, 245, 458, 363, 127, 191, 407, 436, 465, 246, 350, 460, 249, 411, 365, 440, 374, 423, 466, 250, 371, 481,
+    413, 366, 468, 429, 252, 373, 482, 427, 414, 223, 472, 455, 377, 435, 319, 484, 430, 488, 239, 378, 459, 437, 380, 461, 496,
+    351, 467, 438, 251, 462, 442, 441, 469, 247, 367, 253, 375, 444, 470, 483, 415, 485, 473, 474, 254, 379, 431, 489, 486, 476,
+    439, 490, 463, 381, 497, 492, 443, 382, 498, 445, 471, 500, 446, 475, 487, 504, 255, 477, 491, 478, 383, 493, 499, 502, 494,
+    501, 447, 505, 506, 479, 508, 495, 503, 507, 509, 510, 511};
+
+static int nr_pbch_u16_cmp(const void *a, const void *b)
 {
-  const double beta = 1.189207115002721;
-  double w = 0.0;
-  double p = 1.0;
-  uint32_t x = idx;
-  for (uint32_t j = 0; j < n; j++) {
-    if (x & 1U) {
-      w += p;
-    }
-    p *= beta;
-    x >>= 1U;
-  }
-  return w;
+  const uint16_t va = *(const uint16_t *)a;
+  const uint16_t vb = *(const uint16_t *)b;
+  return (va > vb) - (va < vb);
 }
 
-typedef struct {
-  uint16_t idx;
-  double score;
-} nr_polar_rank_t;
-
-typedef struct {
-  uint16_t pos;
-  float abs_llr;
-} nr_pbch_weak_bit_t;
-
-static int nr_polar_rank_cmp(const void *a, const void *b)
-{
-  const nr_polar_rank_t *ra = (const nr_polar_rank_t *)a;
-  const nr_polar_rank_t *rb = (const nr_polar_rank_t *)b;
-  if (ra->score < rb->score) {
-    return -1;
-  }
-  if (ra->score > rb->score) {
-    return 1;
-  }
-  return (int)ra->idx - (int)rb->idx;
-}
-
-static int nr_pbch_weak_bit_cmp(const void *a, const void *b)
-{
-  const nr_pbch_weak_bit_t *wa = (const nr_pbch_weak_bit_t *)a;
-  const nr_pbch_weak_bit_t *wb = (const nr_pbch_weak_bit_t *)b;
-  if (wa->abs_llr < wb->abs_llr) {
-    return -1;
-  }
-  if (wa->abs_llr > wb->abs_llr) {
-    return 1;
-  }
-  return (int)wa->pos - (int)wb->pos;
-}
+static int nr_pbch_extract_candidate(const uint8_t *uhat,
+                                     const uint16_t *info_pos,
+                                     uint8_t *payload_crc,
+                                     uint8_t *payload_plain,
+                                     uint16_t pci);
 
 static void nr_pbch_build_info_set(uint16_t *info_pos, uint8_t *frozen)
 {
-  nr_polar_rank_t ranks[NR_PBCH_N];
-  for (uint32_t i = 0; i < NR_PBCH_N; i++) {
-    ranks[i].idx = (uint16_t)i;
-    ranks[i].score = nr_polar_pw_score(i, 9U);
-  }
-  qsort(ranks, NR_PBCH_N, sizeof(ranks[0]), nr_polar_rank_cmp);
+  uint16_t tmp[NR_PBCH_K];
+
   if (frozen) {
     memset(frozen, 1, NR_PBCH_N * sizeof(*frozen));
   }
+  /* The last K entries of Q_0 are the selected info channels. OAI then sorts
+   * Q_I_N in ascending bit-index order before mapping C' into u. */
   for (uint32_t i = 0; i < NR_PBCH_K; i++) {
-    info_pos[i] = ranks[NR_PBCH_N - NR_PBCH_K + i].idx;
+    tmp[i] = g_Q_0_Nminus1_512[NR_PBCH_N - NR_PBCH_K + i];
     if (frozen) {
-      frozen[info_pos[i]] = 0U;
+      frozen[tmp[i]] = 0U;
     }
+  }
+  if (info_pos) {
+    memcpy(info_pos, tmp, sizeof(tmp));
+    qsort(info_pos, NR_PBCH_K, sizeof(*info_pos), nr_pbch_u16_cmp);
   }
 }
 
@@ -351,93 +343,287 @@ static void nr_polar_encode_n(const uint8_t *u, uint32_t N, uint8_t *x)
   }
 }
 
-static float nr_sc_f(float a, float b)
+static int16_t nr_pbch_sat_add16(int16_t a, int16_t b)
 {
-  const float sa = (a >= 0.0f) ? 1.0f : -1.0f;
-  const float sb = (b >= 0.0f) ? 1.0f : -1.0f;
-  const float aa = fabsf(a);
-  const float bb = fabsf(b);
-  return sa * sb * ((aa < bb) ? aa : bb);
+  const int32_t s = (int32_t)a + (int32_t)b;
+  if (s > 32767) {
+    return 32767;
+  }
+  if (s < -32767) {
+    return -32767;
+  }
+  return (int16_t)s;
 }
 
-static float nr_sc_g(float a, float b, uint8_t u)
+static int16_t nr_pbch_sat_sub16(int16_t a, int16_t b)
 {
-  return b + ((u == 0U) ? a : -a);
+  const int32_t s = (int32_t)a - (int32_t)b;
+  if (s > 32767) {
+    return 32767;
+  }
+  if (s < -32767) {
+    return -32767;
+  }
+  return (int16_t)s;
 }
 
-static int nr_polar_should_flip(uint32_t offset, const uint16_t *flip_pos, uint32_t flip_count)
+static int16_t nr_pbch_oai_f_int16(int16_t a, int16_t b)
 {
-  for (uint32_t i = 0U; i < flip_count; i++) {
-    if (flip_pos[i] == offset) {
-      return 1;
+  const int16_t absa = (int16_t)abs((int)a);
+  const int16_t absb = (int16_t)abs((int)b);
+  const int16_t minab = (absa < absb) ? absa : absb;
+  return ((a < 0) ^ (b < 0)) ? (int16_t)-minab : minab;
+}
+
+static void nr_pbch_quantize_llr_int16(const float *in, int16_t *out, uint32_t len)
+{
+  if (!in || !out) {
+    return;
+  }
+  for (uint32_t i = 0U; i < len; i++) {
+    int32_t q = (int32_t)lroundf(in[i]);
+    if (q > 32) {
+      q = 32;
+    } else if (q < -32) {
+      q = -32;
+    }
+    out[i] = (int16_t)q;
+  }
+}
+
+typedef struct {
+  uint16_t first_leaf_index;
+  uint16_t nv;
+  int16_t left;
+  int16_t right;
+  uint8_t level;
+  uint8_t leaf;
+  uint8_t all_frozen;
+  uint8_t beta_init;
+} nr_pbch_decoder_node_t;
+
+typedef struct {
+  uint8_t op_code;
+  uint16_t node_idx;
+} nr_pbch_decoder_op_t;
+
+typedef struct {
+  uint8_t initialized;
+  uint16_t root_idx;
+  uint16_t node_count;
+  uint16_t op_count;
+  nr_pbch_decoder_node_t nodes[2U * NR_PBCH_N];
+  nr_pbch_decoder_op_t ops[3U * NR_PBCH_N];
+  int16_t alpha[2U * NR_PBCH_N][NR_PBCH_N];
+  uint8_t beta[2U * NR_PBCH_N][NR_PBCH_N];
+} nr_pbch_decoder_ctx_t;
+
+enum {
+  NR_PBCH_OP_LEFT = 0,
+  NR_PBCH_OP_RIGHT = 1,
+  NR_PBCH_OP_BETA = 2,
+};
+
+static uint8_t nr_pbch_all_frozen_range(const uint8_t *frozen,
+                                        uint16_t first_leaf_index,
+                                        uint16_t nv)
+{
+  if (!frozen) {
+    return 0U;
+  }
+  for (uint16_t i = 0U; i < nv; i++) {
+    if (!frozen[first_leaf_index + i]) {
+      return 0U;
     }
   }
-  return 0;
+  return 1U;
 }
 
-static int nr_polar_sc_decode_rec(const float *llr, uint32_t N, uint32_t offset,
-                                  const uint8_t *frozen, const uint16_t *flip_pos,
-                                  uint32_t flip_count, float *leaf_llr,
-                                  uint8_t *leaf_bits, uint8_t *partial_sums)
+static int16_t nr_pbch_build_decoder_tree(nr_pbch_decoder_ctx_t *ctx,
+                                          uint8_t level,
+                                          uint16_t first_leaf_index,
+                                          const uint8_t *frozen)
 {
-  if (N == 1U) {
-    uint8_t bit = frozen[offset] ? 0U : (uint8_t)(llr[0] < 0.0f);
-    if (!frozen[offset] && nr_polar_should_flip(offset, flip_pos, flip_count)) {
-      bit ^= 1U;
-    }
-    if (leaf_llr) {
-      leaf_llr[offset] = llr[0];
-    }
-    leaf_bits[offset] = bit;
-    partial_sums[0] = bit;
-    return 0;
+  nr_pbch_decoder_node_t *node;
+  const uint16_t nv = (uint16_t)(1U << level);
+  const uint16_t idx = ctx->node_count++;
+  const uint8_t all_frozen = nr_pbch_all_frozen_range(frozen, first_leaf_index, nv);
+
+  node = &ctx->nodes[idx];
+  memset(node, 0, sizeof(*node));
+  node->first_leaf_index = first_leaf_index;
+  node->nv = nv;
+  node->level = level;
+  node->leaf = (uint8_t)((level == 0U) || all_frozen);
+  node->all_frozen = all_frozen;
+  node->left = -1;
+  node->right = -1;
+
+  if (!node->leaf) {
+    const uint16_t half = (uint16_t)(nv >> 1U);
+    node->left = nr_pbch_build_decoder_tree(ctx, (uint8_t)(level - 1U), first_leaf_index, frozen);
+    node->right = nr_pbch_build_decoder_tree(ctx, (uint8_t)(level - 1U),
+                                             (uint16_t)(first_leaf_index + half), frozen);
+  }
+  return (int16_t)idx;
+}
+
+static void nr_pbch_linearize_decoder_tree(nr_pbch_decoder_ctx_t *ctx, uint16_t node_idx)
+{
+  const nr_pbch_decoder_node_t *node = &ctx->nodes[node_idx];
+  if (node->leaf) {
+    return;
   }
 
-  const uint32_t half = N >> 1U;
-  float *left = (float *)malloc(sizeof(*left) * (size_t)half);
-  float *right = (float *)malloc(sizeof(*right) * (size_t)half);
-  uint8_t *ps_left = (uint8_t *)malloc(sizeof(*ps_left) * (size_t)half);
-  uint8_t *ps_right = (uint8_t *)malloc(sizeof(*ps_right) * (size_t)half);
-  if (!left || !right || !ps_left || !ps_right) {
-    free(left);
-    free(right);
-    free(ps_left);
-    free(ps_right);
+  ctx->ops[ctx->op_count++] = (nr_pbch_decoder_op_t){ .op_code = NR_PBCH_OP_LEFT, .node_idx = node_idx };
+  nr_pbch_linearize_decoder_tree(ctx, (uint16_t)node->left);
+  ctx->ops[ctx->op_count++] = (nr_pbch_decoder_op_t){ .op_code = NR_PBCH_OP_RIGHT, .node_idx = node_idx };
+  nr_pbch_linearize_decoder_tree(ctx, (uint16_t)node->right);
+  ctx->ops[ctx->op_count++] = (nr_pbch_decoder_op_t){ .op_code = NR_PBCH_OP_BETA, .node_idx = node_idx };
+}
+
+static void nr_pbch_init_generic_decoder(nr_pbch_decoder_ctx_t *ctx, const uint8_t *frozen)
+{
+  memset(ctx, 0, sizeof(*ctx));
+  ctx->root_idx = (uint16_t)nr_pbch_build_decoder_tree(ctx, 9U, 0U, frozen);
+  nr_pbch_linearize_decoder_tree(ctx, ctx->root_idx);
+  ctx->initialized = 1U;
+}
+
+static void nr_pbch_apply_f_to_left(nr_pbch_decoder_ctx_t *ctx,
+                                    uint16_t node_idx,
+                                    uint8_t *output_bits)
+{
+  nr_pbch_decoder_node_t *node = &ctx->nodes[node_idx];
+  nr_pbch_decoder_node_t *left = &ctx->nodes[(uint16_t)node->left];
+  int16_t *alpha_v = ctx->alpha[node_idx];
+  int16_t *alpha_l = ctx->alpha[(uint16_t)node->left];
+
+  if (!left->all_frozen) {
+    for (uint16_t i = 0U; i < left->nv; i++) {
+      alpha_l[i] = nr_pbch_oai_f_int16(alpha_v[i], alpha_v[i + left->nv]);
+    }
+
+    if (left->leaf) {
+      const uint8_t bit = (uint8_t)(alpha_l[0] <= 0);
+      ctx->beta[(uint16_t)node->left][0] = bit;
+      left->beta_init = 1U;
+      output_bits[left->first_leaf_index] = bit;
+    }
+  }
+}
+
+static void nr_pbch_apply_g_to_right(nr_pbch_decoder_ctx_t *ctx,
+                                     uint16_t node_idx,
+                                     uint8_t *output_bits)
+{
+  nr_pbch_decoder_node_t *node = &ctx->nodes[node_idx];
+  nr_pbch_decoder_node_t *left = &ctx->nodes[(uint16_t)node->left];
+  nr_pbch_decoder_node_t *right = &ctx->nodes[(uint16_t)node->right];
+  int16_t *alpha_v = ctx->alpha[node_idx];
+  int16_t *alpha_r = ctx->alpha[(uint16_t)node->right];
+  uint8_t *beta_l = ctx->beta[(uint16_t)node->left];
+
+  if (!right->all_frozen) {
+    for (uint16_t i = 0U; i < right->nv; i++) {
+      alpha_r[i] = left->beta_init
+        ? (beta_l[i]
+            ? nr_pbch_sat_sub16(alpha_v[i + right->nv], alpha_v[i])
+            : nr_pbch_sat_add16(alpha_v[i + right->nv], alpha_v[i]))
+        : nr_pbch_sat_add16(alpha_v[i + right->nv], alpha_v[i]);
+    }
+
+    if (right->leaf) {
+      const uint8_t bit = (uint8_t)(alpha_r[0] <= 0);
+      ctx->beta[(uint16_t)node->right][0] = bit;
+      right->beta_init = 1U;
+      output_bits[right->first_leaf_index] = bit;
+    }
+  }
+}
+
+static void nr_pbch_compute_beta(nr_pbch_decoder_ctx_t *ctx, uint16_t node_idx)
+{
+  nr_pbch_decoder_node_t *node = &ctx->nodes[node_idx];
+  nr_pbch_decoder_node_t *left = &ctx->nodes[(uint16_t)node->left];
+  nr_pbch_decoder_node_t *right = &ctx->nodes[(uint16_t)node->right];
+  uint8_t *beta_v = ctx->beta[node_idx];
+  uint8_t *beta_l = ctx->beta[(uint16_t)node->left];
+  uint8_t *beta_r = ctx->beta[(uint16_t)node->right];
+
+  if (left->all_frozen) {
+    for (uint16_t i = 0U; i < right->nv; i++) {
+      beta_v[i] = beta_r[i];
+      beta_v[i + right->nv] = beta_r[i];
+    }
+  } else {
+    for (uint16_t i = 0U; i < right->nv; i++) {
+      beta_v[i] = (uint8_t)((beta_l[i] + beta_r[i]) & 1U);
+      beta_v[i + right->nv] = beta_r[i];
+    }
+  }
+  node->beta_init = 1U;
+}
+
+static void nr_pbch_extract_u_from_tree_output(const nr_pbch_decoder_ctx_t *ctx,
+                                               uint8_t *uhat)
+{
+  if (!ctx || !uhat) {
+    return;
+  }
+  memset(uhat, 0, NR_PBCH_N * sizeof(*uhat));
+  for (uint16_t i = 0U; i < ctx->node_count; i++) {
+    const nr_pbch_decoder_node_t *node = &ctx->nodes[i];
+    if (!node->leaf || node->all_frozen) {
+      continue;
+    }
+    uhat[node->first_leaf_index] = ctx->beta[i][0];
+  }
+}
+
+static int nr_pbch_oai_generic_decoder_int16(const float *llr_sub,
+                                             const uint8_t *frozen,
+                                             const uint16_t *info_pos,
+                                             uint8_t *payload_crc,
+                                             uint8_t *payload_plain,
+                                             uint16_t pci)
+{
+  static __thread nr_pbch_decoder_ctx_t ctx;
+  uint8_t uhat[NR_PBCH_N];
+
+  if (!llr_sub || !frozen || !info_pos || !payload_crc || !payload_plain) {
     return -1;
   }
 
-  for (uint32_t i = 0; i < half; i++) {
-    left[i] = nr_sc_f(llr[i], llr[half + i]);
-  }
-  if (nr_polar_sc_decode_rec(left, half, offset, frozen, flip_pos, flip_count,
-                             leaf_llr, leaf_bits, ps_left) != 0) {
-    free(left);
-    free(right);
-    free(ps_left);
-    free(ps_right);
-    return -1;
-  }
-  for (uint32_t i = 0; i < half; i++) {
-    right[i] = nr_sc_g(llr[i], llr[half + i], ps_left[i]);
-  }
-  if (nr_polar_sc_decode_rec(right, half, offset + half, frozen, flip_pos, flip_count,
-                             leaf_llr, leaf_bits, ps_right) != 0) {
-    free(left);
-    free(right);
-    free(ps_left);
-    free(ps_right);
-    return -1;
-  }
-  for (uint32_t i = 0; i < half; i++) {
-    partial_sums[i] = (uint8_t)(ps_left[i] ^ ps_right[i]);
-    partial_sums[half + i] = ps_right[i];
+  if (!ctx.initialized) {
+    nr_pbch_init_generic_decoder(&ctx, frozen);
   }
 
-  free(left);
-  free(right);
-  free(ps_left);
-  free(ps_right);
-  return 0;
+  nr_pbch_quantize_llr_int16(llr_sub, ctx.alpha[ctx.root_idx], NR_PBCH_N);
+  for (uint16_t i = 0U; i < ctx.node_count; i++) {
+    ctx.nodes[i].beta_init = 0U;
+    memset(ctx.beta[i], 0, NR_PBCH_N * sizeof(ctx.beta[i][0]));
+  }
+
+  for (uint16_t i = 0U; i < ctx.op_count; i++) {
+    const nr_pbch_decoder_op_t *op = &ctx.ops[i];
+    switch (op->op_code) {
+      case NR_PBCH_OP_LEFT:
+        nr_pbch_apply_f_to_left(&ctx, op->node_idx, uhat);
+        break;
+      case NR_PBCH_OP_RIGHT:
+        nr_pbch_apply_g_to_right(&ctx, op->node_idx, uhat);
+        break;
+      case NR_PBCH_OP_BETA:
+        nr_pbch_compute_beta(&ctx, op->node_idx);
+        break;
+      default:
+        return -1;
+    }
+  }
+
+  nr_pbch_extract_u_from_tree_output(&ctx, uhat);
+  return nr_pbch_extract_candidate(uhat, info_pos, payload_crc, payload_plain, pci);
 }
 
 static int nr_pbch_extract_candidate(const uint8_t *uhat,
@@ -461,6 +647,304 @@ static int nr_pbch_extract_candidate(const uint8_t *uhat,
     return -1;
   }
   return 0;
+}
+
+typedef struct {
+  double metric;
+  uint8_t parent;
+  uint8_t bit;
+  uint8_t crc_state;
+  uint8_t crc_checksum[NR_PBCH_CRC];
+} nr_pbch_oai_candidate_t;
+
+static int nr_pbch_oai_candidate_cmp(const void *a, const void *b)
+{
+  const nr_pbch_oai_candidate_t *ca = (const nr_pbch_oai_candidate_t *)a;
+  const nr_pbch_oai_candidate_t *cb = (const nr_pbch_oai_candidate_t *)b;
+  if (ca->metric < cb->metric) {
+    return -1;
+  }
+  if (ca->metric > cb->metric) {
+    return 1;
+  }
+  return (int)ca->parent - (int)cb->parent;
+}
+
+static double nr_pbch_softplus(double x)
+{
+  if (x > 40.0) {
+    return x;
+  }
+  if (x < -40.0) {
+    return exp(x);
+  }
+  return log1p(exp(x));
+}
+
+static double nr_pbch_oai_compute_llr(double a, double b)
+{
+  const double s = ((a >= 0.0) == (b >= 0.0)) ? 1.0 : -1.0;
+  const double x = fabs(a + b);
+  const double y = fabs(a - b);
+  const double minab = (fabs(a) < fabs(b)) ? fabs(a) : fabs(b);
+  return s * (minab + log1p(exp(-x)) - log1p(exp(-y)));
+}
+
+static void nr_pbch_oai_update_bit(uint8_t list_size,
+                                   uint16_t row,
+                                   uint16_t col,
+                                   uint8_t bit[NR_PBCH_N][NR_PBCH_POLAR_LEVELS][NR_PBCH_MAX_PATHS],
+                                   uint8_t bit_updated[NR_PBCH_N][NR_PBCH_POLAR_LEVELS])
+{
+  const uint32_t offset = NR_PBCH_N / (1U << (NR_PBCH_POLAR_LEVELS - col));
+
+  for (uint32_t p = 0U; p < list_size; p++) {
+    if ((row % (2U * offset)) >= offset) {
+      if (!bit_updated[row][col - 1U]) {
+        nr_pbch_oai_update_bit(list_size, row, (uint16_t)(col - 1U), bit, bit_updated);
+      }
+      bit[row][col][p] = bit[row][col - 1U][p];
+    } else {
+      if (!bit_updated[row][col - 1U]) {
+        nr_pbch_oai_update_bit(list_size, row, (uint16_t)(col - 1U), bit, bit_updated);
+      }
+      if (!bit_updated[row + offset][col - 1U]) {
+        nr_pbch_oai_update_bit(list_size, (uint16_t)(row + offset), (uint16_t)(col - 1U),
+                               bit, bit_updated);
+      }
+      bit[row][col][p] =
+          (uint8_t)((bit[row][col - 1U][p] + bit[row + offset][col - 1U][p]) & 1U);
+    }
+  }
+
+  bit_updated[row][col] = 1U;
+}
+
+static void nr_pbch_oai_update_llr(uint8_t list_size,
+                                   uint16_t row,
+                                   uint16_t col,
+                                   double llr[NR_PBCH_N][NR_PBCH_POLAR_LEVELS][NR_PBCH_MAX_PATHS],
+                                   uint8_t llr_updated[NR_PBCH_N][NR_PBCH_POLAR_LEVELS],
+                                   uint8_t bit[NR_PBCH_N][NR_PBCH_POLAR_LEVELS][NR_PBCH_MAX_PATHS],
+                                   uint8_t bit_updated[NR_PBCH_N][NR_PBCH_POLAR_LEVELS])
+{
+  const uint32_t offset = NR_PBCH_N / (1U << (NR_PBCH_POLAR_LEVELS - col - 1U));
+
+  for (uint32_t p = 0U; p < list_size; p++) {
+    if ((row % (2U * offset)) >= offset) {
+      if (!bit_updated[row - offset][col]) {
+        nr_pbch_oai_update_bit(list_size, (uint16_t)(row - offset), col, bit, bit_updated);
+      }
+      if (!llr_updated[row - offset][col + 1U]) {
+        nr_pbch_oai_update_llr(list_size, (uint16_t)(row - offset), (uint16_t)(col + 1U),
+                               llr, llr_updated, bit, bit_updated);
+      }
+      if (!llr_updated[row][col + 1U]) {
+        nr_pbch_oai_update_llr(list_size, row, (uint16_t)(col + 1U),
+                               llr, llr_updated, bit, bit_updated);
+      }
+      llr[row][col][p] =
+          (((bit[row - offset][col][p] != 0U) ? -1.0 : 1.0) * llr[row - offset][col + 1U][p]) +
+          llr[row][col + 1U][p];
+    } else {
+      if (!llr_updated[row][col + 1U]) {
+        nr_pbch_oai_update_llr(list_size, row, (uint16_t)(col + 1U),
+                               llr, llr_updated, bit, bit_updated);
+      }
+      if (!llr_updated[row + offset][col + 1U]) {
+        nr_pbch_oai_update_llr(list_size, (uint16_t)(row + offset), (uint16_t)(col + 1U),
+                               llr, llr_updated, bit, bit_updated);
+      }
+      llr[row][col][p] =
+          nr_pbch_oai_compute_llr(llr[row][col + 1U][p], llr[row + offset][col + 1U][p]);
+    }
+  }
+
+  llr_updated[row][col] = 1U;
+}
+
+static void nr_pbch_oai_update_path_metric(double *path_metric,
+                                           uint8_t list_size,
+                                           uint8_t bit_value,
+                                           uint16_t row,
+                                           double llr[NR_PBCH_N][NR_PBCH_POLAR_LEVELS][NR_PBCH_MAX_PATHS])
+{
+  const double sign = bit_value ? 1.0 : -1.0;
+  for (uint32_t p = 0U; p < list_size; p++) {
+    path_metric[p] += nr_pbch_softplus(sign * llr[row][0][p]);
+  }
+}
+
+static void nr_pbch_oai_copy_path_double(double dst[NR_PBCH_N][NR_PBCH_POLAR_LEVELS][NR_PBCH_MAX_PATHS],
+                                         uint8_t dst_path,
+                                         double src[NR_PBCH_N][NR_PBCH_POLAR_LEVELS][NR_PBCH_MAX_PATHS],
+                                         uint8_t src_path)
+{
+  for (uint32_t n = 0U; n < NR_PBCH_N; n++) {
+    for (uint32_t c = 0U; c < NR_PBCH_POLAR_LEVELS; c++) {
+      dst[n][c][dst_path] = src[n][c][src_path];
+    }
+  }
+}
+
+static void nr_pbch_oai_copy_path_u8(uint8_t dst[NR_PBCH_N][NR_PBCH_POLAR_LEVELS][NR_PBCH_MAX_PATHS],
+                                     uint8_t dst_path,
+                                     uint8_t src[NR_PBCH_N][NR_PBCH_POLAR_LEVELS][NR_PBCH_MAX_PATHS],
+                                     uint8_t src_path)
+{
+  for (uint32_t n = 0U; n < NR_PBCH_N; n++) {
+    for (uint32_t c = 0U; c < NR_PBCH_POLAR_LEVELS; c++) {
+      dst[n][c][dst_path] = src[n][c][src_path];
+    }
+  }
+}
+
+static __attribute__((unused))
+int nr_pbch_oai_ca_scl_decode(const float *llr_sub,
+                              const uint8_t *frozen,
+                              const uint16_t *info_pos,
+                              uint8_t *payload_crc,
+                              uint8_t *payload_plain,
+                              uint16_t pci)
+{
+  double llr[NR_PBCH_N][NR_PBCH_POLAR_LEVELS][NR_PBCH_MAX_PATHS];
+  double old_llr[NR_PBCH_N][NR_PBCH_POLAR_LEVELS][NR_PBCH_MAX_PATHS];
+  uint8_t bit[NR_PBCH_N][NR_PBCH_POLAR_LEVELS][NR_PBCH_MAX_PATHS];
+  uint8_t old_bit[NR_PBCH_N][NR_PBCH_POLAR_LEVELS][NR_PBCH_MAX_PATHS];
+  uint8_t bit_updated[NR_PBCH_N][NR_PBCH_POLAR_LEVELS];
+  uint8_t llr_updated[NR_PBCH_N][NR_PBCH_POLAR_LEVELS];
+  uint8_t crc_checksum[NR_PBCH_CRC][NR_PBCH_SCL_LIST];
+  uint8_t old_crc_checksum[NR_PBCH_CRC][NR_PBCH_SCL_LIST];
+  uint8_t crc_state[NR_PBCH_SCL_LIST];
+  uint8_t old_crc_state[NR_PBCH_SCL_LIST];
+  uint8_t info_pattern[NR_PBCH_N];
+  uint8_t uhat[NR_PBCH_N];
+  nr_pbch_oai_candidate_t cand[NR_PBCH_MAX_PATHS];
+  double path_metric[NR_PBCH_SCL_LIST];
+  double old_path_metric[NR_PBCH_SCL_LIST];
+  uint32_t non_frozen_bit = 0U;
+  uint8_t current_list_size = 1U;
+
+  if (!llr_sub || !frozen || !info_pos || !payload_crc || !payload_plain) {
+    return -1;
+  }
+
+  memset(llr, 0, sizeof(llr));
+  memset(old_llr, 0, sizeof(old_llr));
+  memset(bit, 0, sizeof(bit));
+  memset(old_bit, 0, sizeof(old_bit));
+  memset(bit_updated, 0, sizeof(bit_updated));
+  memset(llr_updated, 0, sizeof(llr_updated));
+  memset(crc_checksum, 0, sizeof(crc_checksum));
+  memset(old_crc_checksum, 0, sizeof(old_crc_checksum));
+  memset(path_metric, 0, sizeof(path_metric));
+  memset(old_path_metric, 0, sizeof(old_path_metric));
+  memset(info_pattern, 0, sizeof(info_pattern));
+  memset(uhat, 0, sizeof(uhat));
+
+  for (uint32_t n = 0U; n < NR_PBCH_N; n++) {
+    llr[n][NR_PBCH_POLAR_LEVELS - 1U][0] = (double)llr_sub[n];
+    llr_updated[n][NR_PBCH_POLAR_LEVELS - 1U] = 1U;
+    info_pattern[n] = frozen[n] ? 0U : 1U;
+    bit_updated[n][0] = (uint8_t)(frozen[n] ? 1U : 0U);
+  }
+  for (uint32_t p = 0U; p < NR_PBCH_SCL_LIST; p++) {
+    crc_state[p] = 1U;
+  }
+
+  for (uint32_t current_bit = 0U; current_bit < NR_PBCH_N; current_bit++) {
+    nr_pbch_oai_update_llr(current_list_size, (uint16_t)current_bit, 0U,
+                           llr, llr_updated, bit, bit_updated);
+
+    if (!info_pattern[current_bit]) {
+      nr_pbch_oai_update_path_metric(path_metric, current_list_size, 0U,
+                                     (uint16_t)current_bit, llr);
+      continue;
+    }
+
+    {
+      uint32_t cand_count = 0U;
+
+      for (uint32_t p = 0U; p < current_list_size; p++) {
+        nr_pbch_oai_copy_path_double(old_llr, (uint8_t)p, llr, (uint8_t)p);
+        nr_pbch_oai_copy_path_u8(old_bit, (uint8_t)p, bit, (uint8_t)p);
+        old_path_metric[p] = path_metric[p];
+        old_crc_state[p] = crc_state[p];
+      }
+      memcpy(old_crc_checksum, crc_checksum, sizeof(old_crc_checksum));
+
+      for (uint32_t p = 0U; p < current_list_size; p++) {
+        cand[cand_count].metric =
+            old_path_metric[p] + nr_pbch_softplus(-old_llr[current_bit][0][p]);
+        cand[cand_count].parent = (uint8_t)p;
+        cand[cand_count].bit = 0U;
+        cand[cand_count].crc_state = old_crc_state[p];
+        for (uint32_t j = 0U; j < NR_PBCH_CRC; j++) {
+          cand[cand_count].crc_checksum[j] = old_crc_checksum[j][p];
+        }
+        cand_count++;
+
+        cand[cand_count].metric =
+            old_path_metric[p] + nr_pbch_softplus(old_llr[current_bit][0][p]);
+        cand[cand_count].parent = (uint8_t)p;
+        cand[cand_count].bit = 1U;
+        cand[cand_count].crc_state = old_crc_state[p];
+        for (uint32_t j = 0U; j < NR_PBCH_CRC; j++) {
+          cand[cand_count].crc_checksum[j] = old_crc_checksum[j][p];
+        }
+        cand_count++;
+      }
+
+      qsort(cand, cand_count, sizeof(cand[0]), nr_pbch_oai_candidate_cmp);
+      current_list_size = (uint8_t)((cand_count < NR_PBCH_SCL_LIST) ? cand_count : NR_PBCH_SCL_LIST);
+
+      for (uint32_t p = 0U; p < current_list_size; p++) {
+        const uint8_t parent = cand[p].parent;
+        nr_pbch_oai_copy_path_double(llr, (uint8_t)p, old_llr, parent);
+        nr_pbch_oai_copy_path_u8(bit, (uint8_t)p, old_bit, parent);
+        bit[current_bit][0][p] = cand[p].bit;
+        path_metric[p] = cand[p].metric;
+        crc_state[p] = cand[p].crc_state;
+        for (uint32_t j = 0U; j < NR_PBCH_CRC; j++) {
+          crc_checksum[j][p] = cand[p].crc_checksum[j];
+        }
+      }
+      bit_updated[current_bit][0] = 1U;
+      non_frozen_bit++;
+    }
+  }
+
+  {
+    uint8_t order[NR_PBCH_SCL_LIST];
+
+    for (uint32_t p = 0U; p < current_list_size; p++) {
+      order[p] = (uint8_t)p;
+    }
+    for (uint32_t i = 0U; i < current_list_size; i++) {
+      for (uint32_t j = i + 1U; j < current_list_size; j++) {
+        if (path_metric[order[j]] < path_metric[order[i]]) {
+          const uint8_t tmp = order[i];
+          order[i] = order[j];
+          order[j] = tmp;
+        }
+      }
+    }
+
+    for (uint32_t r = 0U; r < current_list_size; r++) {
+      const uint8_t path = order[r];
+      if (!crc_state[path]) {
+        continue;
+      }
+      for (uint32_t n = 0U; n < NR_PBCH_N; n++) {
+        uhat[n] = bit[n][0][path];
+      }
+      if (nr_pbch_extract_candidate(uhat, info_pos, payload_crc, payload_plain, pci) == 0) {
+        return 0;
+      }
+    }
+  }
+
+  return -1;
 }
 
 static void nr_pbch_subblock_interleave(const uint8_t *in, uint8_t *out)
@@ -536,13 +1020,20 @@ uint32_t nr_pbch_dmrs_re_positions(uint8_t v, uint16_t *rel_idx, uint8_t *sym_id
   if (max_len < NR_PBCH_DMRS_RE) {
     return 0U;
   }
+  /* 3GPP TS 38.211 Section 7.4.3.1: map in increasing order of first l
+   * (symbol) then k (subcarrier).  Symbol 1 (60), symbol 2 PBCH edges (24),
+   * symbol 3 (60) = 144 total. */
   for (uint32_t rel = v; rel < 240U; rel += 4U) {
     rel_idx[pos] = (uint16_t)rel;
     sym_idx[pos++] = 1U;
+  }
+  for (uint32_t rel = v; rel < 240U; rel += 4U) {
     if (rel < 48U || rel >= 192U) {
       rel_idx[pos] = (uint16_t)rel;
       sym_idx[pos++] = 2U;
     }
+  }
+  for (uint32_t rel = v; rel < 240U; rel += 4U) {
     rel_idx[pos] = (uint16_t)rel;
     sym_idx[pos++] = 3U;
   }
@@ -556,16 +1047,24 @@ uint32_t nr_pbch_data_re_positions(uint8_t v, uint16_t *rel_idx, uint8_t *sym_id
   if (max_len < NR_PBCH_QPSK_RE) {
     return 0U;
   }
+  /* OAI extracts PBCH LLRs symbol-by-symbol (1, then 2 edge REs, then 3),
+   * which is the ordering we must follow to match live PBCH decoding. */
   for (uint32_t rel = 0U; rel < 240U; rel++) {
     const uint8_t dmrs = (uint8_t)((rel & 3U) == v);
     if (!dmrs) {
       rel_idx[pos] = (uint16_t)rel;
       sym_idx[pos++] = 1U;
     }
+  }
+  for (uint32_t rel = 0U; rel < 240U; rel++) {
+    const uint8_t dmrs = (uint8_t)((rel & 3U) == v);
     if ((rel < 48U || rel >= 192U) && !dmrs) {
       rel_idx[pos] = (uint16_t)rel;
       sym_idx[pos++] = 2U;
     }
+  }
+  for (uint32_t rel = 0U; rel < 240U; rel++) {
+    const uint8_t dmrs = (uint8_t)((rel & 3U) == v);
     if (!dmrs) {
       rel_idx[pos] = (uint16_t)rel;
       sym_idx[pos++] = 3U;
@@ -611,19 +1110,13 @@ int nr_pbch_bch_encode(uint16_t pci, uint8_t ssb_idx, uint16_t sfn, uint8_t hrf,
 
 int nr_pbch_bch_decode(const float *llr, uint32_t llr_len, nr_sync_state_t *sync)
 {
-  enum { NR_PBCH_FLIP_TRIES = 10, NR_PBCH_TRIPLE_TRIES = 4 };
   float llr_scr[NR_PBCH_E];
   float llr_rm[NR_PBCH_N];
   float llr_sub[NR_PBCH_N];
-  float leaf_llr[NR_PBCH_N];
-  uint8_t uhat[NR_PBCH_N];
-  uint8_t partial[NR_PBCH_N];
   uint16_t info_pos[NR_PBCH_K];
-  uint16_t flip_pos[2];
   uint8_t frozen[NR_PBCH_N];
   uint8_t payload_crc[NR_PBCH_K];
   uint8_t payload_plain[NR_PBCH_A];
-  nr_pbch_weak_bit_t weak_bits[NR_PBCH_K];
   uint16_t sfn = 0U;
   uint32_t mib = 0U;
 
@@ -632,72 +1125,33 @@ int nr_pbch_bch_decode(const float *llr, uint32_t llr_len, nr_sync_state_t *sync
   }
 
   memcpy(llr_scr, llr, sizeof(llr_scr));
+
+  {
+    static uint32_t llr_dbg = 0U;
+    if ((llr_dbg++ % 20U) == 0U) {
+      float sum_abs = 0.0f, mx = 0.0f;
+      uint32_t npos = 0U;
+      for (uint32_t i = 0; i < NR_PBCH_E; i++) {
+        float a = llr_scr[i] < 0 ? -llr_scr[i] : llr_scr[i];
+        sum_abs += a;
+        if (a > mx) mx = a;
+        if (llr_scr[i] > 0) npos++;
+      }
+      printf("  LLR_PRE_SCR: pci=%u ssb=%u mean_abs=%.2f max=%.2f pos_frac=%.3f\n",
+             (unsigned)sync->pci, (unsigned)sync->ssb_index,
+             sum_abs / NR_PBCH_E, mx, (float)npos / NR_PBCH_E);
+    }
+  }
+
   nr_pbch_codeword_descramble_llr(sync->pci, sync->ssb_index, llr_scr);
   nr_pbch_rate_match_decode(llr_scr, llr_rm);
   nr_pbch_subblock_deinterleave_llr(llr_rm, llr_sub);
 
   nr_pbch_build_info_set(info_pos, frozen);
-  memset(uhat, 0, sizeof(uhat));
-  memset(leaf_llr, 0, sizeof(leaf_llr));
-  if (nr_polar_sc_decode_rec(llr_sub, NR_PBCH_N, 0U, frozen, NULL, 0U,
-                             leaf_llr, uhat, partial) != 0) {
+  if (nr_pbch_oai_generic_decoder_int16(llr_sub, frozen, info_pos,
+                                        payload_crc, payload_plain, sync->pci) != 0) {
     return -1;
   }
-  if (nr_pbch_extract_candidate(uhat, info_pos, payload_crc, payload_plain, sync->pci) != 0) {
-    uint32_t weak_count = 0U;
-    for (uint32_t i = 0; i < NR_PBCH_K; i++) {
-      weak_bits[i].pos = info_pos[i];
-      weak_bits[i].abs_llr = fabsf(leaf_llr[info_pos[i]]);
-    }
-    qsort(weak_bits, NR_PBCH_K, sizeof(weak_bits[0]), nr_pbch_weak_bit_cmp);
-    weak_count = (NR_PBCH_K < NR_PBCH_FLIP_TRIES) ? NR_PBCH_K : NR_PBCH_FLIP_TRIES;
-
-    for (uint32_t i = 0U; i < weak_count; i++) {
-      memset(uhat, 0, sizeof(uhat));
-      flip_pos[0] = weak_bits[i].pos;
-      if (nr_polar_sc_decode_rec(llr_sub, NR_PBCH_N, 0U, frozen, flip_pos, 1U,
-                                 NULL, uhat, partial) == 0 &&
-          nr_pbch_extract_candidate(uhat, info_pos, payload_crc, payload_plain, sync->pci) == 0) {
-        goto pbch_crc_ok;
-      }
-    }
-
-    for (uint32_t i = 0U; i < weak_count; i++) {
-      for (uint32_t j = i + 1U; j < weak_count; j++) {
-        memset(uhat, 0, sizeof(uhat));
-        flip_pos[0] = weak_bits[i].pos;
-        flip_pos[1] = weak_bits[j].pos;
-        if (nr_polar_sc_decode_rec(llr_sub, NR_PBCH_N, 0U, frozen, flip_pos, 2U,
-                                   NULL, uhat, partial) == 0 &&
-            nr_pbch_extract_candidate(uhat, info_pos, payload_crc, payload_plain, sync->pci) == 0) {
-          goto pbch_crc_ok;
-        }
-      }
-    }
-
-    {
-      const uint32_t triple_count = (weak_count < NR_PBCH_TRIPLE_TRIES) ? weak_count : NR_PBCH_TRIPLE_TRIES;
-      uint16_t flip_pos3[3];
-      for (uint32_t i = 0U; i < triple_count; i++) {
-        for (uint32_t j = i + 1U; j < triple_count; j++) {
-          for (uint32_t k = j + 1U; k < triple_count; k++) {
-            memset(uhat, 0, sizeof(uhat));
-            flip_pos3[0] = weak_bits[i].pos;
-            flip_pos3[1] = weak_bits[j].pos;
-            flip_pos3[2] = weak_bits[k].pos;
-            if (nr_polar_sc_decode_rec(llr_sub, NR_PBCH_N, 0U, frozen, flip_pos3, 3U,
-                                       NULL, uhat, partial) == 0 &&
-                nr_pbch_extract_candidate(uhat, info_pos, payload_crc, payload_plain, sync->pci) == 0) {
-              goto pbch_crc_ok;
-            }
-          }
-        }
-      }
-    }
-    return -1;
-  }
-
-pbch_crc_ok:
 
   for (uint32_t i = 0; i < 24U; i++) {
     mib = (mib << 1U) | (uint32_t)payload_plain[i];

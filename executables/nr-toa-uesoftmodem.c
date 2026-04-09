@@ -14,12 +14,9 @@ volatile int oai_exit;
 #define NR_SYNC_LOST_MISS_THRESH 24U
 #define NR_FREQ_SWEEP_STEP_ITERS 20U
 #define NR_FREQ_SWEEP_STEP_ITERS_WIDE 5U
-#define NR_FREQ_SWEEP_BEST_DWELL 1U
 #define NR_GAIN_STEP_FULL_SWEEPS 1U
-#define NR_FREQ_SWEEP_NEARMISS_DWELL 3U
-#define NR_FREQ_SWEEP_HOT_DECAY 0.82f
-#define NR_FREQ_SWEEP_GAIN_MEMORY 0.72f
 #define NR_UE_LOOP_LOG_EVERY 1000U
+#define NR_RF_SETTLE_READS 2U
 
 typedef struct {
   unsigned points;
@@ -34,25 +31,50 @@ typedef struct {
 
 static int nr_toa_build_sweep_plan(double center_freq_hz,
                                    double sample_rate_hz,
+                                   int full_band_sweep,
+                                   int strict_center_freq,
                                    nr_freq_sweep_plan_t *plan)
 {
-  const double gscn_grid_hz = 1.44e6;
+  const double gscn_grid_hz = nr_v0_ssb_gscn_step_hz();
   const double ssref0_hz = 3000e6;
   const double n78_lo_hz = 3300e6;
   const double n78_hi_hz = 3800e6;
+  long n0 = 0L;
   if (!plan) {
     return -1;
   }
   memset(plan, 0, sizeof(*plan));
 
   if (center_freq_hz >= n78_lo_hz && center_freq_hz <= n78_hi_hz) {
+    n0 = 7499L + (long)llround((center_freq_hz - ssref0_hz) / gscn_grid_hz);
+  } else {
+    n0 = (long)llround(center_freq_hz / gscn_grid_hz);
+  }
+
+  if (strict_center_freq) {
+    plan->points = 1U;
+    plan->freqs_hz = (double *)calloc(1U, sizeof(*plan->freqs_hz));
+    plan->gscn = (long *)calloc(1U, sizeof(*plan->gscn));
+    if (!plan->freqs_hz || !plan->gscn) {
+      free(plan->freqs_hz);
+      free(plan->gscn);
+      memset(plan, 0, sizeof(*plan));
+      return -1;
+    }
+    plan->freqs_hz[0] = center_freq_hz;
+    plan->gscn[0] = n0;
+    return 0;
+  }
+
+  if (full_band_sweep &&
+      center_freq_hz >= n78_lo_hz && center_freq_hz <= n78_hi_hz) {
     const double target_step_hz = fmin(fmax(sample_rate_hz * 0.5, gscn_grid_hz), 5.76e6);
     const long gscn_step = (long)fmax(1.0, llround(target_step_hz / gscn_grid_hz));
     const long coarse_mult = 4L;
     const long coarse_step = gscn_step * coarse_mult;
     const long n_lo = (long)ceil((n78_lo_hz - ssref0_hz) / gscn_grid_hz);
     const long n_hi = (long)floor((n78_hi_hz - ssref0_hz) / gscn_grid_hz);
-    const long n0 = (long)llround((center_freq_hz - ssref0_hz) / gscn_grid_hz);
+    const long n0_rel = (long)llround((center_freq_hz - ssref0_hz) / gscn_grid_hz);
     const unsigned raw_points = (unsigned)((n_hi - n_lo) + 1L);
     long *ordered_n = NULL;
     unsigned fill = 0U;
@@ -73,7 +95,7 @@ static int nr_toa_build_sweep_plan(double center_freq_hz,
     for (int pass = 0; pass < 2 && fill < raw_points; pass++) {
       const long step_n = (pass == 0) ? coarse_step : gscn_step;
       for (long d = 0L; fill < raw_points; d++) {
-        const long cand[2] = {n0 - d * step_n, n0 + d * step_n};
+        const long cand[2] = {n0_rel - d * step_n, n0_rel + d * step_n};
         for (unsigned s = 0U; s < ((d == 0L) ? 1U : 2U); s++) {
           const long n = cand[s];
           int dup = 0;
@@ -90,7 +112,7 @@ static int nr_toa_build_sweep_plan(double center_freq_hz,
             ordered_n[fill++] = n;
           }
         }
-        if ((n0 - d * step_n) < n_lo && (n0 + d * step_n) > n_hi) {
+        if ((n0_rel - d * step_n) < n_lo && (n0_rel + d * step_n) > n_hi) {
           break;
         }
       }
@@ -107,7 +129,6 @@ static int nr_toa_build_sweep_plan(double center_freq_hz,
 
   {
     const unsigned raw_points = 17U;
-    const long n0 = (long)llround((center_freq_hz - ssref0_hz) / gscn_grid_hz);
     plan->points = raw_points;
     plan->freqs_hz = (double *)calloc(raw_points, sizeof(*plan->freqs_hz));
     plan->gscn = (long *)calloc(raw_points, sizeof(*plan->gscn));
@@ -123,8 +144,8 @@ static int nr_toa_build_sweep_plan(double center_freq_hz,
         const long k = (long)((i + 1U) / 2U);
         off = (i & 1U) ? -k : k;
       }
-      plan->gscn[i] = 7499L + n0 + off;
-      plan->freqs_hz[i] = ssref0_hz + (double)(n0 + off) * gscn_grid_hz;
+      plan->gscn[i] = n0 + off;
+      plan->freqs_hz[i] = center_freq_hz + (double)off * gscn_grid_hz;
     }
     return 0;
   }
@@ -159,86 +180,6 @@ static void nr_toa_build_gain_plan(double base_gain_db, nr_gain_plan_t *plan)
   }
 }
 
-static float nr_toa_sync_evidence_score(const nr_sync_state_t *sync)
-{
-  float score = 0.0f;
-  if (!sync) {
-    return 0.0f;
-  }
-  score = 0.60f * sync->pss_metric + 0.10f * sync->snr_db;
-  if (sync->locked) {
-    score += 0.04f;
-  }
-  switch ((nr_pbch_fail_stage_t)sync->pbch_fail_stage) {
-    case NR_PBCH_FAIL_BCH:
-      score += 1.10f * sync->pbch_metric + 0.12f;
-      break;
-    case NR_PBCH_FAIL_DMRS_AMBIG:
-      score += 0.75f * sync->pbch_metric + 0.05f;
-      break;
-    case NR_PBCH_FAIL_DMRS_WEAK:
-      score += 0.45f * sync->pbch_metric;
-      break;
-    default:
-      score += 0.20f * sync->pbch_metric;
-      break;
-  }
-  if (sync->pbch_ok) {
-    score += 2.0f;
-  }
-  if (sync->mib_ok) {
-    score += 4.0f;
-  }
-  if (score < 0.0f) {
-    score = 0.0f;
-  }
-  return score;
-}
-
-static int nr_toa_sync_is_nearmiss(const nr_sync_state_t *sync)
-{
-  if (!sync) {
-    return 0;
-  }
-  if (sync->pbch_fail_stage == NR_PBCH_FAIL_BCH && sync->pbch_metric >= 0.17f) {
-    return 1;
-  }
-  if (sync->pbch_fail_stage == NR_PBCH_FAIL_DMRS_AMBIG &&
-      sync->pbch_metric >= 0.24f &&
-      sync->pss_metric >= 0.20f &&
-      sync->snr_db >= 1.0f) {
-    return 1;
-  }
-  if (sync->pbch_ok || sync->mib_ok) {
-    return 1;
-  }
-  return 0;
-}
-
-static unsigned nr_toa_select_focus_index(const float *metric,
-                                          const float *heat,
-                                          const float *pbch_best,
-                                          const uint16_t *near_hits,
-                                          unsigned points)
-{
-  unsigned best_i = 0U;
-  float best_score = -1.0f;
-  if (!metric || !heat || !pbch_best || !near_hits || points == 0U) {
-    return 0U;
-  }
-  for (unsigned i = 0U; i < points; i++) {
-    const float score = 0.50f * metric[i] +
-                        0.95f * heat[i] +
-                        0.55f * pbch_best[i] +
-                        0.03f * (float)near_hits[i];
-    if (score > best_score) {
-      best_score = score;
-      best_i = i;
-    }
-  }
-  return best_i;
-}
-
 static unsigned nr_toa_find_gscn_index(const nr_freq_sweep_plan_t *plan,
                                        int32_t gscn,
                                        unsigned fallback_idx)
@@ -256,6 +197,7 @@ static unsigned nr_toa_find_gscn_index(const nr_freq_sweep_plan_t *plan,
   }
   return fallback_idx;
 }
+
 
 static void nr_toa_sig_handler(int signo)
 {
@@ -484,31 +426,31 @@ static void *TOA_UE_thread(void *arg)
   PHY_VARS_NR_TOA_UE *UE = (PHY_VARS_NR_TOA_UE *)arg;
 
   const uint32_t ssb_need = nr_v0_ssb_burst_len_fs(UE->app_cfg.sample_rate_hz);
-  const uint32_t nsamps = (ssb_need > 4096U) ? (2U * ssb_need) : 4096U;
+  const uint32_t ssb_period_samps = (UE->app_cfg.ssb_period_ms > 0)
+      ? (uint32_t)(UE->app_cfg.sample_rate_hz * (double)UE->app_cfg.ssb_period_ms / 1000.0)
+      : 0U;
+  const uint32_t min_capture = (ssb_period_samps > 0)
+      ? (ssb_period_samps + ssb_need) : (2U * ssb_need);
+  const uint32_t nsamps = (min_capture > 4096U) ? min_capture : 4096U;
   UE->samples_per_slot = nsamps;
   UE->samples_per_frame = 2 * nsamps;
   UE->abs_samp_wr = 0;
   unsigned iter = 0;
   unsigned presync_no_lock_iter = 0;
-  unsigned presync_hold_after_lock = 0;
   unsigned sweep_idx = 0;
   unsigned sweep_rounds = 0;
-  unsigned sweep_hold = 0;
   unsigned sweep_step_iters = NR_FREQ_SWEEP_STEP_ITERS;
   unsigned gain_idx = 0U;
   unsigned gain_full_sweeps = 0U;
-  unsigned hot_dwell_left = 0U;
-  unsigned hot_focus_idx = 0U;
   nr_freq_sweep_plan_t sweep_plan;
   nr_gain_plan_t gain_plan;
   float *sweep_best_metric = NULL;
-  float *sweep_heat = NULL;
-  float *sweep_pbch_best = NULL;
-  uint16_t *sweep_near_hits = NULL;
   memset(&sweep_plan, 0, sizeof(sweep_plan));
   memset(&gain_plan, 0, sizeof(gain_plan));
   if (nr_toa_build_sweep_plan(UE->app_cfg.center_freq_hz,
                               UE->app_cfg.sample_rate_hz,
+                              UE->app_cfg.full_band_sweep,
+                              UE->app_cfg.strict_center_freq,
                               &sweep_plan) != 0 ||
       sweep_plan.points == 0U) {
     printf("freq_sweep: failed to build sweep plan around %.0f Hz\n",
@@ -520,21 +462,16 @@ static void *TOA_UE_thread(void *arg)
     nr_toa_free_sweep_plan(&sweep_plan);
     return NULL;
   }
-  sweep_heat = (float *)calloc(sweep_plan.points, sizeof(*sweep_heat));
-  sweep_pbch_best = (float *)calloc(sweep_plan.points, sizeof(*sweep_pbch_best));
-  sweep_near_hits = (uint16_t *)calloc(sweep_plan.points, sizeof(*sweep_near_hits));
-  if (!sweep_heat || !sweep_pbch_best || !sweep_near_hits) {
-    free(sweep_best_metric);
-    free(sweep_heat);
-    free(sweep_pbch_best);
-    free(sweep_near_hits);
-    nr_toa_free_sweep_plan(&sweep_plan);
-    return NULL;
-  }
   if (sweep_plan.points > 33U) {
     sweep_step_iters = NR_FREQ_SWEEP_STEP_ITERS_WIDE;
   }
-  nr_toa_build_gain_plan(UE->app_cfg.rx_gain_db, &gain_plan);
+  if (UE->app_cfg.gain_sweep_enable) {
+    nr_toa_build_gain_plan(UE->app_cfg.rx_gain_db, &gain_plan);
+  } else {
+    memset(&gain_plan, 0, sizeof(gain_plan));
+    gain_plan.count = 1U;
+    gain_plan.values_db[0] = (UE->app_cfg.rx_gain_db >= 0.0) ? UE->app_cfg.rx_gain_db : 35.0;
+  }
   printf("freq_sweep: plan_points=%u center=%.0fHz first=%.0fHz last=%.0fHz step_iters=%u\n",
          sweep_plan.points, UE->app_cfg.center_freq_hz,
          sweep_plan.freqs_hz[0],
@@ -548,6 +485,7 @@ static void *TOA_UE_thread(void *arg)
   fflush(stdout);
   UE->current_rx_freq_hz = UE->app_cfg.center_freq_hz;
   UE->current_rx_gscn = (int32_t)sweep_plan.gscn[0];
+  UE->rf_settle_reads = NR_RF_SETTLE_READS;
 
   while (!oai_exit) {
     switch (UE->state) {
@@ -567,81 +505,20 @@ static void *TOA_UE_thread(void *arg)
                            UE->sync.mib_ok);
       cur_sync = UE->sync;
       float cur_metric = cur_sync.pss_metric;
-      float cur_evidence = nr_toa_sync_evidence_score(&cur_sync);
-      int cur_nearmiss = nr_toa_sync_is_nearmiss(&cur_sync);
       unsigned evidence_idx = nr_toa_find_gscn_index(&sweep_plan, cur_sync.last_gscn, sweep_idx);
       pthread_mutex_unlock(&UE->sync_mtx);
-      if (has_real_lock) {
-        presync_hold_after_lock = 800U; /* Hold current freq after a lock event */
-      }
       if (cur_metric > sweep_best_metric[evidence_idx]) {
         sweep_best_metric[evidence_idx] = cur_metric;
       }
-      const float prev_heat = sweep_heat[evidence_idx];
-      const float prev_pbch_best = sweep_pbch_best[evidence_idx];
-      sweep_heat[evidence_idx] = fmaxf(cur_evidence, sweep_heat[evidence_idx] * NR_FREQ_SWEEP_HOT_DECAY);
-      if (cur_sync.pbch_metric > sweep_pbch_best[evidence_idx]) {
-        sweep_pbch_best[evidence_idx] = cur_sync.pbch_metric;
-      }
-      if (cur_nearmiss &&
-          (cur_evidence > (prev_heat + 0.015f) ||
-           cur_sync.pbch_metric > (prev_pbch_best + 0.010f) ||
-           sweep_near_hits[evidence_idx] == 0U)) {
-        if (sweep_near_hits[evidence_idx] < 65535U) {
-          sweep_near_hits[evidence_idx]++;
-        }
-        if (hot_dwell_left < NR_FREQ_SWEEP_NEARMISS_DWELL) {
-          hot_dwell_left = NR_FREQ_SWEEP_NEARMISS_DWELL;
-          hot_focus_idx = evidence_idx;
-          printf("freq_hotspot: idx=%u gscn=%ld rx_freq=%.0fHz score=%.3f pci=%u stage=%u near=%u\n",
-                 evidence_idx,
-                 (long)sweep_plan.gscn[evidence_idx],
-                 sweep_plan.freqs_hz[evidence_idx],
-                 cur_evidence,
-                 (unsigned)cur_sync.pci,
-                 (unsigned)cur_sync.pbch_fail_stage,
-                 (unsigned)sweep_near_hits[evidence_idx]);
-        }
-      }
       if (!has_real_lock) {
         presync_no_lock_iter++;
-        if (presync_hold_after_lock > 0U) {
-          presync_hold_after_lock--;
-        }
         if ((presync_no_lock_iter % sweep_step_iters) == 0U) {
-          if (presync_hold_after_lock > 0U) {
-            break;
-          }
-          if (hot_dwell_left > 0U) {
-            hot_dwell_left--;
-            sweep_idx = hot_focus_idx;
-            if ((iter % 64U) == 0U) {
-              printf("freq_hold: idx=%u gscn=%ld rx_freq=%.0fHz dwell_left=%u heat=%.3f pbch=%.3f near=%u\n",
-                     sweep_idx,
-                     (long)sweep_plan.gscn[sweep_idx],
-                     sweep_plan.freqs_hz[sweep_idx],
-                     hot_dwell_left,
-                     sweep_heat[sweep_idx],
-                     sweep_pbch_best[sweep_idx],
-                     (unsigned)sweep_near_hits[sweep_idx]);
-            }
-          } else if (sweep_rounds < sweep_plan.points) {
-            sweep_idx = (sweep_idx + 1U) % sweep_plan.points;
+          sweep_idx = (sweep_idx + 1U) % sweep_plan.points;
+          if (sweep_idx == 0U) {
             sweep_rounds++;
-          } else {
-            unsigned best_i = nr_toa_select_focus_index(sweep_best_metric,
-                                                        sweep_heat,
-                                                        sweep_pbch_best,
-                                                        sweep_near_hits,
-                                                        sweep_plan.points);
-            sweep_idx = best_i;
-            if (sweep_hold < NR_FREQ_SWEEP_BEST_DWELL) {
-              sweep_hold++;
-              if (sweep_hold == 1U) {
-                gain_full_sweeps++;
-              }
-            } else if ((gain_idx + 1U) < gain_plan.count &&
-                       gain_full_sweeps >= NR_GAIN_STEP_FULL_SWEEPS) {
+            gain_full_sweeps++;
+            if ((gain_idx + 1U) < gain_plan.count &&
+                gain_full_sweeps >= NR_GAIN_STEP_FULL_SWEEPS) {
               gain_idx++;
               if (nr_toa_radio_set_rx_gain(UE->dev, gain_plan.values_db[gain_idx]) == 0) {
                 UE->app_cfg.rx_gain_db = gain_plan.values_db[gain_idx];
@@ -650,27 +527,15 @@ static void *TOA_UE_thread(void *arg)
                        gain_idx, gain_plan.values_db[gain_idx], gain_full_sweeps);
                 fflush(stdout);
               }
-              for (unsigned i = 0U; i < sweep_plan.points; i++) {
-                sweep_best_metric[i] *= 0.50f;
-                sweep_heat[i] *= NR_FREQ_SWEEP_GAIN_MEMORY;
-                sweep_pbch_best[i] *= NR_FREQ_SWEEP_GAIN_MEMORY;
-                sweep_near_hits[i] = (uint16_t)(sweep_near_hits[i] / 2U);
-              }
-              sweep_idx = 0U;
-              sweep_rounds = 0U;
-              sweep_hold = 0U;
               gain_full_sweeps = 0U;
-              hot_dwell_left = 0U;
-              hot_focus_idx = 0U;
-            } else {
-              if ((gain_idx + 1U) >= gain_plan.count) {
-                sweep_idx = best_i;
-              }
+              UE->rf_settle_reads = NR_RF_SETTLE_READS;
             }
           }
-          if (nr_toa_radio_set_rx_freq(UE->dev, sweep_plan.freqs_hz[sweep_idx]) == 0) {
+          if (fabs(UE->current_rx_freq_hz - sweep_plan.freqs_hz[sweep_idx]) > 1.0 &&
+              nr_toa_radio_set_rx_freq(UE->dev, sweep_plan.freqs_hz[sweep_idx]) == 0) {
             UE->current_rx_freq_hz = sweep_plan.freqs_hz[sweep_idx];
             UE->current_rx_gscn = (int32_t)sweep_plan.gscn[sweep_idx];
+            UE->rf_settle_reads = NR_RF_SETTLE_READS;
             printf("freq_sweep(GSCN): idx=%u gscn=%ld rx_freq=%.0fHz best_metric=%.3f\n",
                    sweep_idx, (long)sweep_plan.gscn[sweep_idx], sweep_plan.freqs_hz[sweep_idx],
                    sweep_best_metric[sweep_idx]);
@@ -730,9 +595,6 @@ static void *TOA_UE_thread(void *arg)
   }
 
   free(sweep_best_metric);
-  free(sweep_heat);
-  free(sweep_pbch_best);
-  free(sweep_near_hits);
   nr_toa_free_sweep_plan(&sweep_plan);
   (void)TOA_THREAD_TOA_UE;
   return NULL;
@@ -753,6 +615,13 @@ int main(int argc, char **argv)
     return 1;
   }
   ue.provider = (ue.app_cfg.mode == NR_TOA_MODE_PRS_TOA) ? &nr_prs_provider : &nr_ssb_provider;
+  {
+    uint32_t ssb_scs_khz = ue.app_cfg.ssb_scs_khz;
+    if (ssb_scs_khz != 15U && ssb_scs_khz != 30U) {
+      ssb_scs_khz = nr_v0_default_ssb_scs_khz(ue.app_cfg.center_freq_hz);
+    }
+    nr_v0_set_ssb_scs_khz(ssb_scs_khz);
+  }
 
   if (ue.app_cfg.anchor_db_path[0] != '\0') {
     int n = 0;
@@ -761,7 +630,7 @@ int main(int argc, char **argv)
     }
   }
 
-  printf("NR-TOA UE cfg: sdr=%s clock=%s time=%s f=%0.f Fs=%0.f rx_gain=%0.1f tx_gain=%0.1f mode=%u meas_mode=%u anchor_db_path=%s n_anchors=%d\n",
+  printf("NR-TOA UE cfg: sdr=%s clock=%s time=%s f=%0.f Fs=%0.f rx_gain=%0.1f tx_gain=%0.1f mode=%u meas_mode=%u full_band_sweep=%u strict_center_freq=%u gain_sweep=%u target_pci=%d ssb_scs=%ukHz anchor_db_path=%s n_anchors=%d\n",
          ue.app_cfg.sdr,
          ue.app_cfg.clock_source,
          ue.app_cfg.time_source,
@@ -771,6 +640,11 @@ int main(int argc, char **argv)
          ue.app_cfg.tx_gain_db,
          (unsigned)ue.app_cfg.mode,
          (unsigned)ue.app_cfg.meas_mode,
+         (unsigned)ue.app_cfg.full_band_sweep,
+         (unsigned)ue.app_cfg.strict_center_freq,
+         (unsigned)ue.app_cfg.gain_sweep_enable,
+         ue.app_cfg.target_pci,
+         (unsigned)nr_v0_get_ssb_scs_khz(),
          ue.app_cfg.anchor_db_path,
          ue.n_anchors);
   if (ue.app_cfg.mode == NR_TOA_MODE_SSB_TOA) {

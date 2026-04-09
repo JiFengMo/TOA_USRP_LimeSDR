@@ -11,10 +11,35 @@
 #define NR_V0_SSB_SYMS 4U
 #define NR_V0_FS_HZ_FALLBACK 30720000.0
 
+static uint32_t g_nr_v0_ssb_scs_khz = 30U;
+
+void nr_v0_set_ssb_scs_khz(uint32_t scs_khz)
+{
+  if (scs_khz == 15U || scs_khz == 30U) {
+    g_nr_v0_ssb_scs_khz = scs_khz;
+  }
+}
+
+uint32_t nr_v0_get_ssb_scs_khz(void)
+{
+  return g_nr_v0_ssb_scs_khz;
+}
+
+uint32_t nr_v0_default_ssb_scs_khz(double center_freq_hz)
+{
+  return (center_freq_hz < 3.0e9) ? 15U : 30U;
+}
+
+double nr_v0_ssb_gscn_step_hz(void)
+{
+  return (g_nr_v0_ssb_scs_khz <= 15U) ? 1.20e6 : 1.44e6;
+}
+
 static uint32_t nr_v0_ssb_nfft_from_fs(double fs_hz)
 {
   const double fs = (fs_hz > 1.0) ? fs_hz : NR_V0_FS_HZ_FALLBACK;
-  uint32_t nfft = (uint32_t)llround(fs / 30000.0);
+  const double scs_hz = 1000.0 * (double)g_nr_v0_ssb_scs_khz;
+  uint32_t nfft = (uint32_t)llround(fs / scs_hz);
   if (nfft < 256U) {
     nfft = 256U;
   }
@@ -27,9 +52,13 @@ static uint32_t nr_v0_ssb_nfft_from_fs(double fs_hz)
   return nfft;
 }
 
-static uint32_t nr_v0_ssb_cp_from_nfft(uint32_t nfft)
+static uint32_t nr_v0_ssb_symbol_cp_from_nfft(uint32_t nfft, uint32_t sym_idx)
 {
-  uint32_t cp = (uint32_t)llround((72.0 * (double)nfft) / 1024.0);
+  const uint32_t mu = (g_nr_v0_ssb_scs_khz <= 15U) ? 0U : 1U;
+  const uint32_t long_period = 7U * (1U << mu);
+  const double short_cp = (144.0 * (double)nfft) / 2048.0;
+  const double long_cp = ((144.0 + 16.0 * (double)(1U << mu)) * (double)nfft) / 2048.0;
+  const uint32_t cp = (uint32_t)llround(((sym_idx % long_period) == 0U) ? long_cp : short_cp);
   return (cp > 0U) ? cp : 1U;
 }
 
@@ -40,12 +69,17 @@ uint32_t nr_v0_ssb_nfft(double fs_hz)
 
 uint32_t nr_v0_ssb_cp_len(double fs_hz)
 {
-  return nr_v0_ssb_cp_from_nfft(nr_v0_ssb_nfft_from_fs(fs_hz));
+  return nr_v0_ssb_symbol_cp_len_fs(fs_hz, 0U);
+}
+
+uint32_t nr_v0_ssb_symbol_cp_len_fs(double fs_hz, uint32_t sym_idx)
+{
+  return nr_v0_ssb_symbol_cp_from_nfft(nr_v0_ssb_nfft_from_fs(fs_hz), sym_idx);
 }
 
 uint32_t nr_v0_pss_td_len(void)
 {
-  return nr_v0_ssb_sym_len_fs(NR_V0_FS_HZ_FALLBACK);
+  return nr_v0_ssb_symbol_len_fs(NR_V0_FS_HZ_FALLBACK, 0U);
 }
 
 uint32_t nr_v0_ssb_sym_len(void)
@@ -60,13 +94,22 @@ uint32_t nr_v0_ssb_burst_len(void)
 
 uint32_t nr_v0_ssb_sym_len_fs(double fs_hz)
 {
+  return nr_v0_ssb_symbol_len_fs(fs_hz, 0U);
+}
+
+uint32_t nr_v0_ssb_symbol_len_fs(double fs_hz, uint32_t sym_idx)
+{
   const uint32_t nfft = nr_v0_ssb_nfft_from_fs(fs_hz);
-  return nfft + nr_v0_ssb_cp_from_nfft(nfft);
+  return nfft + nr_v0_ssb_symbol_cp_from_nfft(nfft, sym_idx);
 }
 
 uint32_t nr_v0_ssb_burst_len_fs(double fs_hz)
 {
-  return NR_V0_SSB_SYMS * nr_v0_ssb_sym_len_fs(fs_hz);
+  uint32_t total = 0U;
+  for (uint32_t sym = 0U; sym < NR_V0_SSB_SYMS; sym++) {
+    total += nr_v0_ssb_symbol_len_fs(fs_hz, sym);
+  }
+  return total;
 }
 
 static void nr_v0_map_real_seq_to_fd(const float *seq, uint32_t seq_len,
@@ -200,7 +243,7 @@ void nr_v0_pss_build_td_f_fs(int nid2, double fs_hz,
                              float *td_i, float *td_q, uint32_t len)
 {
   const uint32_t nfft = nr_v0_ssb_nfft_from_fs(fs_hz);
-  const uint32_t cp = nr_v0_ssb_cp_from_nfft(nfft);
+  const uint32_t cp = nr_v0_ssb_symbol_cp_len_fs(fs_hz, 0U);
   const uint32_t need = nfft + cp;
   if (!td_i || !td_q || len < need) {
     return;
@@ -292,7 +335,7 @@ static void nr_v0_sss_build_td_f_impl(int nid1, int nid2, double fs_hz,
                                       float *td_i, float *td_q, uint32_t len)
 {
   const uint32_t nfft = nr_v0_ssb_nfft_from_fs(fs_hz);
-  const uint32_t cp = nr_v0_ssb_cp_from_nfft(nfft);
+  const uint32_t cp = nr_v0_ssb_symbol_cp_len_fs(fs_hz, 2U);
   const uint32_t need = nfft + cp;
   if (!td_i || !td_q || len < need) {
     return;
@@ -386,8 +429,8 @@ int nr_v0_ssb_build_burst_iq(int nid1, int nid2,
                               c16_t *out, uint32_t out_len, float amp)
 {
   const uint32_t nfft = nr_v0_ssb_nfft_from_fs(NR_V0_FS_HZ_FALLBACK);
-  const uint32_t cp = nr_v0_ssb_cp_from_nfft(nfft);
-  const uint32_t sym_len = nfft + cp;
+  const uint32_t max_sym_len =
+      nfft + nr_v0_ssb_symbol_cp_len_fs(NR_V0_FS_HZ_FALLBACK, 0U);
   const uint32_t burst_len = nr_v0_ssb_burst_len();
   if (!out || out_len < burst_len) {
     return -1;
@@ -406,8 +449,9 @@ int nr_v0_ssb_build_burst_iq(int nid1, int nid2,
   float pbch_q[432];
   float *Xr = (float *)calloc(nfft, sizeof(*Xr));
   float *Xi = (float *)calloc(nfft, sizeof(*Xi));
-  float *td_i = (float *)malloc(sizeof(*td_i) * (size_t)sym_len);
-  float *td_q = (float *)malloc(sizeof(*td_q) * (size_t)sym_len);
+  float *td_i = (float *)malloc(sizeof(*td_i) * (size_t)max_sym_len);
+  float *td_q = (float *)malloc(sizeof(*td_q) * (size_t)max_sym_len);
+  uint32_t sym_off = 0U;
   if (!Xr || !Xi || !td_i || !td_q) {
     free(Xr);
     free(Xi);
@@ -453,6 +497,8 @@ int nr_v0_ssb_build_burst_iq(int nid1, int nid2,
   }
 
   for (uint32_t sym = 0; sym < NR_V0_SSB_SYMS; sym++) {
+    const uint32_t cp = nr_v0_ssb_symbol_cp_len_fs(NR_V0_FS_HZ_FALLBACK, sym);
+    const uint32_t sym_len = nfft + cp;
     memset(Xr, 0, sizeof(*Xr) * (size_t)nfft);
     memset(Xi, 0, sizeof(*Xi) * (size_t)nfft);
 
@@ -501,9 +547,10 @@ int nr_v0_ssb_build_burst_iq(int nid1, int nid2,
       if (ir < -32768.0f) ir = -32768.0f;
       if (iq > 32767.0f) iq = 32767.0f;
       if (iq < -32768.0f) iq = -32768.0f;
-      out[sym * sym_len + n].r = (int16_t)lrintf(ir);
-      out[sym * sym_len + n].i = (int16_t)lrintf(iq);
+      out[sym_off + n].r = (int16_t)lrintf(ir);
+      out[sym_off + n].i = (int16_t)lrintf(iq);
     }
+    sym_off += sym_len;
   }
 
   free(Xr);

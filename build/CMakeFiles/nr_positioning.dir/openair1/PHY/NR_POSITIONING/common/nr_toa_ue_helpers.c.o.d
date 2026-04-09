@@ -50,4 +50,6 @@ CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpe
  /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
  /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
  /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/nr_pos_api.h \
- /usr/include/string.h /usr/include/strings.h
+ /usr/include/string.h /usr/include/strings.h \
+ /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h

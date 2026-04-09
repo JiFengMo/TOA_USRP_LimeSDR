@@ -69,9 +69,15 @@ int nr_ssb_ofdm_mod(const nr_ssb_grid_t *grid, nr_tx_burst_t *burst);
 uint32_t nr_v0_pss_td_len(void);
 uint32_t nr_v0_ssb_sym_len(void);
 uint32_t nr_v0_ssb_burst_len(void);
+void nr_v0_set_ssb_scs_khz(uint32_t scs_khz);
+uint32_t nr_v0_get_ssb_scs_khz(void);
+uint32_t nr_v0_default_ssb_scs_khz(double center_freq_hz);
+double nr_v0_ssb_gscn_step_hz(void);
 uint32_t nr_v0_ssb_nfft(double fs_hz);
 uint32_t nr_v0_ssb_cp_len(double fs_hz);
+uint32_t nr_v0_ssb_symbol_cp_len_fs(double fs_hz, uint32_t sym_idx);
 uint32_t nr_v0_ssb_sym_len_fs(double fs_hz);
+uint32_t nr_v0_ssb_symbol_len_fs(double fs_hz, uint32_t sym_idx);
 uint32_t nr_v0_ssb_burst_len_fs(double fs_hz);
 void nr_v0_pss_build_fd(int nid2, float *seq, uint32_t len);
 void nr_v0_sss_build_fd(int nid1, int nid2, float *seq, uint32_t len);
@@ -123,6 +129,13 @@ int nr_ssb_demod(const nr_iq_block_t *blk, const nr_ssb_window_t *win,
 int nr_ssb_ls_estimate(const nr_ssb_grid_t *grid, const nr_sync_state_t *sync, nr_chest_t *h);
 int nr_ssb_interp_channel(const nr_chest_t *h, nr_chest_full_t *hf);
 int nr_ssb_build_cir(const nr_chest_full_t *hf, nr_cir_t *cir);
+int nr_ssb_pbch_prepare_frontend(const nr_ssb_grid_t *grid,
+                                 uint16_t pci,
+                                 uint8_t ssb_idx,
+                                 float *dmrs_metric,
+                                 float *noise_var,
+                                 float *cpe_rad,
+                                 float *llr);
 
 /* ssb_toa_est */
 int nr_toa_find_integer_peak(const nr_cir_t *cir, int *peak_idx);

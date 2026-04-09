@@ -9,19 +9,69 @@
 #include <string.h>
 #include <sys/stat.h>
 
-enum { SSB_CAND_CACHE_SIZE = 48 };
+enum { SSB_ACQ_MAX_CAND = 4 };
 
 typedef struct {
-  int32_t gscn;
-  uint16_t pci;
-  uint8_t ssb;
-  float heat;
-  float pbch_best;
-  float pss_best;
-  uint16_t hits;
-  uint8_t fail_stage;
-  uint32_t age;
-} ssb_cand_cache_entry_t;
+  nr_sync_state_t sync;
+  float rank;
+  uint8_t pbch_attempted;
+  int pbch_rc;
+} ssb_acq_candidate_t;
+
+static int ssb_target_pci_enabled(const nr_toa_ue_t *ue)
+{
+  return ue && ue->app_cfg.target_pci >= 0 && ue->app_cfg.target_pci < 1008;
+}
+
+static void ssb_force_target_pci(nr_sync_state_t *sync, int32_t target_pci)
+{
+  if (!sync || target_pci < 0 || target_pci >= 1008) {
+    return;
+  }
+  sync->pci = (uint16_t)target_pci;
+  sync->pci_full = (uint16_t)target_pci;
+  sync->nid2 = (uint8_t)(target_pci % 3);
+  sync->nid1 = (uint16_t)(target_pci / 3);
+  sync->pci_hyp_count = 1U;
+  sync->pci_hyp[0] = (uint16_t)target_pci;
+  sync->pci_hyp_delta[0] = 0;
+  sync->pci_hyp_metric[0] = sync->pss_metric;
+}
+
+static void ssb_acq_insert_candidate(ssb_acq_candidate_t *cands,
+                                     uint32_t *count,
+                                     uint32_t max_count,
+                                     const ssb_acq_candidate_t *cand)
+{
+  uint32_t n = 0U;
+  uint32_t pos = 0U;
+  if (!cands || !count || !cand || max_count == 0U) {
+    return;
+  }
+  n = (*count < max_count) ? *count : max_count;
+  while (pos < n && cands[pos].rank >= cand->rank) {
+    pos++;
+  }
+  if (pos >= max_count) {
+    return;
+  }
+  if (n < max_count) {
+    n++;
+    *count = n;
+  }
+  for (uint32_t i = n - 1U; i > pos; i--) {
+    cands[i] = cands[i - 1U];
+  }
+  cands[pos] = *cand;
+}
+
+static float ssb_acq_direct_rank(const nr_sync_state_t *sync)
+{
+  if (!sync) {
+    return 0.0f;
+  }
+  return sync->pss_metric;
+}
 
 static const char *ssb_pbch_fail_stage_name(uint8_t stage)
 {
@@ -41,160 +91,6 @@ static const char *ssb_pbch_fail_stage_name(uint8_t stage)
     default:
       return "unknown";
   }
-}
-
-static float ssb_candidate_score(const nr_sync_state_t *sync)
-{
-  float score = 0.0f;
-  if (!sync) {
-    return 0.0f;
-  }
-  score = 0.45f * sync->pss_metric + 0.08f * sync->snr_db;
-  switch ((nr_pbch_fail_stage_t)sync->pbch_fail_stage) {
-    case NR_PBCH_FAIL_BCH:
-      score += 1.20f * sync->pbch_metric + 0.12f;
-      break;
-    case NR_PBCH_FAIL_DMRS_AMBIG:
-      score += 0.70f * sync->pbch_metric + 0.04f;
-      break;
-    case NR_PBCH_FAIL_DMRS_WEAK:
-      score += 0.30f * sync->pbch_metric;
-      break;
-    default:
-      score += 0.12f * sync->pbch_metric;
-      break;
-  }
-  if (sync->pbch_ok) {
-    score += 2.5f;
-  }
-  if (sync->mib_ok) {
-    score += 4.0f;
-  }
-  if (score < 0.0f) {
-    score = 0.0f;
-  }
-  return score;
-}
-
-static void ssb_candidate_cache_decay(ssb_cand_cache_entry_t *cache, uint32_t now_age)
-{
-  if (!cache) {
-    return;
-  }
-  for (int i = 0; i < SSB_CAND_CACHE_SIZE; i++) {
-    if (cache[i].hits == 0U) {
-      continue;
-    }
-    uint32_t delta = now_age - cache[i].age;
-    while (delta > 0U) {
-      cache[i].heat *= 0.965f;
-      cache[i].pbch_best *= 0.985f;
-      cache[i].pss_best *= 0.990f;
-      delta--;
-    }
-    cache[i].age = now_age;
-    if (cache[i].heat < 0.04f && cache[i].pbch_best < 0.08f) {
-      memset(&cache[i], 0, sizeof(cache[i]));
-      cache[i].gscn = -1;
-    }
-  }
-}
-
-static int ssb_candidate_cache_find_slot(ssb_cand_cache_entry_t *cache,
-                                         int32_t gscn,
-                                         uint16_t pci,
-                                         uint8_t ssb,
-                                         uint32_t now_age)
-{
-  int free_i = -1;
-  int min_i = 0;
-  float min_score = 1.0e9f;
-  if (!cache) {
-    return -1;
-  }
-  for (int i = 0; i < SSB_CAND_CACHE_SIZE; i++) {
-    if (cache[i].hits == 0U || cache[i].gscn < 0) {
-      if (free_i < 0) {
-        free_i = i;
-      }
-      continue;
-    }
-    if (cache[i].gscn == gscn && cache[i].pci == pci && cache[i].ssb == ssb) {
-      return i;
-    }
-    {
-      const uint32_t age_delta = now_age - cache[i].age;
-      const float score = cache[i].heat + 0.40f * cache[i].pbch_best - 0.01f * (float)age_delta;
-      if (score < min_score) {
-        min_score = score;
-        min_i = i;
-      }
-    }
-  }
-  if (free_i >= 0) {
-    return free_i;
-  }
-  return min_i;
-}
-
-static float ssb_candidate_cache_lookup(const ssb_cand_cache_entry_t *cache,
-                                        int32_t gscn,
-                                        uint16_t pci)
-{
-  float best = 0.0f;
-  if (!cache || gscn < 0) {
-    return 0.0f;
-  }
-  for (int i = 0; i < SSB_CAND_CACHE_SIZE; i++) {
-    if (cache[i].hits == 0U || cache[i].gscn != gscn || cache[i].pci != pci) {
-      continue;
-    }
-    {
-      const float score = cache[i].heat + 0.35f * cache[i].pbch_best + 0.10f * cache[i].pss_best;
-      if (score > best) {
-        best = score;
-      }
-    }
-  }
-  return best;
-}
-
-static void ssb_candidate_cache_update(ssb_cand_cache_entry_t *cache,
-                                       int32_t gscn,
-                                       const nr_sync_state_t *sync,
-                                       uint32_t now_age)
-{
-  int slot = -1;
-  float ev = 0.0f;
-  if (!cache || !sync || gscn < 0 || sync->pci >= 1008U) {
-    return;
-  }
-  slot = ssb_candidate_cache_find_slot(cache, gscn, sync->pci, sync->ssb_index, now_age);
-  if (slot < 0) {
-    return;
-  }
-  if (cache[slot].hits == 0U || cache[slot].gscn != gscn ||
-      cache[slot].pci != sync->pci || cache[slot].ssb != sync->ssb_index) {
-    memset(&cache[slot], 0, sizeof(cache[slot]));
-    cache[slot].gscn = gscn;
-    cache[slot].pci = sync->pci;
-    cache[slot].ssb = sync->ssb_index;
-  }
-  ev = ssb_candidate_score(sync);
-  cache[slot].heat = fmaxf(ev, 0.86f * cache[slot].heat + 0.14f * ev);
-  if (sync->pbch_metric > cache[slot].pbch_best) {
-    cache[slot].pbch_best = sync->pbch_metric;
-  } else {
-    cache[slot].pbch_best *= 0.995f;
-  }
-  if (sync->pss_metric > cache[slot].pss_best) {
-    cache[slot].pss_best = sync->pss_metric;
-  }
-  if (cache[slot].hits < 65535U) {
-    cache[slot].hits++;
-  }
-  cache[slot].fail_stage = sync->pbch_fail_stage;
-  cache[slot].age = now_age;
 }
 
 static void ssb_dump_candidate_iq(const nr_toa_ue_t *ue,
@@ -303,355 +199,158 @@ static int ssb_acquire(void *ctx, const nr_iq_block_t *blk, nr_sync_state_t *syn
 {
   nr_toa_ue_t *ue = (nr_toa_ue_t *)ctx;
   static uint32_t dbg_cnt = 0;
-  static uint32_t cand_age = 0U;
-  static uint8_t cand_cache_init = 0U;
-  /* Track PBCH/MIB separately from SSB lock so we can relax live SSB gating
-   * without ever fabricating a successful PBCH/MIB accept. */
-  static uint32_t pbch_confirm_streak = 0;
-  static uint32_t pbch_fail_streak = 0;
-  static uint32_t pbch_probe_round = 0;
-  static uint32_t pbch_full_round = 0;
-  const uint32_t pbch_confirm_need = 1U;
-  const uint32_t pbch_fail_tolerate = 4U;
-  /* Additive PCI consistency gate: majority vote over a short window. */
-  enum { PCI_HIST_LEN = 6 };
-  static uint16_t pci_hist[PCI_HIST_LEN] = {0};
-  static uint8_t pci_hist_used = 0;
-  static uint8_t pci_hist_pos = 0;
-  const uint32_t pci_majority_need = 2U;
-  /* Additive PCI confidence scorer to tolerate non-consecutive jitter. */
-  enum { PCI_SCORE_SLOTS = 12 };
-  static uint16_t pci_score_id[PCI_SCORE_SLOTS] = {0};
-  static float pci_score_val[PCI_SCORE_SLOTS] = {0.0f};
-  /* Additive long-window dominant PCI vote. */
-  static uint16_t pci_vote[1008] = {0};
-  /* Additive final consistency gate on fully qualified lock outputs. */
-  static uint16_t final_pci_last = 0;
-  static uint32_t final_pci_streak = 0;
-  static ssb_cand_cache_entry_t cand_cache[SSB_CAND_CACHE_SIZE];
-  const uint32_t final_pci_need = 1U;
-  const float pci_score_lock_need = 1.15f;
-  const float pci_score_ratio_need = 1.08f;
-  const float relaxed_metric_floor = 0.160f;
-  const float relaxed_snr_floor = 0.85f;
+  const float min_pss_metric = 0.15f;
+  const uint32_t pbch_attempt_limit = 4U;
+  const int32_t target_pci = ssb_target_pci_enabled(ue) ? ue->app_cfg.target_pci : -1;
+  const uint8_t target_nid2 = (uint8_t)((target_pci >= 0) ? (target_pci % 3) : 0);
   if (!blk || !sync) {
     return -1;
   }
-  if (!cand_cache_init) {
-    for (int i = 0; i < SSB_CAND_CACHE_SIZE; i++) {
-      cand_cache[i].gscn = -1;
-    }
-    cand_cache_init = 1U;
-  }
-  cand_age++;
-  ssb_candidate_cache_decay(cand_cache, cand_age);
 
   nr_pss_hit_t hits[4];
   if (nr_ssb_pss_search(blk, hits, 4) != 0) {
     sync->locked = 0;
-    pbch_confirm_streak = 0;
-    pbch_fail_streak = 0;
-    pci_hist_used = 0;
-    pci_hist_pos = 0;
-    for (int s = 0; s < PCI_SCORE_SLOTS; s++) {
-      pci_score_val[s] *= 0.95f;
-    }
-    if ((dbg_cnt++ % 100U) == 0U) {
-      printf("pss_search: not-detected\n");
-    }
+  if ((dbg_cnt++ % 10U) == 0U) {
+    printf("pss_search: not-detected\n");
+  }
     return -1;
   }
-  if ((dbg_cnt++ % 100U) == 0U) {
-    printf("pss_hits: [0]nid2=%u off=%d m=%.3f [1]nid2=%u off=%d m=%.3f [2]nid2=%u off=%d m=%.3f\n",
-           (unsigned)hits[0].nid2, hits[0].peak_samp, hits[0].metric,
-           (unsigned)hits[1].nid2, hits[1].peak_samp, hits[1].metric,
-           (unsigned)hits[2].nid2, hits[2].peak_samp, hits[2].metric);
-  }
-  /* Try multiple PSS candidates and keep the best refined sync result. */
+  printf("pss_hits: [0]nid2=%u off=%d m=%.3f cfo=%.1f [1]nid2=%u off=%d m=%.3f [2]nid2=%u off=%d m=%.3f [3]nid2=%u off=%d m=%.3f\n",
+         (unsigned)hits[0].nid2, hits[0].peak_samp, hits[0].metric, hits[0].coarse_cfo_hz,
+         (unsigned)hits[1].nid2, hits[1].peak_samp, hits[1].metric,
+         (unsigned)hits[2].nid2, hits[2].peak_samp, hits[2].metric,
+         (unsigned)hits[3].nid2, hits[3].peak_samp, hits[3].metric);
+  dbg_cnt++;
+  ssb_acq_candidate_t cands[SSB_ACQ_MAX_CAND];
+  uint32_t cand_count = 0U;
   nr_sync_state_t best_sync;
   int best_valid = 0;
-  float best_score = -1.0f;
+  uint32_t best_idx = 0U;
+  memset(cands, 0, sizeof(cands));
   for (int i = 0; i < 4; i++) {
     if (hits[i].metric <= 0.0f) {
       continue;
     }
-    nr_sync_state_t cand;
-    nr_sync_state_t probe;
-    float score = 0.0f;
-    float hist_score = 0.0f;
-    const uint32_t probe_tick = pbch_probe_round++;
-    if (nr_ssb_refine_sync(blk, &hits[i], &cand) != 0) {
+    if (target_pci >= 0 && hits[i].nid2 != target_nid2) {
       continue;
     }
-    hist_score = ssb_candidate_cache_lookup(cand_cache, blk->rx_gscn, cand.pci);
-    score = cand.snr_db + 0.35f * cand.pss_metric + 0.30f * hist_score;
-    if (i == 0 &&
-        (cand.pss_metric >= 0.22f ||
-         cand.snr_db >= 1.15f ||
-         hist_score >= 0.24f ||
-         ((probe_tick & 3U) == 0U))) {
-      probe = cand;
-      if (nr_ssb_pbch_decode(blk, &probe) == 0 && probe.pbch_ok) {
-        score = 1000.0f + probe.pbch_metric;
-        cand = probe;
-      } else {
-        cand.ssb_index = probe.ssb_index;
-        cand.pbch_metric = probe.pbch_metric;
-        cand.pbch_metric_second = probe.pbch_metric_second;
-        cand.pbch_fail_stage = probe.pbch_fail_stage;
-        cand.coarse_offset_samp = probe.coarse_offset_samp;
-        score = cand.snr_db + 0.55f * probe.pbch_metric + 0.20f * cand.pss_metric +
-                0.40f * hist_score;
+    ssb_acq_candidate_t cand;
+    memset(&cand, 0, sizeof(cand));
+    if (nr_ssb_refine_sync(blk, &hits[i], &cand.sync) != 0) {
+      continue;
+    }
+    if (target_pci >= 0) {
+      ssb_force_target_pci(&cand.sync, target_pci);
+    }
+    cand.rank = ssb_acq_direct_rank(&cand.sync);
+    cand.pbch_attempted = 0U;
+    cand.pbch_rc = -1;
+    ssb_acq_insert_candidate(cands, &cand_count, SSB_ACQ_MAX_CAND, &cand);
+  }
+
+  printf("acq_cands: count=%u\n", cand_count);
+  for (uint32_t d = 0U; d < cand_count; d++) {
+    printf("  cand[%u]: pci=%u nid2=%u nid1=%u off=%d cfo=%.1f rank=%.3f pss=%.3f hyps=%u\n",
+           d, (unsigned)cands[d].sync.pci, (unsigned)cands[d].sync.nid2,
+           (unsigned)cands[d].sync.nid1,
+           cands[d].sync.coarse_offset_samp, cands[d].sync.cfo_hz,
+           cands[d].rank, cands[d].sync.pss_metric,
+           (unsigned)cands[d].sync.pci_hyp_count);
+  }
+  for (uint32_t i = 0U; i < cand_count; i++) {
+    cands[i].pbch_attempted = 0U;
+    cands[i].pbch_rc = -1;
+    if (i >= pbch_attempt_limit) {
+      continue;
+    }
+    cands[i].pbch_attempted = 1U;
+    cands[i].pbch_rc = nr_ssb_pbch_decode(blk, &cands[i].sync);
+    printf("  pbch_cand[%u]: pci=%u rc=%d ok=%u dmrs=%.3f fail=%u\n",
+           i, (unsigned)cands[i].sync.pci, cands[i].pbch_rc,
+           (unsigned)cands[i].sync.pbch_ok, cands[i].sync.pbch_metric,
+           (unsigned)cands[i].sync.pbch_fail_stage);
+    if (cands[i].pbch_rc == 0 && cands[i].sync.pbch_ok) {
+      cands[i].rank = 1000.0f + cands[i].sync.pbch_metric;
+      best_sync = cands[i].sync;
+      best_valid = 1;
+      best_idx = i;
+      break;
+    }
+  }
+
+  if (!best_valid && cand_count > 0U) {
+    uint32_t best_i = 0U;
+    for (uint32_t i = 1U; i < cand_count; i++) {
+      if (cands[i].rank > cands[best_i].rank) {
+        best_i = i;
       }
     }
-    if (!best_valid || score > best_score) {
-      best_score = score;
-      best_sync = cand;
-      best_valid = 1;
-    }
+    best_sync = cands[best_i].sync;
+    best_valid = 1;
+    best_idx = best_i;
   }
 
   if (!best_valid) {
     sync->locked = 0;
-    pbch_confirm_streak = 0;
-    pbch_fail_streak = 0;
-    pci_hist_used = 0;
-    pci_hist_pos = 0;
-    for (int s = 0; s < PCI_SCORE_SLOTS; s++) {
-      pci_score_val[s] *= 0.97f;
-    }
     return -1;
   }
   *sync = best_sync;
   sync->last_gscn = blk->rx_gscn;
-  sync->pbch_ok = 0;
-  sync->pbch_confirmed = 0;
-  sync->mib_ok = 0;
-  sync->mib_payload = 0U;
-  if (sync->pci < 1008U) {
-    uint16_t add = (sync->snr_db > 0.85f) ? 3U : 1U;
-    if ((uint32_t)pci_vote[sync->pci] + add > 60000U) {
-      /* Soft decay to avoid saturation and keep responsiveness. */
-      for (int v = 0; v < 1008; v++) {
-        pci_vote[v] = (uint16_t)(pci_vote[v] >> 1);
-      }
-    }
-    pci_vote[sync->pci] = (uint16_t)(pci_vote[sync->pci] + add);
-  }
-
-  uint16_t dom_pci_long = sync->pci;
-  uint16_t sec_pci_long = sync->pci;
-  uint16_t dom_vote = 0;
-  uint16_t sec_vote = 0;
-  for (int v = 0; v < 1008; v++) {
-    uint16_t c = pci_vote[v];
-    if (c > dom_vote) {
-      sec_pci_long = dom_pci_long;
-      sec_vote = dom_vote;
-      dom_vote = c;
-      dom_pci_long = (uint16_t)v;
-    } else if (c > sec_vote) {
-      sec_vote = c;
-      sec_pci_long = (uint16_t)v;
-    }
-  }
-  if (sec_vote >= 4U && sec_vote + 1U >= dom_vote && (dbg_cnt % 50U) == 0U) {
-    printf("pci_mix: long_votes top1=%u(%u) top2=%u(%u) cand=%u pss=%.3f snr=%.2f\n",
-           (unsigned)dom_pci_long, (unsigned)dom_vote,
-           (unsigned)sec_pci_long, (unsigned)sec_vote,
-           (unsigned)sync->pci, sync->pss_metric, sync->snr_db);
-  }
-
-  pci_hist[pci_hist_pos] = sync->pci;
-  pci_hist_pos = (uint8_t)((pci_hist_pos + 1U) % PCI_HIST_LEN);
-  if (pci_hist_used < PCI_HIST_LEN) {
-    pci_hist_used++;
-  }
-
-  uint16_t pci_dom = sync->pci;
-  uint32_t pci_dom_cnt = 0;
-  for (uint8_t i = 0; i < pci_hist_used; i++) {
-    uint16_t p = pci_hist[i];
-    uint32_t c = 0;
-    for (uint8_t j = 0; j < pci_hist_used; j++) {
-      if (pci_hist[j] == p) {
-        c++;
-      }
-    }
-    if (c > pci_dom_cnt) {
-      pci_dom_cnt = c;
-      pci_dom = p;
-    }
-  }
-  if (pci_dom_cnt < pci_majority_need) {
-    /* Update PCI confidence scores (EMA-like decay + additive reward by SNR). */
-    for (int s = 0; s < PCI_SCORE_SLOTS; s++) {
-      pci_score_val[s] *= 0.96f;
-    }
-    int slot = -1;
-    for (int s = 0; s < PCI_SCORE_SLOTS; s++) {
-      if (pci_score_val[s] > 0.0f && pci_score_id[s] == sync->pci) {
-        slot = s;
-        break;
-      }
-    }
-    if (slot < 0) {
-      int min_s = 0;
-      for (int s = 1; s < PCI_SCORE_SLOTS; s++) {
-        if (pci_score_val[s] < pci_score_val[min_s]) {
-          min_s = s;
-        }
-      }
-      slot = min_s;
-      pci_score_id[slot] = sync->pci;
-      pci_score_val[slot] = 0.0f;
-    }
-    pci_score_val[slot] += (sync->snr_db > 0.0f) ? sync->snr_db : 0.1f;
-
-    int best_s = 0, second_s = 0;
-    for (int s = 1; s < PCI_SCORE_SLOTS; s++) {
-      if (pci_score_val[s] > pci_score_val[best_s]) {
-        second_s = best_s;
-        best_s = s;
-      } else if (s != best_s && pci_score_val[s] > pci_score_val[second_s]) {
-        second_s = s;
-      }
-    }
-    const float best_v = pci_score_val[best_s];
-    const float second_v = pci_score_val[second_s];
-    if (best_v >= pci_score_lock_need &&
-        best_v > pci_score_ratio_need * (second_v + 1e-3f)) {
-      sync->pci = pci_score_id[best_s];
-    } else if (sync->pss_metric >= relaxed_metric_floor &&
-               sync->snr_db >= relaxed_snr_floor) {
-      if ((dbg_cnt % 100U) == 0U) {
-        printf("pci_gate: relaxed pci=%u dom_pci=%u cnt=%u/%u score_best=%.2f score_2nd=%.2f metric=%.3f snr=%.2f\n",
-               (unsigned)sync->pci,
-               (unsigned)pci_dom,
-               (unsigned)pci_dom_cnt,
-               (unsigned)pci_majority_need,
-               best_v, second_v, sync->pss_metric, sync->snr_db);
-      }
-    } else {
-      sync->locked = 0;
-      if ((dbg_cnt % 100U) == 0U) {
-        printf("pci_gate: warmup dom_pci=%u cnt=%u/%u win=%u score_best=%.2f score_2nd=%.2f\n",
-               (unsigned)pci_dom,
-               (unsigned)pci_dom_cnt,
-               (unsigned)pci_majority_need,
-               (unsigned)pci_hist_used,
-               best_v, second_v);
-      }
-      return -1;
-    }
-  } else {
-    sync->pci = pci_dom;
-  }
-
-  /* Long-window vote is now a soft preference only. Same-ARFCN multi-PCI
-   * deployments are common enough that hard rejection hurts robustness. */
-  if (dom_vote >= 10U &&
-      dom_vote > (uint16_t)(sec_vote + 6U) &&
-      sync->pci != dom_pci_long &&
-      sync->pci != sec_pci_long) {
-    sync->pci = dom_pci_long;
-    sync->pci_full = sync->pci;
-    sync->nid2 = (uint8_t)(sync->pci % 3U);
-    sync->nid1 = (uint16_t)(sync->pci / 3U);
-  }
 
   /* Additive quality gate to suppress low-confidence/random locks. */
   if (fabsf(sync->cfo_hz) >= 14900.0f) {
     sync->locked = 0;
     return -1;
   }
-  if (sync->pss_metric < relaxed_metric_floor) {
+  if (sync->pss_metric < min_pss_metric) {
     sync->locked = 0;
     return -1;
   }
   if (sync->coarse_offset_samp < 16 ||
       sync->coarse_offset_samp > (int32_t)(blk->nsamps - 16U)) {
-    sync->locked = 0;
-    return -1;
+      sync->locked = 0;
+      return -1;
   }
 
-  /* Final SSB consistency: require the same PCI to survive all gates twice
-   * before exposing lock=1 to the rest of the pipeline. */
-  if (sync->pci == final_pci_last) {
-    final_pci_streak++;
-  } else {
-    final_pci_last = sync->pci;
-    final_pci_streak = 1;
-  }
-  if (final_pci_streak < final_pci_need) {
-    sync->locked = 0;
-    return -1;
-  }
-  sync->locked = 1;
-
-  /* PBCH/MIB status is reported truthfully and is not allowed to fabricate
-   * a stronger lock state than the code can actually verify. */
-  const float cand_hist = ssb_candidate_cache_lookup(cand_cache, blk->rx_gscn, sync->pci);
-  const int run_full_pbch =
-      (sync->pss_metric >= 0.195f) ||
-      (sync->snr_db >= 1.05f) ||
-      (cand_hist >= 0.22f) ||
-      (pci_dom_cnt >= pci_majority_need) ||
-      (dom_vote >= 4U && sync->pci == dom_pci_long) ||
-      ((pbch_full_round++ % 6U) == 0U);
-  const int pbch_rc = run_full_pbch ? nr_ssb_pbch_decode(blk, sync) : -1;
-  if (pbch_rc == 0 && sync->pbch_ok) {
-    pbch_confirm_streak++;
-    pbch_fail_streak = 0;
-    sync->pbch_ok = 1;
-    if (pbch_confirm_streak >= pbch_confirm_need) {
+  const int shortlist_pbch_attempted =
+      (best_idx < cand_count) ? (int)cands[best_idx].pbch_attempted : 0;
+  int pbch_rc = -1;
+  if (shortlist_pbch_attempted) {
+    pbch_rc = cands[best_idx].pbch_rc;
+    if (pbch_rc == 0 && cands[best_idx].sync.pbch_ok) {
+      sync->pbch_ok = cands[best_idx].sync.pbch_ok;
       sync->pbch_confirmed = 1;
+      sync->mib_ok = cands[best_idx].sync.mib_ok;
+      sync->mib_payload = cands[best_idx].sync.mib_payload;
     }
-    if (ue && ue->app_cfg.iq_dump_enable && sync->mib_ok) {
-      ssb_dump_candidate_iq(ue, blk, sync, "pbch_ok");
-    }
-    ssb_candidate_cache_update(cand_cache, blk->rx_gscn, sync, cand_age);
-  } else {
-    pbch_fail_streak++;
+  }
+  const int run_full_pbch = (!sync->pbch_ok) && !shortlist_pbch_attempted;
+  if (run_full_pbch) {
     sync->pbch_ok = 0;
     sync->pbch_confirmed = 0;
     sync->mib_ok = 0;
-    if (run_full_pbch &&
-        (sync->pbch_fail_stage == NR_PBCH_FAIL_BCH ||
-         sync->pbch_fail_stage == NR_PBCH_FAIL_DMRS_AMBIG ||
-         sync->pbch_fail_stage == NR_PBCH_FAIL_DMRS_WEAK)) {
-      ssb_candidate_cache_update(cand_cache, blk->rx_gscn, sync, cand_age);
-      if ((dbg_cnt % 50U) == 0U) {
-        printf("cand_cache: gscn=%d pci=%u ssb=%u heat=%.3f pbch=%.3f stage=%u\n",
-               blk->rx_gscn,
-               (unsigned)sync->pci,
-               (unsigned)sync->ssb_index,
-               ssb_candidate_cache_lookup(cand_cache, blk->rx_gscn, sync->pci),
-               sync->pbch_metric,
-               (unsigned)sync->pbch_fail_stage);
-      }
+    sync->mib_payload = 0U;
+    pbch_rc = nr_ssb_pbch_decode(blk, sync);
+  }
+  if (pbch_rc == 0 && sync->pbch_ok) {
+    sync->pbch_ok = 1;
+    sync->pbch_confirmed = 1;
+    sync->locked = 1;
+    if (ue && ue->app_cfg.iq_dump_enable && sync->mib_ok) {
+      ssb_dump_candidate_iq(ue, blk, sync, "pbch_ok");
     }
-    if (run_full_pbch && ue && ue->app_cfg.iq_dump_enable &&
+  } else {
+    sync->locked = 0;
+    sync->pbch_ok = 0;
+    sync->pbch_confirmed = 0;
+    sync->mib_ok = 0;
+    if (ue && ue->app_cfg.iq_dump_enable &&
         (sync->pbch_fail_stage == NR_PBCH_FAIL_BCH ||
          sync->pbch_fail_stage == NR_PBCH_FAIL_DMRS_WEAK ||
-         sync->pbch_fail_stage == NR_PBCH_FAIL_DMRS_AMBIG) &&
-        (sync->pss_metric >= 0.18f || sync->pbch_metric >= 0.12f)) {
+         sync->pbch_fail_stage == NR_PBCH_FAIL_DMRS_AMBIG)) {
       ssb_dump_candidate_iq(ue, blk, sync, "pbch_nearmiss");
     }
-    if (pbch_fail_streak >= pbch_fail_tolerate) {
-      pbch_confirm_streak = 0;
-      for (int s = 0; s < PCI_SCORE_SLOTS; s++) {
-        pci_score_val[s] *= 0.9f;
-      }
-    }
-    if (!run_full_pbch) {
-      sync->pbch_fail_stage = NR_PBCH_FAIL_NONE;
-    }
-    if ((dbg_cnt % 100U) == 0U) {
-      printf("pbch_gate: %s confirm=%u/%u (SSB lock kept, MIB invalid)\n",
-             run_full_pbch ? "unavailable" : "deferred",
-             (unsigned)pbch_confirm_streak, (unsigned)pbch_confirm_need);
-    }
+    return -1;
   }
   return 0;
 }

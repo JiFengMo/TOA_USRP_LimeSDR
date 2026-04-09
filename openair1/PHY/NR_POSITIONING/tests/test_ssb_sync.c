@@ -5,6 +5,42 @@
 
 int main(void)
 {
+  {
+    const double fs_hz = 30720000.0;
+    if (nr_v0_ssb_symbol_cp_len_fs(fs_hz, 0U) != 88U) {
+      return 24;
+    }
+    if (nr_v0_ssb_symbol_cp_len_fs(fs_hz, 1U) != 72U) {
+      return 25;
+    }
+    if (nr_v0_ssb_burst_len_fs(fs_hz) != 4400U) {
+      return 26;
+    }
+  }
+
+  {
+    uint16_t rel[432];
+    uint8_t sym[432];
+    if (nr_pbch_data_re_positions(1U, rel, sym, 432U) != 432U) {
+      return 20;
+    }
+    for (uint32_t i = 0U; i < 180U; i++) {
+      if (sym[i] != 1U) {
+        return 21;
+      }
+    }
+    for (uint32_t i = 180U; i < 252U; i++) {
+      if (sym[i] != 2U) {
+        return 22;
+      }
+    }
+    for (uint32_t i = 252U; i < 432U; i++) {
+      if (sym[i] != 3U) {
+        return 23;
+      }
+    }
+  }
+
   uint8_t coded[864];
   float llr[864];
   nr_pss_hit_t hits[4];

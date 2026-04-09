@@ -55,6 +55,13 @@ int nr_toa_read_two_frames(nr_toa_ue_t *ue, nr_iq_ring_t *ring)
     return -1;
   }
 
+  if (ue->rf_settle_reads > 0U) {
+    ue->rf_settle_reads--;
+    nr_iq_block_put(b1);
+    nr_iq_block_put(b2);
+    return 0;
+  }
+
   nr_iq_ring_push(ring, b1);
   nr_iq_ring_push(ring, b2);
 
@@ -87,6 +94,12 @@ int nr_toa_read_one_slot(nr_toa_ue_t *ue, nr_iq_ring_t *ring)
   if (nr_toa_radio_read(ue->dev, blk) != 0) {
     nr_iq_block_put(blk);
     return -1;
+  }
+
+  if (ue->rf_settle_reads > 0U) {
+    ue->rf_settle_reads--;
+    nr_iq_block_put(blk);
+    return 0;
   }
 
   nr_iq_ring_push(ring, blk);

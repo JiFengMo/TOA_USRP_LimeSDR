@@ -33,16 +33,17 @@ int nr_ssb_demod(const nr_iq_block_t *blk, const nr_ssb_window_t *win,
   }
   memset(grid, 0, sizeof(*grid));
   const uint32_t nfft = nr_v0_ssb_nfft(blk->fs_hz);
-  const uint32_t cp = nr_v0_ssb_cp_len(blk->fs_hz);
-  const uint32_t sym_len = nfft + cp;
   const double fs_hz = (blk->fs_hz > 0.0) ? blk->fs_hz : 30720000.0;
   const double w = -2.0 * M_PI * (double)cfo_hz / fs_hz;
-  if (win->len_samp < NR_SSB_RE_ROWS * sym_len) {
+  if (win->len_samp < nr_v0_ssb_burst_len_fs(blk->fs_hz)) {
     return -1;
   }
 
+  uint32_t sym_off = 0U;
   for (int sym = 0; sym < NR_SSB_RE_ROWS; sym++) {
-    const uint32_t sym_start = win->start_samp + (uint32_t)sym * sym_len;
+    const uint32_t cp = nr_v0_ssb_symbol_cp_len_fs(blk->fs_hz, (uint32_t)sym);
+    const uint32_t sym_len = nfft + cp;
+    const uint32_t sym_start = win->start_samp + sym_off;
     const uint32_t fft_start = sym_start + cp;
     if ((uint64_t)fft_start + nfft > blk->nsamps) {
       return -1;
@@ -56,7 +57,7 @@ int nr_ssb_demod(const nr_iq_block_t *blk, const nr_ssb_window_t *win,
         double xr = (double)s.r;
         double xq = (double)s.i;
         if (cfo_hz != 0.0f) {
-          const double ph_cfo = w * (double)((uint64_t)sym * sym_len + n);
+          const double ph_cfo = w * (double)(sym_off + cp + n);
           const double cc = cos(ph_cfo);
           const double ss = sin(ph_cfo);
           const double tr = xr * cc - xq * ss;
@@ -73,6 +74,7 @@ int nr_ssb_demod(const nr_iq_block_t *blk, const nr_ssb_window_t *win,
       grid->re[sym][rel].r = (float)(sr / (double)nfft);
       grid->re[sym][rel].i = (float)(si / (double)nfft);
     }
+    sym_off += sym_len;
   }
   grid->valid = 1;
   return 0;

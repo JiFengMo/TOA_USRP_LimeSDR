@@ -71,108 +71,35 @@ static float nr_v0_estimate_cfo_hz(const c16_t *x,
     si += ai * br - ar * bi;
   }
   double ph = atan2(si, sr);
-  return (float)(ph * fs_hz / (2.0 * M_PI * (double)nfft));
+  /* CP-based estimate: angle(sum CP[n]*conj(tail[n])) = -2*pi*f_cfo*N/fs,
+   * so the raw ph gives -f_cfo.  Return +f_cfo so that the OFDM demod
+   * correction  e^{-j*2*pi*cfo_hz*t}  actually removes the offset.        */
+  return (float)(-ph * fs_hz / (2.0 * M_PI * (double)nfft));
 }
 
-static int nr_v0_extract_sss_bins(const c16_t *x, uint32_t sss_start,
-                                  uint32_t nsamps, uint32_t nfft, uint32_t cp,
-                                  float cfo_hz, float fs_hz,
-                                  float *rx_i, float *rx_q)
+static int nr_sss_extract_fd_from_grid(const nr_ssb_grid_t *grid,
+                                       uint8_t nid2,
+                                       float *rx_i,
+                                       float *rx_q)
 {
-  if (!x || !rx_i || !rx_q) {
+  float pss_ref[NR_V0_PSS_LEN];
+  if (!grid || !grid->valid || !rx_i || !rx_q) {
     return -1;
   }
-  if ((uint64_t)sss_start + cp + nfft > nsamps) {
-    return -1;
-  }
-  const double w = 2.0 * M_PI * (double)cfo_hz / (double)fs_hz;
-  const uint32_t fft_start = sss_start + cp;
-  for (uint32_t m = 0; m < NR_V0_PSS_LEN; m++) {
-    const int k = (int)m - 64;
-    double sr = 0.0;
-    double si = 0.0;
-    for (uint32_t n = 0; n < nfft; n++) {
-      double xr = (double)x[fft_start + n].r;
-      double xq = (double)x[fft_start + n].i;
-      if (cfo_hz != 0.0f) {
-        const double ph_cfo = w * (double)n;
-        const double cc = cos(ph_cfo);
-        const double ss = sin(ph_cfo);
-        const double tr = xr * cc + xq * ss;
-        const double tq = -xr * ss + xq * cc;
-        xr = tr;
-        xq = tq;
-      }
-      const double ph = -2.0 * M_PI * (double)k * (double)n / (double)nfft;
-      const double c = cos(ph);
-      const double s = sin(ph);
-      sr += xr * c - xq * s;
-      si += xr * s + xq * c;
-    }
-    rx_i[m] = (float)(sr / (double)nfft);
-    rx_q[m] = (float)(si / (double)nfft);
+  nr_v0_pss_build_fd((int)nid2, pss_ref, NR_V0_PSS_LEN);
+  for (uint32_t m = 0U; m < NR_V0_PSS_LEN; m++) {
+    const uint16_t rel = (uint16_t)(56U + m);
+    const cf32_t pss = grid->re[0][rel];
+    const cf32_t sss = grid->re[2][rel];
+    const float ref = pss_ref[m];
+    /* Match OAI's idea: derive H* from PSS then apply it to SSS before
+     * searching Nid1, which removes most channel/CPE distortion. */
+    const float hconj_r = pss.r * ref;
+    const float hconj_i = -pss.i * ref;
+    rx_i[m] = sss.r * hconj_r - sss.i * hconj_i;
+    rx_q[m] = sss.r * hconj_i + sss.i * hconj_r;
   }
   return 0;
-}
-
-static int nr_pbch_dmrs_rel_valid(uint8_t sym, int rel, uint8_t v)
-{
-  if (rel < 0 || rel >= 240) {
-    return 0;
-  }
-  if ((((uint32_t)rel) & 3U) != v) {
-    return 0;
-  }
-  if (sym == 1U || sym == 3U) {
-    return 1;
-  }
-  if (sym == 2U) {
-    return (rel < 48 || rel >= 192);
-  }
-  return 0;
-}
-
-static void nr_pbch_smooth_dmrs_channel(const cf32_t h_raw[NR_SSB_RE_ROWS][NR_SSB_RE_COLS],
-                                        const uint8_t h_valid[NR_SSB_RE_ROWS][NR_SSB_RE_COLS],
-                                        cf32_t h_out[NR_SSB_RE_ROWS][NR_SSB_RE_COLS])
-{
-  memset(h_out, 0, sizeof(cf32_t) * NR_SSB_RE_ROWS * NR_SSB_RE_COLS);
-  for (uint8_t sym = 0U; sym < NR_SSB_RE_ROWS; sym++) {
-    for (uint16_t rel = 0U; rel < NR_SSB_RE_COLS; rel++) {
-      float wsum = 0.0f;
-      cf32_t acc = {0};
-      if (!h_valid[sym][rel]) {
-        continue;
-      }
-      for (int dt = -1; dt <= 1; dt++) {
-        const int sym2 = (int)sym + dt;
-        const float wt = (dt == 0) ? 0.75f : 0.125f;
-        if (sym2 < 0 || sym2 >= NR_SSB_RE_ROWS) {
-          continue;
-        }
-        for (int df = -4; df <= 4; df += 4) {
-          const int rel2 = (int)rel + df;
-          const float wf = (df == 0) ? 0.7f : 0.15f;
-          const float w = wt * wf;
-          if (rel2 < 0 || rel2 >= NR_SSB_RE_COLS) {
-            continue;
-          }
-          if (!h_valid[sym2][rel2]) {
-            continue;
-          }
-          acc.r += w * h_raw[sym2][rel2].r;
-          acc.i += w * h_raw[sym2][rel2].i;
-          wsum += w;
-        }
-      }
-      if (wsum > 0.0f) {
-        h_out[sym][rel].r = acc.r / wsum;
-        h_out[sym][rel].i = acc.i / wsum;
-      } else {
-        h_out[sym][rel] = h_raw[sym][rel];
-      }
-    }
-  }
 }
 
 static int nr_ssb_extract_window_shifted(const nr_iq_block_t *blk,
@@ -203,199 +130,6 @@ static int nr_ssb_extract_window_shifted(const nr_iq_block_t *blk,
   return 0;
 }
 
-static float nr_pbch_dmrs_metric_estimate(const nr_ssb_grid_t *grid,
-                                          uint16_t pci,
-                                          uint8_t ssb_idx,
-                                          uint8_t v,
-                                          cf32_t h_est[NR_SSB_RE_ROWS][NR_SSB_RE_COLS],
-                                          uint8_t h_valid[NR_SSB_RE_ROWS][NR_SSB_RE_COLS])
-{
-  cf32_t h_raw[NR_SSB_RE_ROWS][NR_SSB_RE_COLS];
-  uint16_t dmrs_rel[144];
-  uint8_t dmrs_sym[144];
-  float dmrs_i[144];
-  float dmrs_q[144];
-  double cr = 0.0;
-  double ci = 0.0;
-  double px = 0.0;
-  const double pr = 144.0;
-
-  memset(h_est, 0, sizeof(cf32_t) * NR_SSB_RE_ROWS * NR_SSB_RE_COLS);
-  memset(h_raw, 0, sizeof(h_raw));
-  memset(h_valid, 0, sizeof(uint8_t) * NR_SSB_RE_ROWS * NR_SSB_RE_COLS);
-  if (!grid || !grid->valid) {
-    return -1.0f;
-  }
-  if (nr_pbch_dmrs_re_positions(v, dmrs_rel, dmrs_sym, 144U) != 144U) {
-    return -1.0f;
-  }
-  if (nr_v0_pbch_dmrs_build(pci, ssb_idx, 0, dmrs_i, dmrs_q, 144U) != 144) {
-    return -1.0f;
-  }
-
-  for (uint32_t m = 0U; m < 144U; m++) {
-    const uint8_t sym = dmrs_sym[m];
-    const uint16_t rel = dmrs_rel[m];
-    const cf32_t y = grid->re[sym][rel];
-    const float xr = dmrs_i[m];
-    const float xi = dmrs_q[m];
-    const float den = xr * xr + xi * xi + 1.0e-6f;
-    cr += (double)y.r * (double)xr + (double)y.i * (double)xi;
-    ci += (double)y.i * (double)xr - (double)y.r * (double)xi;
-    px += (double)y.r * (double)y.r + (double)y.i * (double)y.i;
-    h_raw[sym][rel].r = (y.r * xr + y.i * xi) / den;
-    h_raw[sym][rel].i = (y.i * xr - y.r * xi) / den;
-    h_valid[sym][rel] = 1U;
-  }
-
-  nr_pbch_smooth_dmrs_channel(h_raw, h_valid, h_est);
-
-  return (float)(sqrt(cr * cr + ci * ci) / (sqrt(px * pr) + 1e-9));
-}
-
-static int nr_pbch_interp_h(const cf32_t h_est[NR_SSB_RE_ROWS][NR_SSB_RE_COLS],
-                            const uint8_t h_valid[NR_SSB_RE_ROWS][NR_SSB_RE_COLS],
-                            uint8_t sym,
-                            uint16_t rel,
-                            cf32_t *hout)
-{
-  int left = -1;
-  int right = -1;
-  if (!h_est || !h_valid || !hout || sym >= NR_SSB_RE_ROWS || rel >= NR_SSB_RE_COLS) {
-    return -1;
-  }
-  for (int k = (int)rel; k >= 0; k--) {
-    if (h_valid[sym][k]) {
-      left = k;
-      break;
-    }
-  }
-  for (int k = (int)rel; k < NR_SSB_RE_COLS; k++) {
-    if (h_valid[sym][k]) {
-      right = k;
-      break;
-    }
-  }
-  if (left < 0 && right < 0) {
-    return -1;
-  }
-  if (left < 0) {
-    *hout = h_est[sym][right];
-    return 0;
-  }
-  if (right < 0 || right == left) {
-    *hout = h_est[sym][left];
-    return 0;
-  }
-  {
-    const float a = (float)((int)rel - left) / (float)(right - left);
-    hout->r = (1.0f - a) * h_est[sym][left].r + a * h_est[sym][right].r;
-    hout->i = (1.0f - a) * h_est[sym][left].i + a * h_est[sym][right].i;
-  }
-  return 0;
-}
-
-static int nr_pbch_build_llr_from_grid(const nr_ssb_grid_t *grid,
-                                       const cf32_t h_est[NR_SSB_RE_ROWS][NR_SSB_RE_COLS],
-                                       const uint8_t h_valid[NR_SSB_RE_ROWS][NR_SSB_RE_COLS],
-                                       uint8_t v,
-                                       float noise_var,
-                                       float cpe_rad,
-                                       float *llr)
-{
-  uint16_t data_rel[432];
-  uint8_t data_sym[432];
-  const float cph = cosf(-cpe_rad);
-  const float sph = sinf(-cpe_rad);
-  if (!grid || !grid->valid || !llr) {
-    return -1;
-  }
-  if (nr_pbch_data_re_positions(v, data_rel, data_sym, 432U) != 432U) {
-    return -1;
-  }
-  for (uint32_t m = 0U; m < 432U; m++) {
-    const uint8_t sym = data_sym[m];
-    const uint16_t rel = data_rel[m];
-    const cf32_t y = grid->re[sym][rel];
-    cf32_t h = {0};
-    float den = 0.0f;
-    float zr = 0.0f;
-    float zi = 0.0f;
-    if (nr_pbch_interp_h(h_est, h_valid, sym, rel, &h) != 0) {
-      return -1;
-    }
-    den = h.r * h.r + h.i * h.i + 1.0e-6f;
-    zr = (y.r * h.r + y.i * h.i) / den;
-    zi = (y.i * h.r - y.r * h.i) / den;
-    {
-      const float rr = zr * cph - zi * sph;
-      const float ri = zr * sph + zi * cph;
-      const float gain = 2.0f / fmaxf(noise_var, 0.05f);
-      llr[2U * m] = gain * rr;
-      llr[2U * m + 1U] = gain * ri;
-    }
-  }
-  return 0;
-}
-
-static float nr_pbch_estimate_noise_cpe(const nr_ssb_grid_t *grid,
-                                        uint16_t pci,
-                                        uint8_t ssb_idx,
-                                        uint8_t v,
-                                        const cf32_t h_est[NR_SSB_RE_ROWS][NR_SSB_RE_COLS],
-                                        const uint8_t h_valid[NR_SSB_RE_ROWS][NR_SSB_RE_COLS],
-                                        float *cpe_rad)
-{
-  uint16_t dmrs_rel[144];
-  uint8_t dmrs_sym[144];
-  float dmrs_i[144];
-  float dmrs_q[144];
-  double err_pow = 0.0;
-  double sig_pow = 0.0;
-  double cr = 0.0;
-  double ci = 0.0;
-  uint32_t used = 0U;
-  if (cpe_rad) {
-    *cpe_rad = 0.0f;
-  }
-  if (!grid || !grid->valid) {
-    return 1.0f;
-  }
-  if (nr_pbch_dmrs_re_positions(v, dmrs_rel, dmrs_sym, 144U) != 144U) {
-    return 1.0f;
-  }
-  if (nr_v0_pbch_dmrs_build(pci, ssb_idx, 0, dmrs_i, dmrs_q, 144U) != 144) {
-    return 1.0f;
-  }
-  for (uint32_t m = 0U; m < 144U; m++) {
-    const uint8_t sym = dmrs_sym[m];
-    const uint16_t rel = dmrs_rel[m];
-    const cf32_t y = grid->re[sym][rel];
-    const cf32_t h = h_est[sym][rel];
-    const float xr = dmrs_i[m];
-    const float xi = dmrs_q[m];
-    const float pr = h.r * xr - h.i * xi;
-    const float pi = h.r * xi + h.i * xr;
-    const float er = y.r - pr;
-    const float ei = y.i - pi;
-    if (!h_valid[sym][rel]) {
-      continue;
-    }
-    err_pow += (double)er * (double)er + (double)ei * (double)ei;
-    sig_pow += (double)pr * (double)pr + (double)pi * (double)pi;
-    cr += (double)y.r * (double)pr + (double)y.i * (double)pi;
-    ci += (double)y.i * (double)pr - (double)y.r * (double)pi;
-    used++;
-  }
-  if (used == 0U) {
-    return 1.0f;
-  }
-  if (cpe_rad) {
-    *cpe_rad = (float)atan2(ci, cr);
-  }
-  return (float)((err_pow / (double)used) / ((sig_pow / (double)used) + 1.0e-6));
-}
-
 typedef struct {
   uint16_t pci;
   uint8_t grid_idx;
@@ -405,6 +139,25 @@ typedef struct {
   uint8_t ssb_idx;
   float metric;
 } nr_pbch_hyp_t;
+
+static void nr_pbch_sync_apply_hyp(nr_sync_state_t *sync,
+                                   const nr_pbch_hyp_t *hyp,
+                                   float second_metric)
+{
+  if (!sync || !hyp) {
+    return;
+  }
+  sync->pci = hyp->pci;
+  sync->pci_full = hyp->pci;
+  sync->nid2 = (uint8_t)(hyp->pci % 3U);
+  sync->nid1 = (uint16_t)(hyp->pci / 3U);
+  sync->ssb_index = hyp->ssb_idx;
+  sync->pbch_metric = hyp->metric;
+  sync->pbch_metric_second = second_metric;
+  sync->pbch_best_sss_delta_bias = hyp->sss_delta_bias;
+  sync->pbch_best_timing_delta = (int16_t)hyp->timing_delta;
+  sync->pbch_best_cfo_delta_hz = hyp->cfo_delta_hz;
+}
 
 static void nr_pbch_insert_hyp(nr_pbch_hyp_t *hyps, uint32_t max_hyps,
                                uint32_t *count, nr_pbch_hyp_t cand)
@@ -431,6 +184,56 @@ static void nr_pbch_insert_hyp(nr_pbch_hyp_t *hyps, uint32_t max_hyps,
   hyps[pos] = cand;
 }
 
+static void nr_pss_insert_hit(nr_pss_hit_t *hits,
+                              int max_hits,
+                              uint32_t merge_dist,
+                              const nr_pss_hit_t *cand,
+                              int *count)
+{
+  int n = 0;
+  int pos = 0;
+  if (!hits || !cand || !count || max_hits <= 0) {
+    return;
+  }
+
+  n = (*count < max_hits) ? *count : max_hits;
+  for (int i = 0; i < n; i++) {
+    const int32_t d = hits[i].peak_samp - cand->peak_samp;
+    if ((uint32_t)((d < 0) ? -d : d) <= merge_dist) {
+      if (cand->metric > hits[i].metric) {
+        hits[i] = *cand;
+      }
+      while (i > 0 && hits[i - 1].metric < hits[i].metric) {
+        nr_pss_hit_t tmp = hits[i - 1];
+        hits[i - 1] = hits[i];
+        hits[i] = tmp;
+        i--;
+      }
+      while (i + 1 < n && hits[i + 1].metric > hits[i].metric) {
+        nr_pss_hit_t tmp = hits[i + 1];
+        hits[i + 1] = hits[i];
+        hits[i] = tmp;
+        i++;
+      }
+      return;
+    }
+  }
+
+  pos = (n < max_hits) ? n : (max_hits - 1);
+  while (pos > 0 && hits[pos - 1].metric < cand->metric) {
+    if (pos < max_hits) {
+      hits[pos] = hits[pos - 1];
+    }
+    pos--;
+  }
+  if (pos < max_hits) {
+    hits[pos] = *cand;
+    if (n < max_hits) {
+      (*count)++;
+    }
+  }
+}
+
 int nr_ssb_pss_search(const nr_iq_block_t *blk, nr_pss_hit_t *hits, int max_hits)
 {
   if (!blk || !hits || max_hits <= 0) {
@@ -438,6 +241,7 @@ int nr_ssb_pss_search(const nr_iq_block_t *blk, nr_pss_hit_t *hits, int max_hits
   }
   const float fs_hz = (blk->fs_hz > 0.0) ? (float)blk->fs_hz : NR_V0_FS_HZ_FALLBACK;
   const uint32_t ref_len = nr_v0_ssb_sym_len_fs(fs_hz);
+  const uint32_t merge_dist = nr_v0_ssb_cp_len(fs_hz);
   memset(hits, 0, sizeof(nr_pss_hit_t) * (size_t)max_hits);
   if (!blk->rx[0] || blk->nsamps < ref_len + 1U) {
     return -1;
@@ -483,25 +287,12 @@ int nr_ssb_pss_search(const nr_iq_block_t *blk, nr_pss_hit_t *hits, int max_hits
       metric_sum += metric;
       metric_sq += (double)metric * (double)metric;
       metric_cnt++;
-      int insert = found < max_hits ? found : (max_hits - 1);
-      if (insert >= 0) {
-        /* keep hits sorted by metric descending */
-        while (insert > 0 && hits[insert - 1].metric < metric) {
-          if (insert < max_hits) {
-            hits[insert] = hits[insert - 1];
-          }
-          insert--;
-        }
-        if (insert < max_hits) {
-          hits[insert].peak_samp = (int32_t)n;
-          hits[insert].coarse_cfo_hz = 0.0f;
-          hits[insert].metric = metric;
-          hits[insert].nid2 = (uint8_t)nid2;
-          if (found < max_hits) {
-            found++;
-          }
-        }
-      }
+      nr_pss_hit_t cand = {
+          .peak_samp = (int32_t)n,
+          .coarse_cfo_hz = 0.0f,
+          .metric = metric,
+          .nid2 = (uint8_t)nid2};
+      nr_pss_insert_hit(hits, max_hits, merge_dist, &cand, &found);
     }
   }
   if (found <= 0) {
@@ -511,71 +302,37 @@ int nr_ssb_pss_search(const nr_iq_block_t *blk, nr_pss_hit_t *hits, int max_hits
     }
     return -1;
   }
-  double mean = (metric_cnt > 0) ? (metric_sum / (double)metric_cnt) : 0.0;
-  double var = (metric_cnt > 1)
-                   ? (metric_sq / (double)metric_cnt - mean * mean)
-                   : 0.0;
-  if (var < 0.0) {
-    var = 0.0;
-  }
-  const float adaptive_th = (float)fmax(0.12, mean + 4.0 * sqrt(var));
-  if (hits[0].metric < adaptive_th) {
+  if (hits[0].metric < 0.12f) {
     for (int nid2 = 0; nid2 < 3; nid2++) {
       free(pss_i[nid2]);
       free(pss_q[nid2]);
     }
     return -1;
   }
-  if (found >= 2 && hits[1].metric > 0.0f) {
-    /* Additive anti-false-alarm discriminator: winner must be clearly better
-     * than runner-up when scanning many hypotheses. */
-    const int32_t sep = hits[0].peak_samp - hits[1].peak_samp;
-    const int32_t min_sep = (int32_t)(nr_v0_ssb_cp_len(fs_hz) / 2U);
-    if ((sep >= min_sep || sep <= -min_sep) &&
-        hits[0].metric < (1.03f * hits[1].metric)) {
-      for (int nid2 = 0; nid2 < 3; nid2++) {
-        free(pss_i[nid2]);
-        free(pss_q[nid2]);
-      }
-      return -1;
-    }
-  }
 
-  /* Estimate coarse CFO then re-score top candidate with compensation. */
-  uint32_t pss0 = (uint32_t)hits[0].peak_samp;
-  float cfo = nr_v0_estimate_cfo_hz(x, pss0, ref_len, fs_hz);
-  if (cfo > 15000.0f) cfo = 15000.0f;
-  if (cfo < -15000.0f) cfo = -15000.0f;
-  float best_m = -1.0f;
-  uint8_t best_nid2 = hits[0].nid2;
-  for (int nid2 = 0; nid2 < 3; nid2++) {
-    float m = nr_v0_corr_metric_comp(x, pss0, pss_i[nid2], pss_q[nid2], ref_len, cfo, fs_hz);
-    if (m > best_m) {
-      best_m = m;
-      best_nid2 = (uint8_t)nid2;
+  /* Estimate coarse CFO and re-score EVERY hit with compensation. */
+  for (int h = 0; h < found && h < max_hits; h++) {
+    if (hits[h].metric < 0.12f) {
+      continue;
     }
-  }
-  /* Local sharpness check around the winning position to reject flat/noisy peaks. */
-  {
-    const uint32_t probe = nr_v0_ssb_cp_len(fs_hz) / 2U;
-    if (probe > 0U && pss0 > probe && (pss0 + probe + ref_len) < blk->nsamps) {
-      float m_l = nr_v0_corr_metric_comp(x, pss0 - probe, pss_i[best_nid2],
-                                         pss_q[best_nid2], ref_len, cfo, fs_hz);
-      float m_r = nr_v0_corr_metric_comp(x, pss0 + probe, pss_i[best_nid2],
-                                         pss_q[best_nid2], ref_len, cfo, fs_hz);
-    float side = (m_l > m_r) ? m_l : m_r;
-      if (best_m < 1.005f * side) {
-        for (int nid2 = 0; nid2 < 3; nid2++) {
-          free(pss_i[nid2]);
-          free(pss_q[nid2]);
-        }
-        return -1;
+    uint32_t pss_h = (uint32_t)hits[h].peak_samp;
+    float cfo_h = nr_v0_estimate_cfo_hz(x, pss_h, ref_len, fs_hz);
+    if (cfo_h > 15000.0f) cfo_h = 15000.0f;
+    if (cfo_h < -15000.0f) cfo_h = -15000.0f;
+    float best_m = -1.0f;
+    uint8_t best_nid2 = hits[h].nid2;
+    for (int nid2 = 0; nid2 < 3; nid2++) {
+      float m = nr_v0_corr_metric_comp(x, pss_h, pss_i[nid2], pss_q[nid2],
+                                       ref_len, cfo_h, fs_hz);
+      if (m > best_m) {
+        best_m = m;
+        best_nid2 = (uint8_t)nid2;
       }
     }
+    hits[h].nid2 = best_nid2;
+    hits[h].metric = best_m;
+    hits[h].coarse_cfo_hz = cfo_h;
   }
-  hits[0].nid2 = best_nid2;
-  hits[0].metric = best_m;
-  hits[0].coarse_cfo_hz = cfo;
   for (int nid2 = 0; nid2 < 3; nid2++) {
     free(pss_i[nid2]);
     free(pss_q[nid2]);
@@ -623,8 +380,10 @@ static void nr_sss_insert_hyp(nr_sss_hyp_t *hyps, uint32_t max_hyps, nr_sss_hyp_
 int nr_ssb_refine_sync(const nr_iq_block_t *blk, const nr_pss_hit_t *hit,
                        nr_sync_state_t *sync)
 {
-  enum { MAX_SSS_HYPS = 4 };
+  enum { MAX_SSS_HYPS = NR_MAX_PCI_HYPS };
   nr_sss_hyp_t sss_hyps[MAX_SSS_HYPS];
+  int delta_list[5];
+  uint32_t delta_count = 0U;
   if (!blk || !hit || !sync) {
     return -1;
   }
@@ -632,20 +391,18 @@ int nr_ssb_refine_sync(const nr_iq_block_t *blk, const nr_pss_hit_t *hit,
   memset(sync, 0, sizeof(*sync));
   memset(sss_hyps, 0, sizeof(sss_hyps));
 
-  const uint32_t ref_len = nr_v0_ssb_sym_len_fs(fs_hz);
-  const uint32_t sym_len = ref_len;
   if (hit->metric < 0.12f) {
     sync->locked = 0;
     return -1;
   }
 
-  const c16_t *x = blk->rx[0];
   const float cfo_hz = hit->coarse_cfo_hz;
   const uint8_t nid2 = hit->nid2;
 
   enum { NID1_MAX = 336 };
   int best_nid1 = 0;
   float best_metric = -1.0f;
+  float second_metric = -1.0f;
   int best_sss_delta = 0;
   double metric_sum = 0.0;
   double metric_sq = 0.0;
@@ -653,50 +410,55 @@ int nr_ssb_refine_sync(const nr_iq_block_t *blk, const nr_pss_hit_t *hit,
   float rx_i[NR_V0_PSS_LEN];
   float rx_q[NR_V0_PSS_LEN];
   float sss_ref[NR_V0_PSS_LEN];
-  const uint32_t nfft = nr_v0_ssb_nfft(fs_hz);
   const uint32_t cp = nr_v0_ssb_cp_len(fs_hz);
 
-  const uint32_t nominal_sss_start = (uint32_t)hit->peak_samp + 2U * sym_len;
-  const int delta_max = (int)(cp / 2U);
   const int delta_step = (int)((cp / 4U) ? (cp / 4U) : 1U);
-  for (int delta = -delta_max; delta <= delta_max; delta += delta_step) {
-    int64_t sss_i64 = (int64_t)nominal_sss_start + (int64_t)delta;
-    if (sss_i64 < 0) {
-      continue;
-    }
-    uint32_t sss_start = (uint32_t)sss_i64;
-    if (nr_v0_extract_sss_bins(x, sss_start, blk->nsamps, nfft, cp,
-                               cfo_hz, fs_hz, rx_i, rx_q) != 0) {
-      continue;
-    }
-
-    for (int nid1 = 0; nid1 < NID1_MAX; nid1++) {
-      double cr = 0.0;
-      double ci = 0.0;
-      double px = 0.0;
-      double pp = 0.0;
-      nr_v0_sss_build_fd(nid1, nid2, sss_ref, NR_V0_PSS_LEN);
-      for (uint32_t m = 0; m < NR_V0_PSS_LEN; m++) {
-        const double xr = (double)rx_i[m];
-        const double xq = (double)rx_q[m];
-        const double sr = (double)sss_ref[m];
-        cr += xr * sr;
-        ci += xq * sr;
-        px += xr * xr + xq * xq;
-        pp += sr * sr;
+  delta_list[delta_count++] = 0;
+  delta_list[delta_count++] = -delta_step;
+  delta_list[delta_count++] = delta_step;
+  delta_list[delta_count++] = -2 * delta_step;
+  delta_list[delta_count++] = 2 * delta_step;
+  sync->coarse_offset_samp = hit->peak_samp;
+  sync->cum_tracking_shift_samp = 0;
+  for (uint32_t di = 0U; di < delta_count; di++) {
+    const int delta = delta_list[di];
+    nr_ssb_window_t fd_win;
+    nr_ssb_grid_t fd_grid;
+    if (nr_ssb_extract_window_shifted(blk, sync, delta, &fd_win) == 0 &&
+        nr_ssb_demod(blk, &fd_win, cfo_hz, &fd_grid) == 0 &&
+        fd_grid.valid &&
+        nr_sss_extract_fd_from_grid(&fd_grid, nid2, rx_i, rx_q) == 0) {
+      for (int nid1 = 0; nid1 < NID1_MAX; nid1++) {
+        float metric = -1.0f;
+        double cr = 0.0;
+        double ci = 0.0;
+        double px = 0.0;
+        double pp = 0.0;
+        nr_v0_sss_build_fd(nid1, nid2, sss_ref, NR_V0_PSS_LEN);
+        for (uint32_t m = 0; m < NR_V0_PSS_LEN; m++) {
+          const double xr = (double)rx_i[m];
+          const double xq = (double)rx_q[m];
+          const double sr = (double)sss_ref[m];
+          cr += xr * sr;
+          ci += xq * sr;
+          px += xr * xr + xq * xq;
+          pp += sr * sr;
+        }
+        metric = (float)(sqrt(cr * cr + ci * ci) / (sqrt(px * pp) + 1e-9));
+        metric_sum += metric;
+        metric_sq += (double)metric * (double)metric;
+        cnt++;
+        if (metric > best_metric) {
+          second_metric = best_metric;
+          best_metric = metric;
+          best_nid1 = nid1;
+          best_sss_delta = delta;
+        } else if (metric > second_metric) {
+          second_metric = metric;
+        }
+        nr_sss_insert_hyp(sss_hyps, MAX_SSS_HYPS,
+                          (nr_sss_hyp_t){.nid1 = (uint16_t)nid1, .delta = (int16_t)delta, .metric = metric});
       }
-      const float metric =
-          (float)(sqrt(cr * cr + ci * ci) / (sqrt(px * pp) + 1e-9));
-      metric_sum += metric;
-      metric_sq += (double)metric * (double)metric;
-      cnt++;
-      if (metric > best_metric) {
-        best_metric = metric;
-        best_nid1 = nid1;
-        best_sss_delta = delta;
-      }
-      nr_sss_insert_hyp(sss_hyps, MAX_SSS_HYPS,
-                        (nr_sss_hyp_t){.nid1 = (uint16_t)nid1, .delta = (int16_t)delta, .metric = metric});
     }
   }
   if (cnt == 0) {
@@ -704,12 +466,7 @@ int nr_ssb_refine_sync(const nr_iq_block_t *blk, const nr_pss_hit_t *hit,
     return -1;
   }
 
-  double mean = metric_sum / (double)cnt;
-  double var = metric_sq / (double)cnt - mean * mean;
-  if (var < 0.0) var = 0.0;
-  const float adaptive_th = (float)fmax(0.15, mean + 4.0 * sqrt(var));
-
-  if (best_metric < adaptive_th) {
+  if (best_metric < 0.12f) {
     sync->locked = 0;
     return -1;
   }
@@ -718,7 +475,7 @@ int nr_ssb_refine_sync(const nr_iq_block_t *blk, const nr_pss_hit_t *hit,
    * multi-stage consistency/PBCH confirmation gates. */
   sync->locked = 0;
   /* Fold part of SSS timing refinement back into coarse timing state. */
-  sync->coarse_offset_samp = hit->peak_samp + (best_sss_delta / 2);
+  sync->coarse_offset_samp = hit->peak_samp + best_sss_delta;
   sync->frac_offset_samp = 0.0f;
   sync->cfo_hz = hit->coarse_cfo_hz;
   sync->nid2 = nid2;
@@ -759,19 +516,72 @@ int nr_ssb_refine_sync(const nr_iq_block_t *blk, const nr_pss_hit_t *hit,
   return 0;
 }
 
+static void nr_dbg_grid_quality(const nr_ssb_grid_t *grid, uint8_t nid2,
+                                uint16_t pci, float cfo_hz)
+{
+  float pss_ref[127];
+  float sss_ref[127];
+  double cr = 0.0, ci = 0.0, px = 0.0, pp = 0.0;
+  double sym_pow[4] = {0};
+  if (!grid || !grid->valid) {
+    return;
+  }
+  nr_v0_pss_build_fd((int)nid2, pss_ref, 127U);
+  for (uint32_t m = 0; m < 127U; m++) {
+    const float yr = grid->re[0][56U + m].r;
+    const float yi = grid->re[0][56U + m].i;
+    cr += (double)yr * (double)pss_ref[m];
+    ci += (double)yi * (double)pss_ref[m];
+    px += (double)yr * yr + (double)yi * yi;
+    pp += (double)pss_ref[m] * (double)pss_ref[m];
+  }
+  float pss_corr = (float)(sqrt(cr * cr + ci * ci) / (sqrt(px * pp) + 1e-9));
+  float pss_phase = (float)(atan2(ci, cr) * 180.0 / M_PI);
+
+  double scr = 0.0, sci = 0.0, spx = 0.0, spp = 0.0;
+  uint16_t nid1 = pci / 3;
+  nr_v0_sss_build_fd((int)nid1, (int)nid2, sss_ref, 127U);
+  for (uint32_t m = 0; m < 127U; m++) {
+    const float yr = grid->re[2][56U + m].r;
+    const float yi = grid->re[2][56U + m].i;
+    scr += (double)yr * (double)sss_ref[m];
+    sci += (double)yi * (double)sss_ref[m];
+    spx += (double)yr * yr + (double)yi * yi;
+    spp += (double)sss_ref[m] * (double)sss_ref[m];
+  }
+  float sss_corr = (float)(sqrt(scr * scr + sci * sci) / (sqrt(spx * spp) + 1e-9));
+
+  for (uint8_t sym = 0; sym < 4; sym++) {
+    for (uint16_t rel = 0; rel < 240U; rel++) {
+      sym_pow[sym] += (double)grid->re[sym][rel].r * grid->re[sym][rel].r +
+                      (double)grid->re[sym][rel].i * grid->re[sym][rel].i;
+    }
+    sym_pow[sym] /= 240.0;
+  }
+
+  printf("GRID_DBG: pci=%u cfo=%.1f pss_corr=%.4f sss_corr=%.4f pss_ph=%.1f "
+         "sym_pow=[%.1f,%.1f,%.1f,%.1f]\n",
+         (unsigned)pci, cfo_hz, pss_corr, sss_corr, pss_phase,
+         sym_pow[0], sym_pow[1], sym_pow[2], sym_pow[3]);
+}
+
 int nr_ssb_pbch_decode(const nr_iq_block_t *blk, nr_sync_state_t *sync)
 {
   static const int32_t timing_deltas[] = {0, -1, 1, -2, 2, -3, 3};
-  static const float cfo_deltas_hz[] = {0.0f, -500.0f, 500.0f, -1000.0f, 1000.0f,
-                                        -2000.0f, 2000.0f, -3500.0f, 3500.0f};
-  static const float phase_rot_deg[] = {0.0f, -15.0f, 15.0f, -30.0f, 30.0f};
+  static const float cfo_deltas_hz[] = {0.0f, -500.0f, 500.0f};
   static const uint8_t k_pbch_ssb_candidates = 8U;
-  enum { MAX_PBCH_HYPS = 16 };
+  enum { MAX_PBCH_HYPS = 8 };
   static uint32_t pbch_dbg_cnt = 0U;
   nr_ssb_grid_t grids[(sizeof(timing_deltas) / sizeof(timing_deltas[0])) *
                       (sizeof(cfo_deltas_hz) / sizeof(cfo_deltas_hz[0]))];
   nr_pbch_hyp_t hyps[MAX_PBCH_HYPS];
-  const uint8_t pci_hyp_count = (sync->pci_hyp_count > 0U) ? sync->pci_hyp_count : 1U;
+  nr_pbch_hyp_t best_hyp;
+  nr_pbch_hyp_t best_llr_hyp;
+  uint8_t pci_hyp_count = (sync->pci_hyp_count > 0U) ? sync->pci_hyp_count : 1U;
+  uint32_t timing_count = sizeof(timing_deltas) / sizeof(timing_deltas[0]);
+  uint32_t cfo_count = sizeof(cfo_deltas_hz) / sizeof(cfo_deltas_hz[0]);
+  uint8_t ssb_candidate_count = k_pbch_ssb_candidates;
+  uint32_t decode_hyp_count = 0U;
   uint32_t hyp_count = 0U;
   int32_t best_timing_delta = 0;
   int16_t best_sss_delta_bias = 0;
@@ -782,9 +592,20 @@ int nr_ssb_pbch_decode(const nr_iq_block_t *blk, nr_sync_state_t *sync)
   }
   float best_metric = -1.0f;
   float second_metric = -1.0f;
+  float best_llr_metric = -1.0f;
   uint8_t best_ssb_idx = 0U;
+  float best_noise_var = 1.0f;
+  float best_cpe_rad = 0.0f;
+  int best_llr_valid = 0;
   memset(grids, 0, sizeof(grids));
   memset(hyps, 0, sizeof(hyps));
+  memset(&best_hyp, 0, sizeof(best_hyp));
+  memset(&best_llr_hyp, 0, sizeof(best_llr_hyp));
+
+  if (pci_hyp_count > MAX_PBCH_HYPS) {
+    pci_hyp_count = MAX_PBCH_HYPS;
+  }
+  ssb_candidate_count = k_pbch_ssb_candidates;
 
   sync->pbch_ok = 0;
   sync->pbch_confirmed = 0;
@@ -793,14 +614,21 @@ int nr_ssb_pbch_decode(const nr_iq_block_t *blk, nr_sync_state_t *sync)
   sync->pbch_metric = 0.0f;
   sync->pbch_metric_second = 0.0f;
   sync->pbch_fail_stage = NR_PBCH_FAIL_NONE;
+  sync->pbch_llr_valid = 0U;
+  sync->pbch_best_sss_delta_bias = 0;
+  sync->pbch_best_timing_delta = 0;
+  sync->pbch_best_cfo_delta_hz = 0.0f;
+  sync->pbch_best_phase_deg = 0.0f;
+  sync->pbch_noise_var = 1.0f;
+  sync->pbch_cpe_rad = 0.0f;
+  memset(sync->pbch_llr, 0, sizeof(sync->pbch_llr));
 
   for (uint32_t p = 0U; p < pci_hyp_count; p++) {
     const uint16_t pci = (sync->pci_hyp_count > 0U) ? sync->pci_hyp[p] : sync->pci;
     const int16_t sss_delta_bias =
-        (sync->pci_hyp_count > 0U) ? (int16_t)((sync->pci_hyp_delta[p] - sync->pci_hyp_delta[0]) / 2) : 0;
-    const uint8_t v = (uint8_t)(pci & 3U);
-    for (uint32_t g = 0U; g < (sizeof(timing_deltas) / sizeof(timing_deltas[0])); g++) {
-      for (uint32_t c = 0U; c < (sizeof(cfo_deltas_hz) / sizeof(cfo_deltas_hz[0])); c++) {
+        (sync->pci_hyp_count > 0U) ? (int16_t)(sync->pci_hyp_delta[p] - sync->pci_hyp_delta[0]) : 0;
+    for (uint32_t g = 0U; g < timing_count; g++) {
+      for (uint32_t c = 0U; c < cfo_count; c++) {
         nr_ssb_window_t win;
         const int32_t total_delta = timing_deltas[g] + (int32_t)sss_delta_bias;
         const uint32_t grid_idx = g * (uint32_t)(sizeof(cfo_deltas_hz) / sizeof(cfo_deltas_hz[0])) + c;
@@ -811,11 +639,21 @@ int nr_ssb_pbch_decode(const nr_iq_block_t *blk, nr_sync_state_t *sync)
             !grids[grid_idx].valid) {
           continue;
         }
-        for (uint8_t ssb_idx = 0U; ssb_idx < k_pbch_ssb_candidates; ssb_idx++) {
-          cf32_t h_est[NR_SSB_RE_ROWS][NR_SSB_RE_COLS];
-          uint8_t h_valid[NR_SSB_RE_ROWS][NR_SSB_RE_COLS];
-          const float metric =
-              nr_pbch_dmrs_metric_estimate(&grids[grid_idx], pci, ssb_idx, v, h_est, h_valid);
+        if (p == 0U && g == 0U && c == 0U) {
+          nr_dbg_grid_quality(&grids[grid_idx], sync->nid2, pci, sync->cfo_hz);
+        }
+        float best_ssb_metric_for_pci = -1.0f;
+        uint8_t best_ssb_for_pci = 0;
+        for (uint8_t ssb_idx = 0U; ssb_idx < ssb_candidate_count; ssb_idx++) {
+          float metric = -1.0f;
+          if (nr_ssb_pbch_prepare_frontend(&grids[grid_idx], pci, ssb_idx,
+                                           &metric, NULL, NULL, NULL) != 0) {
+            continue;
+          }
+          if (metric > best_ssb_metric_for_pci) {
+            best_ssb_metric_for_pci = metric;
+            best_ssb_for_pci = ssb_idx;
+          }
           if (metric > best_metric) {
             second_metric = best_metric;
             best_metric = metric;
@@ -824,185 +662,255 @@ int nr_ssb_pbch_decode(const nr_iq_block_t *blk, nr_sync_state_t *sync)
             best_sss_delta_bias = sss_delta_bias;
             best_timing_delta = timing_deltas[g];
             best_cfo_delta_hz = cfo_deltas_hz[c];
+            best_hyp = (nr_pbch_hyp_t){
+                .pci = pci,
+                .grid_idx = (uint8_t)grid_idx,
+                .sss_delta_bias = sss_delta_bias,
+                .timing_delta = timing_deltas[g],
+                .cfo_delta_hz = cfo_deltas_hz[c],
+                .ssb_idx = ssb_idx,
+                .metric = metric};
           } else if (metric > second_metric) {
             second_metric = metric;
           }
-          if (metric >= 0.10f) {
-            nr_pbch_hyp_t hyp;
-            hyp.pci = pci;
-            hyp.grid_idx = (uint8_t)grid_idx;
-            hyp.sss_delta_bias = sss_delta_bias;
-            hyp.timing_delta = timing_deltas[g];
-            hyp.cfo_delta_hz = cfo_deltas_hz[c];
-            hyp.ssb_idx = ssb_idx;
-            hyp.metric = metric;
-            nr_pbch_insert_hyp(hyps, MAX_PBCH_HYPS, &hyp_count, hyp);
-          }
+          nr_pbch_hyp_t hyp;
+          hyp.pci = pci;
+          hyp.grid_idx = (uint8_t)grid_idx;
+          hyp.sss_delta_bias = sss_delta_bias;
+          hyp.timing_delta = timing_deltas[g];
+          hyp.cfo_delta_hz = cfo_deltas_hz[c];
+          hyp.ssb_idx = ssb_idx;
+          hyp.metric = metric;
+          nr_pbch_insert_hyp(hyps, MAX_PBCH_HYPS, &hyp_count, hyp);
+        }
+        if (p == 0U) {
+          printf("  pci0_scan: pci=%u dt=%d dcfo=%.0f best_ssb=%u dmrs=%.4f\n",
+                 (unsigned)pci, timing_deltas[g], cfo_deltas_hz[c],
+                 (unsigned)best_ssb_for_pci, best_ssb_metric_for_pci);
         }
       }
     }
   }
 
-  sync->pbch_metric = best_metric;
-  sync->pbch_metric_second = second_metric;
-  sync->pci = best_pci;
-  sync->pci_full = best_pci;
-  sync->nid2 = (uint8_t)(best_pci % 3U);
-  sync->nid1 = (uint16_t)(best_pci / 3U);
-  sync->ssb_index = best_ssb_idx;
-  if (best_metric < 0.14f) {
-    sync->pbch_fail_stage = NR_PBCH_FAIL_DMRS_WEAK;
-    if ((pbch_dbg_cnt++ % 25U) == 0U) {
-      printf("pbch_dmrs: weak pci=%u ssb=%u best=%.3f second=%.3f ds=%d dt=%d pss=%.3f snr=%.2f\n",
-             (unsigned)sync->pci, (unsigned)best_ssb_idx,
-             best_metric, second_metric, best_sss_delta_bias, best_timing_delta,
-             sync->pss_metric, sync->snr_db);
-    }
-    return -1;
+  if (best_metric >= 0.0f) {
+    nr_pbch_sync_apply_hyp(sync, &best_hyp, second_metric);
+  } else {
+    sync->pbch_metric = best_metric;
+    sync->pbch_metric_second = second_metric;
+    sync->pci = best_pci;
+    sync->pci_full = best_pci;
+    sync->nid2 = (uint8_t)(best_pci % 3U);
+    sync->nid1 = (uint16_t)(best_pci / 3U);
+    sync->ssb_index = best_ssb_idx;
   }
-  for (uint32_t h = 0U; h < hyp_count; h++) {
-    cf32_t h_est[NR_SSB_RE_ROWS][NR_SSB_RE_COLS];
-    uint8_t h_valid[NR_SSB_RE_ROWS][NR_SSB_RE_COLS];
-    float llr[864];
+  decode_hyp_count = hyp_count;
+
+  printf("pbch_hyps: count=%u decode=%u best_pci=%u best_ssb=%u best_dmrs=%.3f cfo=%.1f\n",
+         hyp_count, decode_hyp_count,
+         (unsigned)best_pci, (unsigned)best_ssb_idx,
+         best_metric, sync->cfo_hz);
+  for (uint32_t d = 0U; d < hyp_count && d < MAX_PBCH_HYPS; d++) {
+    printf("  hyp[%u]: pci=%u ssb=%u dmrs=%.3f ds=%d dt=%d dcfo=%.1f\n",
+           d, (unsigned)hyps[d].pci, (unsigned)hyps[d].ssb_idx,
+           hyps[d].metric, hyps[d].sss_delta_bias,
+           hyps[d].timing_delta, hyps[d].cfo_delta_hz);
+  }
+
+  for (uint32_t h = 0U; h < decode_hyp_count; h++) {
     float llr_base[864];
     float noise_var = 1.0f;
     float cpe_rad = 0.0f;
+    float dmrs_metric = -1.0f;
     const nr_pbch_hyp_t hyp = hyps[h];
-    const uint8_t v = (uint8_t)(hyp.pci & 3U);
-    if (nr_pbch_dmrs_metric_estimate(&grids[hyp.grid_idx], hyp.pci, hyp.ssb_idx, v,
-                                     h_est, h_valid) < 0.0f) {
-      continue;
-    }
-    noise_var = nr_pbch_estimate_noise_cpe(&grids[hyp.grid_idx], hyp.pci, hyp.ssb_idx,
-                                           v, h_est, h_valid, &cpe_rad);
-    if (nr_pbch_build_llr_from_grid(&grids[hyp.grid_idx], h_est, h_valid, v,
-                                    noise_var, cpe_rad, llr_base) != 0) {
-      continue;
-    }
-    sync->pci = hyp.pci;
-    sync->pci_full = hyp.pci;
-    sync->nid2 = (uint8_t)(hyp.pci % 3U);
-    sync->nid1 = (uint16_t)(hyp.pci / 3U);
-    sync->ssb_index = hyp.ssb_idx;
-    for (uint32_t pr = 0U; pr < (sizeof(phase_rot_deg) / sizeof(phase_rot_deg[0])); pr++) {
-      const float ph = phase_rot_deg[pr] * (float)M_PI / 180.0f;
-      const float cph = cosf(ph);
-      const float sph = sinf(ph);
-      for (uint32_t variant = 0U; variant < 8U; variant++) {
-      memcpy(llr, llr_base, sizeof(llr));
-      for (uint32_t m = 0U; m < 432U; m++) {
-        float xr = llr_base[2U * m] * 0.5f;
-        float xi = llr_base[2U * m + 1U] * 0.5f;
-        {
-          const float tr = xr * cph - xi * sph;
-          const float ti = xr * sph + xi * cph;
-          xr = tr;
-          xi = ti;
-        }
-        switch (variant) {
-          case 0U:
-            break;
-          case 1U:
-            xi = -xi;
-            break;
-          case 2U:
-            xr = -xr;
-            break;
-          case 3U:
-            xr = -xr;
-            xi = -xi;
-            break;
-          case 4U: {
-            const float t = xr;
-            xr = xi;
-            xi = t;
-            break;
-          }
-          case 5U: {
-            const float t = xr;
-            xr = xi;
-            xi = -t;
-            break;
-          }
-          case 6U: {
-            const float t = xr;
-            xr = -xi;
-            xi = t;
-            break;
-          }
-          default: {
-            const float t = xr;
-            xr = -xi;
-            xi = -t;
-            break;
-          }
-        }
-        llr[2U * m] = 2.0f * xr;
-        llr[2U * m + 1U] = 2.0f * xi;
+    float hyp_metric = hyp.metric;
+    nr_ssb_grid_t decode_grid;
+    {
+      nr_ssb_window_t dwin;
+      const int32_t dtotal = hyp.timing_delta + (int32_t)hyp.sss_delta_bias;
+      if (nr_ssb_extract_window_shifted(blk, sync, dtotal, &dwin) != 0 ||
+          nr_ssb_demod(blk, &dwin, sync->cfo_hz + hyp.cfo_delta_hz, &decode_grid) != 0 ||
+          !decode_grid.valid) {
+        continue;
       }
-        if (nr_pbch_bch_decode(llr, 864U, sync) == 0) {
-          sync->pbch_ok = 1;
-          sync->pbch_fail_stage = NR_PBCH_FAIL_NONE;
-          sync->coarse_offset_samp += hyp.sss_delta_bias;
-          sync->coarse_offset_samp += hyp.timing_delta;
-          sync->cfo_hz += hyp.cfo_delta_hz;
-          sync->pbch_metric = hyp.metric;
-          sync->pbch_metric_second = second_metric;
-          if (hyp.metric > sync->lock_confidence) {
-            sync->lock_confidence = hyp.metric;
-          }
-          printf("pbch_bch: ok pci=%u ssb=%u dmrs=%.3f dt=%d dcfo=%.1f dph=%.1f pss=%.3f snr=%.2f sfn=%u mib=0x%06x\n",
-                 (unsigned)sync->pci, (unsigned)sync->ssb_index,
-                 hyp.metric, hyp.timing_delta, hyp.cfo_delta_hz, phase_rot_deg[pr],
-                 sync->pss_metric, sync->snr_db,
-                 (unsigned)sync->sfn, (unsigned)sync->mib_payload);
-          return 0;
+    }
+    if (nr_ssb_pbch_prepare_frontend(&decode_grid, hyp.pci, hyp.ssb_idx,
+                                     &dmrs_metric, &noise_var, &cpe_rad, llr_base) != 0) {
+      continue;
+    }
+    if (dmrs_metric > hyp_metric) {
+      hyp_metric = dmrs_metric;
+    }
+    if (!best_llr_valid || hyp_metric > best_llr_metric) {
+      best_llr_metric = hyp_metric;
+      best_llr_hyp = hyp;
+      best_llr_hyp.metric = hyp_metric;
+      best_noise_var = noise_var;
+      best_cpe_rad = cpe_rad;
+      best_llr_valid = 1;
+      memcpy(sync->pbch_llr, llr_base, sizeof(llr_base));
+      sync->pbch_llr_valid = 1U;
+      sync->pbch_noise_var = noise_var;
+      sync->pbch_cpe_rad = cpe_rad;
+    }
+    printf("  pbch_try[%u]: pci=%u ssb=%u dmrs=%.3f noise=%.4f cpe=%.3f dt=%d dcfo=%.1f\n",
+           h, (unsigned)hyp.pci, (unsigned)hyp.ssb_idx,
+           dmrs_metric, noise_var, cpe_rad, hyp.timing_delta, hyp.cfo_delta_hz);
+    {
+      nr_sync_state_t trial = *sync;
+      nr_pbch_sync_apply_hyp(&trial, &hyp, second_metric);
+      if (nr_pbch_bch_decode(llr_base, 864U, &trial) == 0) {
+        *sync = trial;
+        sync->pbch_ok = 1;
+        sync->pbch_fail_stage = NR_PBCH_FAIL_NONE;
+        sync->coarse_offset_samp += hyp.sss_delta_bias;
+        sync->coarse_offset_samp += hyp.timing_delta;
+        sync->cfo_hz += hyp.cfo_delta_hz;
+        sync->pbch_llr_valid = 1U;
+        sync->pbch_noise_var = noise_var;
+        sync->pbch_cpe_rad = cpe_rad;
+        memcpy(sync->pbch_llr, llr_base, sizeof(llr_base));
+        if (hyp.metric > sync->lock_confidence) {
+          sync->lock_confidence = hyp.metric;
         }
+        printf("pbch_bch: ok pci=%u ssb=%u dmrs=%.3f dt=%d dcfo=%.1f pss=%.3f snr=%.2f sfn=%u mib=0x%06x\n",
+               (unsigned)sync->pci, (unsigned)sync->ssb_index,
+               hyp.metric, hyp.timing_delta, hyp.cfo_delta_hz,
+               sync->pss_metric, sync->snr_db,
+               (unsigned)sync->sfn, (unsigned)sync->mib_payload);
+        return 0;
       }
     }
   }
 
-  if (second_metric > 0.0f && best_metric < 1.01f * second_metric) {
+  if (best_llr_valid) {
+    nr_pbch_sync_apply_hyp(sync, &best_llr_hyp, second_metric);
+    sync->coarse_offset_samp += best_llr_hyp.sss_delta_bias;
+    sync->coarse_offset_samp += best_llr_hyp.timing_delta;
+    sync->cfo_hz += best_llr_hyp.cfo_delta_hz;
+    sync->pbch_llr_valid = 1U;
+    sync->pbch_noise_var = best_noise_var;
+    sync->pbch_cpe_rad = best_cpe_rad;
+  } else if (best_metric >= 0.0f) {
+    nr_pbch_sync_apply_hyp(sync, &best_hyp, second_metric);
+    sync->coarse_offset_samp += best_hyp.sss_delta_bias;
+    sync->coarse_offset_samp += best_hyp.timing_delta;
+    sync->cfo_hz += best_hyp.cfo_delta_hz;
+  }
+
+  if (decode_hyp_count == 0U) {
+    sync->pbch_fail_stage = NR_PBCH_FAIL_DEMOD;
+  } else if (best_metric < 0.25f) {
+    sync->pbch_fail_stage = NR_PBCH_FAIL_DMRS_WEAK;
+  } else if (second_metric > 0.0f && best_metric < (second_metric * 1.03f)) {
     sync->pbch_fail_stage = NR_PBCH_FAIL_DMRS_AMBIG;
-    if ((pbch_dbg_cnt++ % 25U) == 0U) {
-      printf("pbch_dmrs: ambiguous pci=%u ssb=%u best=%.3f second=%.3f ds=%d dt=%d dcfo=%.1f pss=%.3f snr=%.2f\n",
-             (unsigned)sync->pci, (unsigned)best_ssb_idx,
-             best_metric, second_metric, best_sss_delta_bias, best_timing_delta, best_cfo_delta_hz,
-             sync->pss_metric, sync->snr_db);
-    }
-    return -1;
+  } else {
+    sync->pbch_fail_stage = NR_PBCH_FAIL_BCH;
   }
-
-  sync->pbch_fail_stage = NR_PBCH_FAIL_BCH;
-  if ((pbch_dbg_cnt++ % 25U) == 0U) {
-    printf("pbch_bch: crc-fail pci=%u ssb=%u dmrs=%.3f second=%.3f ds=%d dt=%d dcfo=%.1f pss=%.3f snr=%.2f\n",
-           (unsigned)sync->pci, (unsigned)best_ssb_idx,
-           best_metric, second_metric, best_sss_delta_bias, best_timing_delta, best_cfo_delta_hz,
-           sync->pss_metric, sync->snr_db);
-  }
+  pbch_dbg_cnt++;
+  printf("pbch_bch: crc-fail pci=%u ssb=%u dmrs=%.3f second=%.3f ds=%d dt=%d dcfo=%.1f pss=%.3f snr=%.2f\n",
+         (unsigned)sync->pci, (unsigned)best_ssb_idx,
+         best_metric, second_metric, best_sss_delta_bias, best_timing_delta, best_cfo_delta_hz,
+         sync->pss_metric, sync->snr_db);
   return -1;
 }
 
 int nr_ssb_track_cfo(const nr_iq_block_t *blk, nr_sync_state_t *sync)
 {
+  nr_ssb_window_t win;
+  nr_ssb_grid_t grid;
+  const float fs_hz = (blk && blk->fs_hz > 0.0) ? (float)blk->fs_hz : NR_V0_FS_HZ_FALLBACK;
+  const uint32_t ref_len = nr_v0_ssb_sym_len_fs(fs_hz);
+  float cp_cfo = 0.0f;
   if (!blk || !sync) {
     return -1;
   }
-  (void)blk;
-  sync->cfo_hz *= 0.99f;
+  if (!blk->rx[0]) {
+    return -1;
+  }
+  if (sync->coarse_offset_samp >= 0 &&
+      (uint32_t)sync->coarse_offset_samp + ref_len < blk->nsamps) {
+    cp_cfo = nr_v0_estimate_cfo_hz(blk->rx[0],
+                                   (uint32_t)sync->coarse_offset_samp,
+                                   ref_len,
+                                   fs_hz);
+    if (cp_cfo > 15000.0f) cp_cfo = 15000.0f;
+    if (cp_cfo < -15000.0f) cp_cfo = -15000.0f;
+  }
+  sync->cfo_hz = 0.82f * sync->cfo_hz + 0.18f * cp_cfo;
+
+  if (sync->pci >= 1008U || nr_ssb_extract_window(blk, sync, &win) != 0 ||
+      nr_ssb_demod(blk, &win, sync->cfo_hz, &grid) != 0 || !grid.valid) {
+    return 0;
+  }
+  {
+    float metric = -1.0f;
+    float noise_var = 1.0f;
+    float cpe_rad = 0.0f;
+    if (nr_ssb_pbch_prepare_frontend(&grid, sync->pci, sync->ssb_index,
+                                     &metric, &noise_var, &cpe_rad, NULL) != 0) {
+      return 0;
+    }
+    if (metric > 0.0f) {
+      const float t_ref = (float)nr_v0_ssb_burst_len_fs(fs_hz) / fs_hz;
+      const float resid_cfo =
+          (fabsf(t_ref) > 1.0e-6f) ? (cpe_rad / (2.0f * (float)M_PI * t_ref)) : 0.0f;
+      const float gain = 0.20f;
+      sync->cfo_hz += gain * resid_cfo;
+      sync->pbch_cpe_rad = cpe_rad;
+      sync->pbch_noise_var = noise_var;
+    }
+  }
   return 0;
 }
 
 int nr_ssb_track_timing(const nr_iq_block_t *blk, nr_sync_state_t *sync,
                         int *sample_shift)
 {
+  static const int deltas[] = {0, -1, 1, -2, 2};
+  float metrics[sizeof(deltas) / sizeof(deltas[0])];
+  int best_idx = 0;
+  nr_ssb_grid_t grid;
   if (!blk || !sync || !sample_shift) {
     return -1;
   }
+  memset(metrics, 0, sizeof(metrics));
   *sample_shift = 0;
+  if (sync->pci < 1008U) {
+    for (uint32_t i = 0U; i < (sizeof(deltas) / sizeof(deltas[0])); i++) {
+      nr_ssb_window_t win;
+      if (nr_ssb_extract_window_shifted(blk, sync, deltas[i], &win) != 0) {
+        continue;
+      }
+      if (nr_ssb_demod(blk, &win, sync->cfo_hz, &grid) != 0 || !grid.valid) {
+        continue;
+      }
+      if (nr_ssb_pbch_prepare_frontend(&grid, sync->pci, sync->ssb_index,
+                                       &metrics[i], NULL, NULL, NULL) != 0) {
+        metrics[i] = 0.0f;
+      }
+      if (metrics[i] > metrics[best_idx]) {
+        best_idx = (int)i;
+      }
+    }
+    *sample_shift = deltas[best_idx];
+    if (best_idx > 0 &&
+        best_idx + 1 < (int)(sizeof(deltas) / sizeof(deltas[0])) &&
+        metrics[best_idx] > 0.0f) {
+      const float lm = metrics[best_idx - 1];
+      const float cm = metrics[best_idx];
+      const float rm = metrics[best_idx + 1];
+      const float den = lm - 2.0f * cm + rm;
+      if (fabsf(den) > 1.0e-6f) {
+        const float frac = 0.5f * (lm - rm) / den;
+        sync->frac_offset_samp = 0.70f * sync->frac_offset_samp + 0.30f * frac;
+      } else {
+        sync->frac_offset_samp *= 0.85f;
+      }
+    } else {
+      sync->frac_offset_samp *= 0.85f;
+    }
+  }
   sync->cum_tracking_shift_samp += *sample_shift;
-  sync->frac_offset_samp *= 0.95f;
-  (void)blk;
   return 0;
 }
 

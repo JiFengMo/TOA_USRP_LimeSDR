@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/jfm/桌面/TOA_USRP_LimeSDR
 
-CXX_FLAGS = -std=gnu++17 -Wall -Wextra -Wpedantic
+CXX_FLAGS = -O2 -g -DNDEBUG -std=gnu++17 -Wall -Wextra -Wpedantic
 

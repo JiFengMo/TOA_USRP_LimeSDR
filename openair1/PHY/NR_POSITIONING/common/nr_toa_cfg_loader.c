@@ -78,6 +78,11 @@ int nr_toa_load_config(const char *path, nr_toa_app_cfg_t *cfg)
   cfg->tx_ant = 1;
   cfg->trace_enable = 0;
   cfg->iq_dump_enable = 0;
+  cfg->full_band_sweep = 1;
+  cfg->strict_center_freq = 0;
+  cfg->gain_sweep_enable = 1;
+  cfg->target_pci = -1;
+  cfg->ssb_scs_khz = 0U;
 
   FILE *fp = fopen(path, "r");
   if (!fp) {
@@ -152,6 +157,31 @@ int nr_toa_load_config(const char *path, nr_toa_app_cfg_t *cfg)
       uint32_t v = 0;
       if (nr_parse_u32(val, &v) == 0) {
         cfg->iq_dump_enable = (uint8_t)v;
+      }
+    } else if (nr_streq_icase(key, "full_band_sweep")) {
+      uint32_t v = 0;
+      if (nr_parse_u32(val, &v) == 0) {
+        cfg->full_band_sweep = (uint8_t)(v ? 1U : 0U);
+      }
+    } else if (nr_streq_icase(key, "strict_center_freq")) {
+      uint32_t v = 0;
+      if (nr_parse_u32(val, &v) == 0) {
+        cfg->strict_center_freq = (uint8_t)(v ? 1U : 0U);
+      }
+    } else if (nr_streq_icase(key, "gain_sweep_enable")) {
+      uint32_t v = 0;
+      if (nr_parse_u32(val, &v) == 0) {
+        cfg->gain_sweep_enable = (uint8_t)(v ? 1U : 0U);
+      }
+    } else if (nr_streq_icase(key, "target_pci")) {
+      uint32_t v = 0;
+      if (nr_parse_u32(val, &v) == 0 && v < 1008U) {
+        cfg->target_pci = (int32_t)v;
+      }
+    } else if (nr_streq_icase(key, "ssb_scs_khz")) {
+      uint32_t v = 0;
+      if (nr_parse_u32(val, &v) == 0) {
+        cfg->ssb_scs_khz = v;
       }
     } else if (nr_streq_icase(key, "ssb_period_ms")) {
       uint32_t v = 0;

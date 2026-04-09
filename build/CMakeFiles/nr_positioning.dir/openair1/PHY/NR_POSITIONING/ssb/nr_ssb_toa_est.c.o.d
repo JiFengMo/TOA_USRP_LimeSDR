@@ -59,4 +59,6 @@ CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c.o
  /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
  /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
  /usr/include/x86_64-linux-gnu/bits/mathcalls.h /usr/include/string.h \
- /usr/include/strings.h
+ /usr/include/strings.h \
+ /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h

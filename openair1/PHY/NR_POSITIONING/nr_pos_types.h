@@ -9,6 +9,8 @@
 #define NR_TOA_MAX_MEAS_PER_EP 16
 #define NR_SSB_RE_ROWS 4
 #define NR_SSB_RE_COLS 240
+#define NR_PBCH_LLR_LEN 864
+#define NR_MAX_PCI_HYPS 16
 
 typedef struct {
   int16_t r;
@@ -103,14 +105,22 @@ typedef struct {
   float pbch_metric;
   float pbch_metric_second;
   uint8_t pbch_fail_stage;
+  uint8_t pbch_llr_valid;
+  int16_t pbch_best_sss_delta_bias;
+  int16_t pbch_best_timing_delta;
+  float pbch_best_cfo_delta_hz;
+  float pbch_best_phase_deg;
+  float pbch_noise_var;
+  float pbch_cpe_rad;
+  float pbch_llr[NR_PBCH_LLR_LEN];
   float lock_confidence;
   int32_t last_gscn;
   uint8_t overflow_seen;
   int64_t cum_tracking_shift_samp;
   uint8_t pci_hyp_count;
-  uint16_t pci_hyp[4];
-  int16_t pci_hyp_delta[4];
-  float pci_hyp_metric[4];
+  uint16_t pci_hyp[NR_MAX_PCI_HYPS];
+  int16_t pci_hyp_delta[NR_MAX_PCI_HYPS];
+  float pci_hyp_metric[NR_MAX_PCI_HYPS];
 } nr_sync_state_t;
 
 typedef struct {
@@ -236,6 +246,11 @@ typedef struct {
   char anchor_db_path[512];
   uint8_t trace_enable;
   uint8_t iq_dump_enable;
+  uint8_t full_band_sweep;
+  uint8_t strict_center_freq;
+  uint8_t gain_sweep_enable;
+  int32_t target_pci;
+  uint32_t ssb_scs_khz;
 
   /* SSB scheduler / RF stream shaping */
   uint32_t ssb_period_ms;

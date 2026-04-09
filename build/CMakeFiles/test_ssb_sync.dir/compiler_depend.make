@@ -31,6 +31,8 @@ CMakeFiles/test_ssb_sync.dir/openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.o
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -116,7 +118,11 @@ CMakeFiles/test_ssb_sync.dir/openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.o
 
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
 
+/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
+
 /home/jfm/桌面/TOA_USRP_LimeSDR/openair1/PHY/NR_POSITIONING/nr_pos_types.h:
+
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:
 
 /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
 

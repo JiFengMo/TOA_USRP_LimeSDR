@@ -1,6 +1,7 @@
 #include "openair1/PHY/NR_POSITIONING/nr_pos_api.h"
 
 #include <math.h>
+#include <stdio.h>
 #include <string.h>
 
 #define NR_SSB_TOTAL_RE (NR_SSB_RE_ROWS * NR_SSB_RE_COLS)
@@ -8,6 +9,175 @@
 static inline uint32_t nr_ssb_re_idx(uint8_t sym, uint16_t rel)
 {
   return (uint32_t)sym * NR_SSB_RE_COLS + (uint32_t)rel;
+}
+
+static int nr_ssb_pbch_ls_estimate_only(const nr_ssb_grid_t *grid,
+                                        uint16_t pci,
+                                        uint8_t ssb_idx,
+                                        nr_chest_t *h,
+                                        float *dmrs_metric)
+{
+  static __thread cf32_t tls_h_ls_pbch[NR_SSB_TOTAL_RE];
+  static __thread uint8_t tls_valid_pbch[NR_SSB_TOTAL_RE];
+  float dmrs_i[144];
+  float dmrs_q[144];
+  uint16_t dmrs_rel[144];
+  uint8_t dmrs_sym[144];
+  const uint8_t v = (uint8_t)(pci & 3U);
+  double cr = 0.0;
+  double ci = 0.0;
+  double px = 0.0;
+  const double pr = 144.0;
+
+  if (dmrs_metric) {
+    *dmrs_metric = -1.0f;
+  }
+  if (!grid || !grid->valid || !h) {
+    return -1;
+  }
+
+  memset(tls_h_ls_pbch, 0, sizeof(tls_h_ls_pbch));
+  memset(tls_valid_pbch, 0, sizeof(tls_valid_pbch));
+
+  if (nr_pbch_dmrs_re_positions(v, dmrs_rel, dmrs_sym, 144U) != 144U) {
+    return -1;
+  }
+  if (nr_v0_pbch_dmrs_build((int)pci, (int)ssb_idx, 0, dmrs_i, dmrs_q, 144U) != 144) {
+    return -1;
+  }
+
+  static uint32_t dmrs_dbg_cnt = 0U;
+  int do_dmrs_dbg = (pci == 2 && ssb_idx == 0 && (dmrs_dbg_cnt % 50U) == 0U);
+  for (uint32_t m = 0U; m < 144U; m++) {
+    const uint8_t sym = dmrs_sym[m];
+    const uint16_t rel = dmrs_rel[m];
+    const cf32_t y = grid->re[sym][rel];
+    const float xr = dmrs_i[m];
+    const float xi = dmrs_q[m];
+    const float den = xr * xr + xi * xi + 1.0e-6f;
+    cr += (double)y.r * (double)xr + (double)y.i * (double)xi;
+    ci += (double)y.i * (double)xr - (double)y.r * (double)xi;
+    px += (double)y.r * (double)y.r + (double)y.i * (double)y.i;
+    tls_h_ls_pbch[nr_ssb_re_idx(sym, rel)].r = (y.r * xr + y.i * xi) / den;
+    tls_h_ls_pbch[nr_ssb_re_idx(sym, rel)].i = (y.i * xr - y.r * xi) / den;
+    tls_valid_pbch[nr_ssb_re_idx(sym, rel)] = 1U;
+    if (do_dmrs_dbg && m < 8U) {
+      float h_r = tls_h_ls_pbch[nr_ssb_re_idx(sym, rel)].r;
+      float h_i = tls_h_ls_pbch[nr_ssb_re_idx(sym, rel)].i;
+      printf("  DMRS[%u] sym=%u rel=%u y=(%.2f,%.2f) ref=(%.3f,%.3f) h=(%.2f,%.2f)\n",
+             m, (unsigned)sym, (unsigned)rel, y.r, y.i, xr, xi, h_r, h_i);
+    }
+  }
+  if (do_dmrs_dbg) {
+    float met = (float)(sqrt(cr * cr + ci * ci) / (sqrt(px * pr) + 1.0e-9));
+    printf("  DMRS_DIAG: pci=%u ssb=%u v=%u metric=%.4f cr=%.1f ci=%.1f px=%.1f\n",
+           (unsigned)pci, (unsigned)ssb_idx, (unsigned)v, met, cr, ci, px);
+    dmrs_dbg_cnt++;
+  } else if (pci == 2 && ssb_idx == 0) {
+    dmrs_dbg_cnt++;
+  }
+
+  h->h_ls = tls_h_ls_pbch;
+  h->valid_re = tls_valid_pbch;
+  h->n_re = NR_SSB_TOTAL_RE;
+  if (dmrs_metric) {
+    *dmrs_metric = (float)(sqrt(cr * cr + ci * ci) / (sqrt(px * pr) + 1.0e-9));
+  }
+  return 0;
+}
+
+static float nr_ssb_pbch_noise_cpe(const nr_ssb_grid_t *grid,
+                                   const nr_chest_full_t *hf,
+                                   uint16_t pci,
+                                   uint8_t ssb_idx,
+                                   float *cpe_rad)
+{
+  float dmrs_i[144];
+  float dmrs_q[144];
+  uint16_t dmrs_rel[144];
+  uint8_t dmrs_sym[144];
+  const uint8_t v = (uint8_t)(pci & 3U);
+  double err_pow = 0.0;
+  double sig_pow = 0.0;
+  double cr = 0.0;
+  double ci = 0.0;
+  uint32_t used = 0U;
+
+  if (cpe_rad) {
+    *cpe_rad = 0.0f;
+  }
+  if (!grid || !grid->valid || !hf || !hf->h_full) {
+    return 1.0f;
+  }
+  if (nr_pbch_dmrs_re_positions(v, dmrs_rel, dmrs_sym, 144U) != 144U) {
+    return 1.0f;
+  }
+  if (nr_v0_pbch_dmrs_build((int)pci, (int)ssb_idx, 0, dmrs_i, dmrs_q, 144U) != 144) {
+    return 1.0f;
+  }
+
+  for (uint32_t m = 0U; m < 144U; m++) {
+    const uint8_t sym = dmrs_sym[m];
+    const uint16_t rel = dmrs_rel[m];
+    const cf32_t y = grid->re[sym][rel];
+    const cf32_t h = hf->h_full[nr_ssb_re_idx(sym, rel)];
+    const float xr = dmrs_i[m];
+    const float xi = dmrs_q[m];
+    const float pr = h.r * xr - h.i * xi;
+    const float pi = h.r * xi + h.i * xr;
+    const float er = y.r - pr;
+    const float ei = y.i - pi;
+    err_pow += (double)er * (double)er + (double)ei * (double)ei;
+    sig_pow += (double)pr * (double)pr + (double)pi * (double)pi;
+    cr += (double)y.r * (double)pr + (double)y.i * (double)pi;
+    ci += (double)y.i * (double)pr - (double)y.r * (double)pi;
+    used++;
+  }
+
+  if (used == 0U) {
+    return 1.0f;
+  }
+  if (cpe_rad) {
+    *cpe_rad = (float)atan2(ci, cr);
+  }
+  return (float)((err_pow / (double)used) / ((sig_pow / (double)used) + 1.0e-6));
+}
+
+static int nr_ssb_pbch_build_llr(const nr_ssb_grid_t *grid,
+                                 const nr_chest_full_t *hf,
+                                 uint16_t pci,
+                                 float noise_var,
+                                 float cpe_rad,
+                                 float *llr)
+{
+  uint16_t data_rel[432];
+  uint8_t data_sym[432];
+  const uint8_t v = (uint8_t)(pci & 3U);
+  const float cph = cosf(-cpe_rad);
+  const float sph = sinf(-cpe_rad);
+
+  if (!grid || !grid->valid || !hf || !hf->h_full || !llr) {
+    return -1;
+  }
+  if (nr_pbch_data_re_positions(v, data_rel, data_sym, 432U) != 432U) {
+    return -1;
+  }
+
+  for (uint32_t m = 0U; m < 432U; m++) {
+    const uint8_t sym = data_sym[m];
+    const uint16_t rel = data_rel[m];
+    const cf32_t y = grid->re[sym][rel];
+    const cf32_t h = hf->h_full[nr_ssb_re_idx(sym, rel)];
+    const float ch_pow = h.r * h.r + h.i * h.i + 1.0e-6f;
+    const float zr = y.r * h.r + y.i * h.i;
+    const float zi = y.i * h.r - y.r * h.i;
+    const float rr = zr * cph - zi * sph;
+    const float ri = zr * sph + zi * cph;
+    const float eff_noise = fmaxf(noise_var * ch_pow, 0.05f);
+    llr[2U * m] = 2.0f * rr / eff_noise;
+    llr[2U * m + 1U] = 2.0f * ri / eff_noise;
+  }
+  return 0;
 }
 
 static void nr_ssb_ls_from_ref(const nr_ssb_grid_t *grid,
@@ -214,5 +384,61 @@ int nr_ssb_build_cir(const nr_chest_full_t *hf, nr_cir_t *cir)
   cir->cir_len = NR_SSB_RE_COLS;
   cir->os_factor = 1U;
   cir->peak_metric = max_mag / ((mean_mag / (float)NR_SSB_RE_COLS) + 1.0e-6f);
+  return 0;
+}
+
+int nr_ssb_pbch_prepare_frontend(const nr_ssb_grid_t *grid,
+                                 uint16_t pci,
+                                 uint8_t ssb_idx,
+                                 float *dmrs_metric,
+                                 float *noise_var,
+                                 float *cpe_rad,
+                                 float *llr)
+{
+  nr_sync_state_t sync_hint;
+  nr_chest_t h;
+  nr_chest_full_t hf;
+  float local_metric = -1.0f;
+  float local_noise = 1.0f;
+  float local_cpe = 0.0f;
+
+  memset(&h, 0, sizeof(h));
+  memset(&hf, 0, sizeof(hf));
+  memset(&sync_hint, 0, sizeof(sync_hint));
+
+  if (nr_ssb_pbch_ls_estimate_only(grid, pci, ssb_idx, &h, &local_metric) != 0) {
+    return -1;
+  }
+  if (nr_ssb_interp_channel(&h, &hf) != 0) {
+    return -1;
+  }
+
+  /* Keep the PBCH DMRS-only metric for hypothesis ranking, but for the actual
+   * LLR path use every known SSB reference once PCI/SSB are hypothesized.
+   * This is closer to OAI's "full block known after sync" behavior and is
+   * noticeably more stable than interpolating from PBCH DMRS alone. */
+  if (llr) {
+    sync_hint.pci = pci;
+    sync_hint.ssb_index = ssb_idx;
+    if (nr_ssb_ls_estimate(grid, &sync_hint, &h) != 0 ||
+        nr_ssb_interp_channel(&h, &hf) != 0) {
+      return -1;
+    }
+  }
+
+  local_noise = nr_ssb_pbch_noise_cpe(grid, &hf, pci, ssb_idx, &local_cpe);
+  if (llr && nr_ssb_pbch_build_llr(grid, &hf, pci, local_noise, local_cpe, llr) != 0) {
+    return -1;
+  }
+
+  if (dmrs_metric) {
+    *dmrs_metric = local_metric;
+  }
+  if (noise_var) {
+    *noise_var = local_noise;
+  }
+  if (cpe_rad) {
+    *cpe_rad = local_cpe;
+  }
   return 0;
 }

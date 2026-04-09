@@ -1,0 +1,78 @@
+{
+  "report_date": "2026-04-09",
+  "band": "n1",
+  "arfcn": 422910,
+  "center_freq_hz": 2114550000,
+  "sample_rate_hz": 30720000,
+  "pci": 84,
+  "captures": [
+    {
+      "label": "capture_a",
+      "iq_file": "pbch_ok_seq01_ts44786797_cf2114550000_fs30720000_pci84_ssb3_pss301_dmrs771.c16",
+      "meta_file": "pbch_ok_seq01_ts44786797_cf2114550000_fs30720000_pci84_ssb3_pss301_dmrs771.meta.txt",
+      "rx_gain_db": 61.0,
+      "ssb_index": 3,
+      "cfo_hz": 2157.42,
+      "snr_db": 2.25,
+      "pss_metric": 0.301030,
+      "pbch_metric": 0.770502,
+      "pbch_metric_second": 0.768809,
+      "pbch_ok": true,
+      "mib_ok": true,
+      "mib_payload_hex": "0x642b15",
+      "decoded_mib": {
+        "system_frame_number_msb6": 25,
+        "full_sfn_from_live_success_log": 410,
+        "subcarrier_spacing_common_raw": 0,
+        "subcarrier_spacing_common_meaning": "scs15or60 -> 15 kHz in this FR1 run",
+        "ssb_subcarrier_offset_lsb4": 1,
+        "dmrs_type_a_position_raw": 0,
+        "dmrs_type_a_position_meaning": "pos2",
+        "pdcch_config_sib1_raw": 177,
+        "control_resource_set_zero": 11,
+        "search_space_zero": 1,
+        "cell_barred_raw": 0,
+        "cell_barred_meaning": "barred",
+        "intra_freq_reselection_raw": 1,
+        "intra_freq_reselection_meaning": "notAllowed",
+        "tail_bit_note": "final remaining payload bit treated as implementation extra or padding"
+      }
+    },
+    {
+      "label": "capture_b",
+      "iq_file": "pbch_ok_seq00_ts43508292_cf2114550000_fs30720000_pci84_ssb3_pss253_dmrs667.c16",
+      "meta_file": "pbch_ok_seq00_ts43508292_cf2114550000_fs30720000_pci84_ssb3_pss253_dmrs667.meta.txt",
+      "rx_gain_db": 64.0,
+      "ssb_index": 3,
+      "cfo_hz": 1111.28,
+      "snr_db": 1.93,
+      "pss_metric": 0.252712,
+      "pbch_metric": 0.667194,
+      "pbch_metric_second": 0.661772,
+      "pbch_ok": true,
+      "mib_ok": true,
+      "mib_payload_hex": "0x8c2b15",
+      "decoded_mib": {
+        "system_frame_number_msb6": 35,
+        "full_sfn_from_live_success_log": 570,
+        "subcarrier_spacing_common_raw": 0,
+        "subcarrier_spacing_common_meaning": "scs15or60 -> 15 kHz in this FR1 run",
+        "ssb_subcarrier_offset_lsb4": 1,
+        "dmrs_type_a_position_raw": 0,
+        "dmrs_type_a_position_meaning": "pos2",
+        "pdcch_config_sib1_raw": 177,
+        "control_resource_set_zero": 11,
+        "search_space_zero": 1,
+        "cell_barred_raw": 0,
+        "cell_barred_meaning": "barred",
+        "intra_freq_reselection_raw": 1,
+        "intra_freq_reselection_meaning": "notAllowed",
+        "tail_bit_note": "final remaining payload bit treated as implementation extra or padding"
+      }
+    }
+  ],
+  "notes": [
+    "The saved metadata confirms pbch_ok=1 and mib_ok=1 for both captures.",
+    "Standalone offline replay_toa_iq did not deterministically re-lock the same candidate in every run."
+  ]
+}

@@ -1,0 +1,172 @@
+replay: hits [0] nid2=2 off=434940 m=0.138 [1] nid2=1 off=436821 m=0.141 [2] nid2=0 off=611832 m=0.132
+replay: meta-seed pci=84 off=596166 cfo=2157.42 pss=0.301
+GRID_DBG: pci=84 cfo=2157.4 pss_corr=0.0607 sss_corr=0.0701 pss_ph=10.7 sym_pow=[1319.2,1156.4,1694.4,1544.9]
+  pci0_scan: pci=84 dt=0 dcfo=0 best_ssb=2 dmrs=0.1568
+  pci0_scan: pci=84 dt=0 dcfo=-500 best_ssb=2 dmrs=0.1485
+  pci0_scan: pci=84 dt=0 dcfo=500 best_ssb=2 dmrs=0.1634
+  pci0_scan: pci=84 dt=-1 dcfo=0 best_ssb=0 dmrs=0.1618
+  pci0_scan: pci=84 dt=-1 dcfo=-500 best_ssb=0 dmrs=0.1622
+  pci0_scan: pci=84 dt=-1 dcfo=500 best_ssb=0 dmrs=0.1603
+  pci0_scan: pci=84 dt=1 dcfo=0 best_ssb=2 dmrs=0.1392
+  pci0_scan: pci=84 dt=1 dcfo=-500 best_ssb=2 dmrs=0.1303
+  pci0_scan: pci=84 dt=1 dcfo=500 best_ssb=2 dmrs=0.1467
+  pci0_scan: pci=84 dt=-2 dcfo=0 best_ssb=0 dmrs=0.1563
+  pci0_scan: pci=84 dt=-2 dcfo=-500 best_ssb=0 dmrs=0.1618
+  pci0_scan: pci=84 dt=-2 dcfo=500 best_ssb=0 dmrs=0.1498
+  pci0_scan: pci=84 dt=2 dcfo=0 best_ssb=6 dmrs=0.1123
+  pci0_scan: pci=84 dt=2 dcfo=-500 best_ssb=6 dmrs=0.1053
+  pci0_scan: pci=84 dt=2 dcfo=500 best_ssb=6 dmrs=0.1180
+  pci0_scan: pci=84 dt=-3 dcfo=0 best_ssb=0 dmrs=0.1322
+  pci0_scan: pci=84 dt=-3 dcfo=-500 best_ssb=0 dmrs=0.1435
+  pci0_scan: pci=84 dt=-3 dcfo=500 best_ssb=0 dmrs=0.1199
+  pci0_scan: pci=84 dt=3 dcfo=0 best_ssb=5 dmrs=0.1262
+  pci0_scan: pci=84 dt=3 dcfo=-500 best_ssb=5 dmrs=0.1259
+  pci0_scan: pci=84 dt=3 dcfo=500 best_ssb=5 dmrs=0.1240
+pbch_hyps: count=8 decode=8 best_pci=84 best_ssb=2 best_dmrs=0.163 cfo=2157.4
+  hyp[0]: pci=84 ssb=2 dmrs=0.163 ds=0 dt=0 dcfo=500.0
+  hyp[1]: pci=84 ssb=0 dmrs=0.162 ds=0 dt=-1 dcfo=-500.0
+  hyp[2]: pci=84 ssb=0 dmrs=0.162 ds=0 dt=-2 dcfo=-500.0
+  hyp[3]: pci=84 ssb=0 dmrs=0.162 ds=0 dt=-1 dcfo=0.0
+  hyp[4]: pci=84 ssb=0 dmrs=0.160 ds=0 dt=-1 dcfo=500.0
+  hyp[5]: pci=84 ssb=2 dmrs=0.157 ds=0 dt=0 dcfo=0.0
+  hyp[6]: pci=84 ssb=0 dmrs=0.156 ds=0 dt=-2 dcfo=0.0
+  hyp[7]: pci=84 ssb=2 dmrs=0.153 ds=0 dt=-1 dcfo=500.0
+  pbch_try[0]: pci=84 ssb=2 dmrs=0.163 noise=0.6594 cpe=0.039 dt=0 dcfo=500.0
+  LLR_PRE_SCR: pci=84 ssb=2 mean_abs=4.65 max=87.13 pos_frac=0.524
+  pbch_try[1]: pci=84 ssb=0 dmrs=0.162 noise=0.5971 cpe=-0.005 dt=-1 dcfo=-500.0
+  pbch_try[2]: pci=84 ssb=0 dmrs=0.162 noise=0.5915 cpe=-0.007 dt=-2 dcfo=-500.0
+  pbch_try[3]: pci=84 ssb=0 dmrs=0.162 noise=0.5977 cpe=-0.007 dt=-1 dcfo=0.0
+  pbch_try[4]: pci=84 ssb=0 dmrs=0.160 noise=0.5984 cpe=-0.010 dt=-1 dcfo=500.0
+  pbch_try[5]: pci=84 ssb=2 dmrs=0.157 noise=0.6607 cpe=0.038 dt=0 dcfo=0.0
+  pbch_try[6]: pci=84 ssb=0 dmrs=0.156 noise=0.5920 cpe=-0.010 dt=-2 dcfo=0.0
+  pbch_try[7]: pci=84 ssb=2 dmrs=0.153 noise=0.6611 cpe=0.043 dt=-1 dcfo=500.0
+pbch_bch: crc-fail pci=84 ssb=2 dmrs=0.163 second=0.162 ds=0 dt=0 dcfo=500.0 pss=0.301 snr=0.92
+replay: meta-seed pbch=fail ssb=2 stage=3 dmrs=0.163 second=0.162 mib=0 sfn=0 payload=0x000000
+replay: cand[0] pci=209 off=434984 cfo=-8847.07 snr=0.89 pss=0.138
+GRID_DBG: pci=209 cfo=-8847.1 pss_corr=0.0556 sss_corr=0.1096 pss_ph=52.9 sym_pow=[2384.1,2313.9,2533.3,2342.3]
+  pci0_scan: pci=209 dt=0 dcfo=0 best_ssb=7 dmrs=0.1132
+  pci0_scan: pci=209 dt=0 dcfo=-500 best_ssb=7 dmrs=0.1177
+  pci0_scan: pci=209 dt=0 dcfo=500 best_ssb=7 dmrs=0.1074
+  pci0_scan: pci=209 dt=-1 dcfo=0 best_ssb=7 dmrs=0.1037
+  pci0_scan: pci=209 dt=-1 dcfo=-500 best_ssb=7 dmrs=0.1053
+  pci0_scan: pci=209 dt=-1 dcfo=500 best_ssb=7 dmrs=0.1006
+  pci0_scan: pci=209 dt=1 dcfo=0 best_ssb=6 dmrs=0.1344
+  pci0_scan: pci=209 dt=1 dcfo=-500 best_ssb=6 dmrs=0.1288
+  pci0_scan: pci=209 dt=1 dcfo=500 best_ssb=6 dmrs=0.1385
+  pci0_scan: pci=209 dt=-2 dcfo=0 best_ssb=3 dmrs=0.1122
+  pci0_scan: pci=209 dt=-2 dcfo=-500 best_ssb=3 dmrs=0.1174
+  pci0_scan: pci=209 dt=-2 dcfo=500 best_ssb=3 dmrs=0.1058
+  pci0_scan: pci=209 dt=2 dcfo=0 best_ssb=6 dmrs=0.1718
+  pci0_scan: pci=209 dt=2 dcfo=-500 best_ssb=6 dmrs=0.1647
+  pci0_scan: pci=209 dt=2 dcfo=500 best_ssb=6 dmrs=0.1770
+  pci0_scan: pci=209 dt=-3 dcfo=0 best_ssb=3 dmrs=0.1253
+  pci0_scan: pci=209 dt=-3 dcfo=-500 best_ssb=3 dmrs=0.1305
+  pci0_scan: pci=209 dt=-3 dcfo=500 best_ssb=3 dmrs=0.1191
+  pci0_scan: pci=209 dt=3 dcfo=0 best_ssb=6 dmrs=0.1753
+  pci0_scan: pci=209 dt=3 dcfo=-500 best_ssb=6 dmrs=0.1682
+  pci0_scan: pci=209 dt=3 dcfo=500 best_ssb=6 dmrs=0.1808
+pbch_hyps: count=8 decode=8 best_pci=245 best_ssb=2 best_dmrs=0.183 cfo=-8847.1
+  hyp[0]: pci=245 ssb=2 dmrs=0.183 ds=0 dt=1 dcfo=500.0
+  hyp[1]: pci=245 ssb=2 dmrs=0.181 ds=0 dt=1 dcfo=0.0
+  hyp[2]: pci=209 ssb=6 dmrs=0.181 ds=0 dt=3 dcfo=500.0
+  hyp[3]: pci=245 ssb=2 dmrs=0.178 ds=0 dt=1 dcfo=-500.0
+  hyp[4]: pci=209 ssb=6 dmrs=0.177 ds=0 dt=2 dcfo=500.0
+  hyp[5]: pci=797 ssb=5 dmrs=0.176 ds=0 dt=-3 dcfo=-500.0
+  hyp[6]: pci=797 ssb=0 dmrs=0.176 ds=0 dt=1 dcfo=500.0
+  hyp[7]: pci=209 ssb=6 dmrs=0.175 ds=0 dt=3 dcfo=0.0
+  pbch_try[0]: pci=245 ssb=2 dmrs=0.183 noise=0.6331 cpe=0.045 dt=1 dcfo=500.0
+  pbch_try[1]: pci=245 ssb=2 dmrs=0.181 noise=0.6274 cpe=0.047 dt=1 dcfo=0.0
+  pbch_try[2]: pci=209 ssb=6 dmrs=0.181 noise=0.6032 cpe=0.005 dt=3 dcfo=500.0
+  pbch_try[3]: pci=245 ssb=2 dmrs=0.178 noise=0.6202 cpe=0.048 dt=1 dcfo=-500.0
+  pbch_try[4]: pci=209 ssb=6 dmrs=0.177 noise=0.6032 cpe=0.004 dt=2 dcfo=500.0
+  pbch_try[5]: pci=797 ssb=5 dmrs=0.176 noise=0.6249 cpe=0.002 dt=-3 dcfo=-500.0
+  pbch_try[6]: pci=797 ssb=0 dmrs=0.176 noise=0.5666 cpe=-0.012 dt=1 dcfo=500.0
+  pbch_try[7]: pci=209 ssb=6 dmrs=0.175 noise=0.6105 cpe=-0.000 dt=3 dcfo=0.0
+pbch_bch: crc-fail pci=245 ssb=2 dmrs=0.183 second=0.181 ds=0 dt=1 dcfo=500.0 pss=0.138 snr=0.89
+replay: cand[0] pbch=fail ssb=2 stage=3 dmrs=0.183 second=0.181 mib=0 sfn=0 payload=0x000000
+replay: cand[1] pci=922 off=436799 cfo=-529.46 snr=0.88 pss=0.141
+GRID_DBG: pci=922 cfo=-529.5 pss_corr=0.0154 sss_corr=0.0277 pss_ph=-137.5 sym_pow=[2407.7,2574.8,2252.0,2507.4]
+  pci0_scan: pci=922 dt=0 dcfo=0 best_ssb=6 dmrs=0.1326
+  pci0_scan: pci=922 dt=0 dcfo=-500 best_ssb=6 dmrs=0.1368
+  pci0_scan: pci=922 dt=0 dcfo=500 best_ssb=6 dmrs=0.1270
+  pci0_scan: pci=922 dt=-1 dcfo=0 best_ssb=4 dmrs=0.1436
+  pci0_scan: pci=922 dt=-1 dcfo=-500 best_ssb=4 dmrs=0.1446
+  pci0_scan: pci=922 dt=-1 dcfo=500 best_ssb=4 dmrs=0.1415
+  pci0_scan: pci=922 dt=1 dcfo=0 best_ssb=2 dmrs=0.1367
+  pci0_scan: pci=922 dt=1 dcfo=-500 best_ssb=2 dmrs=0.1348
+  pci0_scan: pci=922 dt=1 dcfo=500 best_ssb=2 dmrs=0.1377
+  pci0_scan: pci=922 dt=-2 dcfo=0 best_ssb=4 dmrs=0.1324
+  pci0_scan: pci=922 dt=-2 dcfo=-500 best_ssb=4 dmrs=0.1361
+  pci0_scan: pci=922 dt=-2 dcfo=500 best_ssb=4 dmrs=0.1278
+  pci0_scan: pci=922 dt=2 dcfo=0 best_ssb=2 dmrs=0.1341
+  pci0_scan: pci=922 dt=2 dcfo=-500 best_ssb=2 dmrs=0.1350
+  pci0_scan: pci=922 dt=2 dcfo=500 best_ssb=1 dmrs=0.1344
+  pci0_scan: pci=922 dt=-3 dcfo=0 best_ssb=7 dmrs=0.1058
+  pci0_scan: pci=922 dt=-3 dcfo=-500 best_ssb=7 dmrs=0.1127
+  pci0_scan: pci=922 dt=-3 dcfo=500 best_ssb=7 dmrs=0.0987
+  pci0_scan: pci=922 dt=3 dcfo=0 best_ssb=2 dmrs=0.1200
+  pci0_scan: pci=922 dt=3 dcfo=-500 best_ssb=2 dmrs=0.1236
+  pci0_scan: pci=922 dt=3 dcfo=500 best_ssb=2 dmrs=0.1156
+pbch_hyps: count=8 decode=8 best_pci=97 best_ssb=3 best_dmrs=0.221 cfo=-529.5
+  hyp[0]: pci=97 ssb=3 dmrs=0.221 ds=44 dt=-2 dcfo=0.0
+  hyp[1]: pci=97 ssb=3 dmrs=0.220 ds=44 dt=-2 dcfo=500.0
+  hyp[2]: pci=97 ssb=3 dmrs=0.220 ds=44 dt=-2 dcfo=-500.0
+  hyp[3]: pci=97 ssb=3 dmrs=0.210 ds=44 dt=-3 dcfo=-500.0
+  hyp[4]: pci=97 ssb=3 dmrs=0.209 ds=44 dt=-3 dcfo=0.0
+  hyp[5]: pci=97 ssb=3 dmrs=0.206 ds=44 dt=-3 dcfo=500.0
+  hyp[6]: pci=97 ssb=3 dmrs=0.195 ds=44 dt=-1 dcfo=500.0
+  hyp[7]: pci=97 ssb=3 dmrs=0.192 ds=44 dt=-1 dcfo=0.0
+  pbch_try[0]: pci=97 ssb=3 dmrs=0.221 noise=0.5213 cpe=-0.003 dt=-2 dcfo=0.0
+  pbch_try[1]: pci=97 ssb=3 dmrs=0.220 noise=0.5306 cpe=0.000 dt=-2 dcfo=500.0
+  pbch_try[2]: pci=97 ssb=3 dmrs=0.220 noise=0.5140 cpe=-0.006 dt=-2 dcfo=-500.0
+  pbch_try[3]: pci=97 ssb=3 dmrs=0.210 noise=0.5098 cpe=-0.010 dt=-3 dcfo=-500.0
+  pbch_try[4]: pci=97 ssb=3 dmrs=0.209 noise=0.5182 cpe=-0.006 dt=-3 dcfo=0.0
+  LLR_PRE_SCR: pci=97 ssb=3 mean_abs=7.39 max=460.56 pos_frac=0.499
+  pbch_try[5]: pci=97 ssb=3 dmrs=0.206 noise=0.5285 cpe=-0.002 dt=-3 dcfo=500.0
+  pbch_try[6]: pci=97 ssb=3 dmrs=0.195 noise=0.5258 cpe=0.004 dt=-1 dcfo=500.0
+  pbch_try[7]: pci=97 ssb=3 dmrs=0.192 noise=0.5171 cpe=0.002 dt=-1 dcfo=0.0
+pbch_bch: crc-fail pci=97 ssb=3 dmrs=0.221 second=0.220 ds=44 dt=-2 dcfo=0.0 pss=0.141 snr=0.88
+replay: cand[1] pbch=fail ssb=3 stage=3 dmrs=0.221 second=0.220 mib=0 sfn=0 payload=0x000000
+replay: cand[2] pci=585 off=611788 cfo=3777.71 snr=0.81 pss=0.132
+GRID_DBG: pci=693 cfo=3777.7 pss_corr=0.0803 sss_corr=0.1089 pss_ph=-33.9 sym_pow=[1118.9,810.9,1029.2,1067.6]
+  pci0_scan: pci=693 dt=0 dcfo=0 best_ssb=6 dmrs=0.1249
+  pci0_scan: pci=693 dt=0 dcfo=-500 best_ssb=6 dmrs=0.1156
+  pci0_scan: pci=693 dt=0 dcfo=500 best_ssb=6 dmrs=0.1339
+  pci0_scan: pci=693 dt=-1 dcfo=0 best_ssb=6 dmrs=0.1251
+  pci0_scan: pci=693 dt=-1 dcfo=-500 best_ssb=6 dmrs=0.1172
+  pci0_scan: pci=693 dt=-1 dcfo=500 best_ssb=6 dmrs=0.1326
+  pci0_scan: pci=693 dt=1 dcfo=0 best_ssb=6 dmrs=0.1118
+  pci0_scan: pci=693 dt=1 dcfo=-500 best_ssb=1 dmrs=0.1092
+  pci0_scan: pci=693 dt=1 dcfo=500 best_ssb=6 dmrs=0.1232
+  pci0_scan: pci=693 dt=-2 dcfo=0 best_ssb=3 dmrs=0.1129
+  pci0_scan: pci=693 dt=-2 dcfo=-500 best_ssb=3 dmrs=0.1163
+  pci0_scan: pci=693 dt=-2 dcfo=500 best_ssb=6 dmrs=0.1109
+  pci0_scan: pci=693 dt=2 dcfo=0 best_ssb=1 dmrs=0.1296
+  pci0_scan: pci=693 dt=2 dcfo=-500 best_ssb=1 dmrs=0.1267
+  pci0_scan: pci=693 dt=2 dcfo=500 best_ssb=1 dmrs=0.1304
+  pci0_scan: pci=693 dt=-3 dcfo=0 best_ssb=2 dmrs=0.1252
+  pci0_scan: pci=693 dt=-3 dcfo=-500 best_ssb=2 dmrs=0.1252
+  pci0_scan: pci=693 dt=-3 dcfo=500 best_ssb=2 dmrs=0.1238
+  pci0_scan: pci=693 dt=3 dcfo=0 best_ssb=1 dmrs=0.1292
+  pci0_scan: pci=693 dt=3 dcfo=-500 best_ssb=1 dmrs=0.1257
+  pci0_scan: pci=693 dt=3 dcfo=500 best_ssb=1 dmrs=0.1307
+pbch_hyps: count=8 decode=8 best_pci=555 best_ssb=6 best_dmrs=0.209 cfo=3777.7
+  hyp[0]: pci=555 ssb=6 dmrs=0.209 ds=-22 dt=-2 dcfo=500.0
+  hyp[1]: pci=555 ssb=6 dmrs=0.207 ds=-22 dt=-1 dcfo=500.0
+  hyp[2]: pci=555 ssb=6 dmrs=0.206 ds=-22 dt=-3 dcfo=500.0
+  hyp[3]: pci=555 ssb=6 dmrs=0.205 ds=-22 dt=-2 dcfo=0.0
+  hyp[4]: pci=555 ssb=6 dmrs=0.203 ds=-22 dt=-3 dcfo=0.0
+  hyp[5]: pci=555 ssb=6 dmrs=0.201 ds=-22 dt=-1 dcfo=0.0
+  hyp[6]: pci=555 ssb=6 dmrs=0.199 ds=-22 dt=-2 dcfo=-500.0
+  hyp[7]: pci=555 ssb=6 dmrs=0.198 ds=-22 dt=-3 dcfo=-500.0
+  pbch_try[0]: pci=555 ssb=6 dmrs=0.209 noise=0.5875 cpe=-0.033 dt=-2 dcfo=500.0
+  pbch_try[1]: pci=555 ssb=6 dmrs=0.207 noise=0.5894 cpe=-0.033 dt=-1 dcfo=500.0
+  pbch_try[2]: pci=555 ssb=6 dmrs=0.206 noise=0.5860 cpe=-0.036 dt=-3 dcfo=500.0
+  pbch_try[3]: pci=555 ssb=6 dmrs=0.205 noise=0.5849 cpe=-0.026 dt=-2 dcfo=0.0
+  pbch_try[4]: pci=555 ssb=6 dmrs=0.203 noise=0.5829 cpe=-0.029 dt=-3 dcfo=0.0
+  pbch_try[5]: pci=555 ssb=6 dmrs=0.201 noise=0.5868 cpe=-0.026 dt=-1 dcfo=0.0
+  pbch_try[6]: pci=555 ssb=6 dmrs=0.199 noise=0.5825 cpe=-0.019 dt=-2 dcfo=-500.0
+  pbch_try[7]: pci=555 ssb=6 dmrs=0.198 noise=0.5801 cpe=-0.022 dt=-3 dcfo=-500.0
+pbch_bch: crc-fail pci=555 ssb=6 dmrs=0.209 second=0.207 ds=-22 dt=-2 dcfo=500.0 pss=0.132 snr=0.81
+replay: cand[2] pbch=fail ssb=6 stage=3 dmrs=0.209 second=0.207 mib=0 sfn=0 payload=0x000000
+replay: PBCH FAIL pci=84 stage=3 dmrs=0.163 second=0.162 pss=0.301 snr=0.92

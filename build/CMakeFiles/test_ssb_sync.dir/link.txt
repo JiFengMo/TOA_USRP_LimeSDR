@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/test_ssb_sync.dir/openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.o -o test_ssb_sync   -L/usr/local/lib  -Wl,-rpath,/usr/local/lib libnr_positioning.a libnr_radio.a -luhd -lboost_system -lm -lpthread 
+/usr/bin/c++ -O2 -g -DNDEBUG CMakeFiles/test_ssb_sync.dir/openair1/PHY/NR_POSITIONING/tests/test_ssb_sync.c.o -o test_ssb_sync   -L/usr/local/lib  -Wl,-rpath,/usr/local/lib libnr_positioning.a libnr_radio.a -luhd -lboost_system -lm -lpthread 
