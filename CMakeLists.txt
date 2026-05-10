@@ -29,10 +29,15 @@ set(NR_POSITIONING_SOURCES
   openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.c
   openair1/PHY/NR_POSITIONING/common/nr_radio_if.c
   openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c
+  openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.c
   openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.c
   openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c
   openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c
   openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c
+  openair1/PHY/NR_POSITIONING/common/nr_type0_css.c
+  openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.c
+  openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.c
+  openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.c
   openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c
   openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c
   openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c

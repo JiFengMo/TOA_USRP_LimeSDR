@@ -1,0 +1,187 @@
+NR-TOA UE cfg: sdr=usrp clock=internal time=internal f=2114550000 Fs=30720000 rx_gain=58.0 tx_gain=0.0 mode=0 meas_mode=0 full_band_sweep=0 strict_center_freq=1 gain_sweep=0 target_pci=84 ssb_scs=15kHz anchor_db_path=targets/PROJECTS/NR-TOA/CONF/anchors.csv n_anchors=2
+NR-TOA note: SSB mode now attempts real PBCH/MIB decode; treat ssb_locked=1 with mib=0 as a decode failure, not a successful cell accept.
+NR-TOA note: IQ near-miss dump enabled, dir=/home/jfm/桌面/TOA_USRP_LimeSDR/precise_trials_live_20260409_194310/pci84_gain58_iq
+relative_delay_csv: path=/tmp/nr_ssb_relative_delay_20260409_194310.csv
+USRP: configured req(rate=30720000 rx=2114550000 tx=2114550000 gain=58.0) act(rate=30720000 rx=2114550000 tx=2114550000 rx_gain=58.0 tx_gain=0.0 rx_bw=56000000) lo_locked=1
+USRP: RX streaming started
+freq_sweep: plan_points=1 center=2114550000Hz first=2114550000Hz last=2114550000Hz step_iters=20
+rx_gain_plan: count=1 start=58.0 end=58.0 current=58.0
+sync_actor: ts=43548424 nsamps=623184 avg_pwr=720886.6 peak=9874817.0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+pss_hits: [0]nid2=0 off=18904 m=0.232 cfo=1080.1 [1]nid2=1 off=135952 m=0.092 [2]nid2=1 off=308221 m=0.090 [3]nid2=1 off=620975 m=0.066
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+acq_cands: count=1
+  cand[0]: pci=84 nid2=0 nid1=28 off=18824 cfo=1080.1 rank=0.232 pss=0.232 hyps=1
+GRID_DBG: pci=84 cfo=1080.1 pss_corr=0.0625 sss_corr=0.0568 pss_ph=-98.4 sym_pow=[497.4,1000.9,1027.1,948.9]
+  pci0_scan: pci=84 dt=0 dcfo=0 best_ssb=1 dmrs=0.1564
+  pci0_scan: pci=84 dt=0 dcfo=-500 best_ssb=1 dmrs=0.1626
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+  pci0_scan: pci=84 dt=0 dcfo=500 best_ssb=1 dmrs=0.1453
+  pci0_scan: pci=84 dt=-1 dcfo=0 best_ssb=1 dmrs=0.1457
+  pci0_scan: pci=84 dt=-1 dcfo=-500 best_ssb=1 dmrs=0.1548
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+  pci0_scan: pci=84 dt=-1 dcfo=500 best_ssb=1 dmrs=0.1314
+  pci0_scan: pci=84 dt=1 dcfo=0 best_ssb=1 dmrs=0.1564
+  pci0_scan: pci=84 dt=1 dcfo=-500 best_ssb=1 dmrs=0.1588
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+  pci0_scan: pci=84 dt=1 dcfo=500 best_ssb=1 dmrs=0.1498
+  pci0_scan: pci=84 dt=-2 dcfo=0 best_ssb=1 dmrs=0.1302
+  pci0_scan: pci=84 dt=-2 dcfo=-500 best_ssb=1 dmrs=0.1413
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+  pci0_scan: pci=84 dt=-2 dcfo=500 best_ssb=1 dmrs=0.1136
+  pci0_scan: pci=84 dt=2 dcfo=0 best_ssb=1 dmrs=0.1438
+  pci0_scan: pci=84 dt=2 dcfo=-500 best_ssb=1 dmrs=0.1436
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+  pci0_scan: pci=84 dt=2 dcfo=500 best_ssb=1 dmrs=0.1411
+  pci0_scan: pci=84 dt=-3 dcfo=0 best_ssb=4 dmrs=0.1132
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+  pci0_scan: pci=84 dt=-3 dcfo=-500 best_ssb=1 dmrs=0.1184
+  pci0_scan: pci=84 dt=-3 dcfo=500 best_ssb=4 dmrs=0.1135
+  pci0_scan: pci=84 dt=3 dcfo=0 best_ssb=1 dmrs=0.1236
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+  pci0_scan: pci=84 dt=3 dcfo=-500 best_ssb=1 dmrs=0.1210
+  pci0_scan: pci=84 dt=3 dcfo=500 best_ssb=1 dmrs=0.1248
+pbch_hyps: count=8 decode=8 best_pci=84 best_ssb=1 best_dmrs=0.163 cfo=1080.1
+  hyp[0]: pci=84 ssb=1 dmrs=0.163 ds=0 dt=0 dcfo=-500.0
+  hyp[1]: pci=84 ssb=1 dmrs=0.159 ds=0 dt=1 dcfo=-500.0
+  hyp[2]: pci=84 ssb=1 dmrs=0.156 ds=0 dt=0 dcfo=0.0
+  hyp[3]: pci=84 ssb=1 dmrs=0.156 ds=0 dt=1 dcfo=0.0
+  hyp[4]: pci=84 ssb=1 dmrs=0.155 ds=0 dt=-1 dcfo=-500.0
+  hyp[5]: pci=84 ssb=1 dmrs=0.150 ds=0 dt=1 dcfo=500.0
+  hyp[6]: pci=84 ssb=1 dmrs=0.146 ds=0 dt=-1 dcfo=0.0
+  hyp[7]: pci=84 ssb=1 dmrs=0.145 ds=0 dt=0 dcfo=500.0
+  pbch_try[0]: pci=84 ssb=1 dmrs=0.163 noise=0.8865 cpe=-0.011 dt=0 dcfo=-500.0
+  LLR_PRE_SCR: pci=84 ssb=1 mean_abs=4.35 max=87.32 pos_frac=0.494
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+  pbch_try[1]: pci=84 ssb=1 dmrs=0.159 noise=0.8793 cpe=-0.011 dt=1 dcfo=-500.0
+  pbch_try[2]: pci=84 ssb=1 dmrs=0.156 noise=0.9195 cpe=0.001 dt=0 dcfo=0.0
+  pbch_try[3]: pci=84 ssb=1 dmrs=0.156 noise=0.9123 cpe=0.001 dt=1 dcfo=0.0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+  pbch_try[4]: pci=84 ssb=1 dmrs=0.155 noise=0.8924 cpe=-0.011 dt=-1 dcfo=-500.0
+  pbch_try[5]: pci=84 ssb=1 dmrs=0.150 noise=0.9341 cpe=0.012 dt=1 dcfo=500.0
+  pbch_try[6]: pci=84 ssb=1 dmrs=0.146 noise=0.9264 cpe=0.001 dt=-1 dcfo=0.0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+  pbch_try[7]: pci=84 ssb=1 dmrs=0.145 noise=0.9411 cpe=0.013 dt=0 dcfo=500.0
+pbch_bch: crc-fail pci=84 ssb=1 dmrs=0.163 second=0.159 ds=0 dt=0 dcfo=-500.0 pss=0.232 snr=2.25
+  pbch_cand[0]: pci=84 rc=-1 ok=0 dmrs=0.163 fail=3
+iq_dump: saved tag=pbch_nearmiss reason=dmrs_weak iq=/home/jfm/桌面/TOA_USRP_LimeSDR/precise_trials_live_20260409_194310/pci84_gain58_iq/pbch_nearmiss_seq00_ts43548424_cf2114550000_fs30720000_pci84_ssb1_pss232_dmrs163.c16 meta=/home/jfm/桌面/TOA_USRP_LimeSDR/precise_trials_live_20260409_194310/pci84_gain58_iq/pbch_nearmiss_seq00_ts43548424_cf2114550000_fs30720000_pci84_ssb1_pss232_dmrs163.meta.txt
+sync_result: not-detected ssb_locked=0 pbch=0 mib=0 pci=84 ssb=1 sfn=0 mib_payload=0x000000 offset=18824 cfo=580.07 snr=2.25 metric=0.232 miss_streak=1 det=0 nodet=1 dropped_sync=0 dropped_meas=0 dropped_solver=0
+USRP: RX overflow count=1 timeout=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+pss_hits: [0]nid2=0 off=615734 m=0.313 cfo=2729.0 [1]nid2=0 off=1335 m=0.278 [2]nid2=2 off=154321 m=0.098 [3]nid2=2 off=620961 m=0.063
+acq_cands: count=1
+  cand[0]: pci=84 nid2=0 nid1=28 off=1255 cfo=390.7 rank=0.278 pss=0.278 hyps=1
+GRID_DBG: pci=84 cfo=390.7 pss_corr=0.0660 sss_corr=0.0373 pss_ph=-45.0 sym_pow=[461.4,1020.3,899.0,973.0]
+  pci0_scan: pci=84 dt=0 dcfo=0 best_ssb=1 dmrs=0.1242
+  pci0_scan: pci=84 dt=0 dcfo=-500 best_ssb=1 dmrs=0.1109
+  pci0_scan: pci=84 dt=0 dcfo=500 best_ssb=1 dmrs=0.1329
+  pci0_scan: pci=84 dt=-1 dcfo=0 best_ssb=1 dmrs=0.1236
+  pci0_scan: pci=84 dt=-1 dcfo=-500 best_ssb=1 dmrs=0.1094
+  pci0_scan: pci=84 dt=-1 dcfo=500 best_ssb=1 dmrs=0.1319
+  pci0_scan: pci=84 dt=1 dcfo=0 best_ssb=1 dmrs=0.1157
+  pci0_scan: pci=84 dt=1 dcfo=-500 best_ssb=1 dmrs=0.1042
+  pci0_scan: pci=84 dt=1 dcfo=500 best_ssb=1 dmrs=0.1246
+  pci0_scan: pci=84 dt=-2 dcfo=0 best_ssb=1 dmrs=0.1134
+  pci0_scan: pci=84 dt=-2 dcfo=-500 best_ssb=6 dmrs=0.1092
+  pci0_scan: pci=84 dt=-2 dcfo=500 best_ssb=4 dmrs=0.1316
+  pci0_scan: pci=84 dt=2 dcfo=0 best_ssb=1 dmrs=0.0969
+  pci0_scan: pci=84 dt=2 dcfo=-500 best_ssb=7 dmrs=0.1062
+  pci0_scan: pci=84 dt=2 dcfo=500 best_ssb=4 dmrs=0.1112
+  pci0_scan: pci=84 dt=-3 dcfo=0 best_ssb=4 dmrs=0.1131
+  pci0_scan: pci=84 dt=-3 dcfo=-500 best_ssb=6 dmrs=0.1179
+  pci0_scan: pci=84 dt=-3 dcfo=500 best_ssb=4 dmrs=0.1287
+  pci0_scan: pci=84 dt=3 dcfo=0 best_ssb=7 dmrs=0.1102
+  pci0_scan: pci=84 dt=3 dcfo=-500 best_ssb=7 dmrs=0.1247
+  pci0_scan: pci=84 dt=3 dcfo=500 best_ssb=4 dmrs=0.1041
+pbch_hyps: count=8 decode=8 best_pci=84 best_ssb=1 best_dmrs=0.133 cfo=390.7
+  hyp[0]: pci=84 ssb=1 dmrs=0.133 ds=0 dt=0 dcfo=500.0
+  hyp[1]: pci=84 ssb=1 dmrs=0.132 ds=0 dt=-1 dcfo=500.0
+  hyp[2]: pci=84 ssb=4 dmrs=0.132 ds=0 dt=-2 dcfo=500.0
+  hyp[3]: pci=84 ssb=4 dmrs=0.131 ds=0 dt=-1 dcfo=500.0
+  hyp[4]: pci=84 ssb=4 dmrs=0.129 ds=0 dt=-3 dcfo=500.0
+  hyp[5]: pci=84 ssb=4 dmrs=0.126 ds=0 dt=0 dcfo=500.0
+  hyp[6]: pci=84 ssb=7 dmrs=0.125 ds=0 dt=3 dcfo=-500.0
+  hyp[7]: pci=84 ssb=1 dmrs=0.125 ds=0 dt=1 dcfo=500.0
+  pbch_try[0]: pci=84 ssb=1 dmrs=0.133 noise=0.7699 cpe=-0.011 dt=0 dcfo=500.0
+  pbch_try[1]: pci=84 ssb=1 dmrs=0.132 noise=0.7675 cpe=-0.011 dt=-1 dcfo=500.0
+  pbch_try[2]: pci=84 ssb=4 dmrs=0.132 noise=0.6995 cpe=-0.003 dt=-2 dcfo=500.0
+  pbch_try[3]: pci=84 ssb=4 dmrs=0.131 noise=0.6971 cpe=-0.003 dt=-1 dcfo=500.0
+  pbch_try[4]: pci=84 ssb=4 dmrs=0.129 noise=0.7007 cpe=-0.003 dt=-3 dcfo=500.0
+  pbch_try[5]: pci=84 ssb=4 dmrs=0.126 noise=0.6951 cpe=-0.004 dt=0 dcfo=500.0
+  pbch_try[6]: pci=84 ssb=7 dmrs=0.125 noise=0.7563 cpe=-0.021 dt=3 dcfo=-500.0
+  pbch_try[7]: pci=84 ssb=1 dmrs=0.125 noise=0.7712 cpe=-0.011 dt=1 dcfo=500.0
+pbch_bch: crc-fail pci=84 ssb=1 dmrs=0.133 second=0.132 ds=0 dt=0 dcfo=500.0 pss=0.278 snr=2.31
+  pbch_cand[0]: pci=84 rc=-1 ok=0 dmrs=0.133 fail=3
+iq_dump: saved tag=pbch_nearmiss reason=dmrs_weak iq=/home/jfm/桌面/TOA_USRP_LimeSDR/precise_trials_live_20260409_194310/pci84_gain58_iq/pbch_nearmiss_seq01_ts44794792_cf2114550000_fs30720000_pci84_ssb1_pss278_dmrs133.c16 meta=/home/jfm/桌面/TOA_USRP_LimeSDR/precise_trials_live_20260409_194310/pci84_gain58_iq/pbch_nearmiss_seq01_ts44794792_cf2114550000_fs30720000_pci84_ssb1_pss278_dmrs133.meta.txt

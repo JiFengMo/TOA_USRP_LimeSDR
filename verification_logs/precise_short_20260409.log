@@ -1,0 +1,88 @@
+[INFO] [UHD] linux; GNU C++ version 13.3.0; Boost_108300; UHD_4.8.0.HEAD-0-g308126a4
+[INFO] [B200] Detected Device: B210
+[INFO] [B200] Operating over USB 3.
+[INFO] [B200] Initialize CODEC control...
+[INFO] [B200] Initialize Radio control...
+[INFO] [B200] Performing register loopback test... 
+[INFO] [B200] Register loopback test passed
+[INFO] [B200] Performing register loopback test... 
+[INFO] [B200] Register loopback test passed
+[INFO] [B200] Setting master clock rate selection to 'automatic'.
+[INFO] [B200] Asking for clock rate 16.000000 MHz... 
+[INFO] [B200] Actually got clock rate 16.000000 MHz.
+[INFO] [B200] Asking for clock rate 30.720000 MHz... 
+[INFO] [B200] Actually got clock rate 30.720000 MHz.
+NR-TOA UE cfg: sdr=usrp clock=internal time=internal f=2114550000 Fs=30720000 rx_gain=64.0 tx_gain=0.0 mode=0 meas_mode=0 full_band_sweep=0 strict_center_freq=1 gain_sweep=0 target_pci=84 ssb_scs=15kHz anchor_db_path=targets/PROJECTS/NR-TOA/CONF/anchors.csv n_anchors=2
+NR-TOA note: SSB mode now attempts real PBCH/MIB decode; treat ssb_locked=1 with mib=0 as a decode failure, not a successful cell accept.
+NR-TOA note: structured MIB context is retained for future Type0-PDCCH/SIB1 work (k_SSB/CORESET0/SearchSpace0).
+NR-TOA note: IQ near-miss dump enabled, dir=/tmp/nr_toa_iq
+relative_delay_csv: path=/tmp/nr_ssb_relative_delay_20260409_214020.csv
+USRP: configured req(rate=30720000 rx=2114550000 tx=2114550000 gain=64.0) act(rate=30720000 rx=2114550000 tx=2114550000 rx_gain=64.0 tx_gain=0.0 rx_bw=56000000) lo_locked=1
+USRP: RX streaming started
+freq_sweep: plan_points=1 center=2114550000Hz first=2114550000Hz last=2114550000Hz step_iters=20
+rx_gain_plan: count=1 start=64.0 end=64.0 current=64.0
+sync_actor: ts=43545369 nsamps=623184 avg_pwr=3793295.6 peak=66202436.0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+pss_hits: [0]nid2=0 off=352359 m=0.131 cfo=910.2 [1]nid2=2 off=385286 m=0.100 [2]nid2=1 off=335272 m=0.097 [3]nid2=0 off=620875 m=0.034
+acq_cands: count=1
+  cand[0]: pci=84 nid2=0 nid1=28 off=352279 cfo=910.2 rank=0.131 pss=0.131 hyps=1
+GRID_DBG: pci=84 cfo=910.2 pss_corr=0.0311 sss_corr=0.0150 pss_ph=-5.0 sym_pow=[1384.2,2048.7,2092.7,2188.8]
+  pci0_scan: pci=84 dt=0 dcfo=0 best_ssb=2 dmrs=0.1220
+  pci0_scan: pci=84 dt=0 dcfo=-500 best_ssb=2 dmrs=0.1281
+  pci0_scan: pci=84 dt=0 dcfo=500 best_ssb=2 dmrs=0.1110
+  pci0_scan: pci=84 dt=-1 dcfo=0 best_ssb=2 dmrs=0.0878
+  pci0_scan: pci=84 dt=-1 dcfo=-500 best_ssb=2 dmrs=0.0990
+  pci0_scan: pci=84 dt=-1 dcfo=500 best_ssb=0 dmrs=0.0908
+  pci0_scan: pci=84 dt=1 dcfo=0 best_ssb=2 dmrs=0.1516
+  pci0_scan: pci=84 dt=1 dcfo=-500 best_ssb=2 dmrs=0.1518
+  pci0_scan: pci=84 dt=1 dcfo=500 best_ssb=2 dmrs=0.1458
+  pci0_scan: pci=84 dt=-2 dcfo=0 best_ssb=0 dmrs=0.0978
+  pci0_scan: pci=84 dt=-2 dcfo=-500 best_ssb=0 dmrs=0.0828
+  pci0_scan: pci=84 dt=-2 dcfo=500 best_ssb=0 dmrs=0.1118
+  pci0_scan: pci=84 dt=2 dcfo=0 best_ssb=2 dmrs=0.1725
+  pci0_scan: pci=84 dt=2 dcfo=-500 best_ssb=2 dmrs=0.1678
+  pci0_scan: pci=84 dt=2 dcfo=500 best_ssb=2 dmrs=0.1711
+  pci0_scan: pci=84 dt=-3 dcfo=0 best_ssb=0 dmrs=0.1133
+  pci0_scan: pci=84 dt=-3 dcfo=-500 best_ssb=0 dmrs=0.0956
+  pci0_scan: pci=84 dt=-3 dcfo=500 best_ssb=0 dmrs=0.1290
+  pci0_scan: pci=84 dt=3 dcfo=0 best_ssb=2 dmrs=0.1869
+  pci0_scan: pci=84 dt=3 dcfo=-500 best_ssb=2 dmrs=0.1787
+  pci0_scan: pci=84 dt=3 dcfo=500 best_ssb=2 dmrs=0.1884
+pbch_hyps: count=8 decode=8 best_pci=84 best_ssb=2 best_dmrs=0.188 cfo=910.2
+  hyp[0]: pci=84 ssb=2 dmrs=0.188 ds=0 dt=3 dcfo=500.0
+  hyp[1]: pci=84 ssb=2 dmrs=0.187 ds=0 dt=3 dcfo=0.0
+  hyp[2]: pci=84 ssb=2 dmrs=0.179 ds=0 dt=3 dcfo=-500.0
+  hyp[3]: pci=84 ssb=2 dmrs=0.173 ds=0 dt=2 dcfo=0.0
+  hyp[4]: pci=84 ssb=2 dmrs=0.171 ds=0 dt=2 dcfo=500.0
+  hyp[5]: pci=84 ssb=2 dmrs=0.168 ds=0 dt=2 dcfo=-500.0
+  hyp[6]: pci=84 ssb=2 dmrs=0.152 ds=0 dt=1 dcfo=-500.0
+  hyp[7]: pci=84 ssb=2 dmrs=0.152 ds=0 dt=1 dcfo=0.0
+  pbch_try[0]: pci=84 ssb=2 dmrs=0.188 noise=0.6306 cpe=0.053 dt=3 dcfo=500.0
+  LLR_PRE_SCR: pci=84 ssb=2 mean_abs=5.71 max=131.77 pos_frac=0.471
+  pbch_try[1]: pci=84 ssb=2 dmrs=0.187 noise=0.6671 cpe=0.062 dt=3 dcfo=0.0
+  pbch_try[2]: pci=84 ssb=2 dmrs=0.179 noise=0.7014 cpe=0.067 dt=3 dcfo=-500.0
+  pbch_try[3]: pci=84 ssb=2 dmrs=0.173 noise=0.6753 cpe=0.062 dt=2 dcfo=0.0
+  pbch_try[4]: pci=84 ssb=2 dmrs=0.171 noise=0.6359 cpe=0.053 dt=2 dcfo=500.0
+  pbch_try[5]: pci=84 ssb=2 dmrs=0.168 noise=0.7121 cpe=0.066 dt=2 dcfo=-500.0
+  pbch_try[6]: pci=84 ssb=2 dmrs=0.152 noise=0.7206 cpe=0.066 dt=1 dcfo=-500.0
+  pbch_try[7]: pci=84 ssb=2 dmrs=0.152 noise=0.6831 cpe=0.061 dt=1 dcfo=0.0
+pbch_bch: crc-fail pci=84 ssb=2 dmrs=0.188 second=0.187 ds=0 dt=3 dcfo=500.0 pss=0.131 snr=1.37
+  pbch_cand[0]: pci=84 rc=-1 ok=0 dmrs=0.188 fail=3
+sync_result: not-detected ssb_locked=0 pbch=0 mib=0 pci=84 ssb=2 sfn=0 mib_payload=0x000000 freq=2114550000Hz gscn=1762 target_pci=84 offset=352282 cfo=1410.15 snr=1.37 metric=0.131 miss_streak=1 det=0 nodet=1 dropped_sync=0 dropped_meas=0 dropped_solver=0

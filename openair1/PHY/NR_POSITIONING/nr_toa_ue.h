@@ -30,7 +30,13 @@ typedef struct nr_toa_ue {
   uint32_t samples_per_frame;
   double current_rx_freq_hz;
   int32_t current_rx_gscn;
+  int32_t current_target_pci;
+  uint32_t current_scan_target_idx;
   uint8_t rf_settle_reads;
+
+  nr_cell_ctx_t serving_cell;
+  nr_cell_ctx_t known_cells[NR_TOA_MAX_SCAN_TARGETS];
+  uint32_t known_cell_count;
 
   /* Provider holds its own caches/state via ctx. */
   const nr_pos_provider_if_t *provider;
@@ -38,8 +44,6 @@ typedef struct nr_toa_ue {
 
   /* Actor threads + minimal job synchronization (Phase-0 single-fifo). */
   pthread_t sync_tid;
-  pthread_t meas_tid;
-  pthread_t solver_tid;
 
   pthread_mutex_t sync_mtx;
   pthread_cond_t sync_cv;
@@ -56,33 +60,12 @@ typedef struct nr_toa_ue {
   uint32_t sync_q_tail;
   uint32_t sync_q_count;
 
-  pthread_mutex_t meas_mtx;
-  pthread_cond_t meas_cv;
-  int meas_job_pending;
-  int meas_job_done;
-  nr_iq_block_t *meas_job_blk;
-  nr_sync_state_t meas_job_sync_snapshot;
-  uint64_t meas_job_id;
-
-  pthread_mutex_t solver_mtx;
-  pthread_cond_t solver_cv;
-  /* Phase-0: minimal solver queue (depth-limited) to decouple measurement. */
-#ifndef NR_SOLVER_Q_DEPTH
-#define NR_SOLVER_Q_DEPTH 8
-#endif
-  nr_toa_meas_t solver_q[NR_SOLVER_Q_DEPTH];
-  uint64_t solver_q_job_id[NR_SOLVER_Q_DEPTH];
-  uint32_t solver_q_head;
-  uint32_t solver_q_tail;
-  uint32_t solver_q_count;
-
   /* Debug / accounting. */
   uint64_t next_sync_job_id;
-  uint64_t next_meas_job_id;
-  uint64_t next_solver_job_id;
   uint64_t sync_jobs_dropped;
-  uint64_t meas_jobs_dropped;
-  uint64_t solver_jobs_dropped;
+  uint64_t rx_read_count;
+  uint64_t rx_gap_count;
+  uint64_t rx_next_abs_samp;
 
-  /* Current pending job identifiers: stored in sync_job_id / meas_job_id above. */
+  /* Current pending job identifier is stored in sync_job_id above. */
 } nr_toa_ue_t;

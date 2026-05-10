@@ -30,6 +30,8 @@ typedef struct openair0_config {
   const char *sdr_addrs;
   const char *clock_source;
   const char *time_source;
+  const char *rx_antenna;
+  const char *tx_antenna;
 } openair0_config_t;
 
 struct openair0_device;

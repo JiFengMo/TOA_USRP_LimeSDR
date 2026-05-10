@@ -1,0 +1,173 @@
+[INFO] [UHD] linux; GNU C++ version 13.3.0; Boost_108300; UHD_4.8.0.HEAD-0-g308126a4
+[INFO] [B200] Detected Device: B210
+[INFO] [B200] Operating over USB 3.
+[INFO] [B200] Initialize CODEC control...
+[INFO] [B200] Initialize Radio control...
+[INFO] [B200] Performing register loopback test... 
+[INFO] [B200] Register loopback test passed
+[INFO] [B200] Performing register loopback test... 
+[INFO] [B200] Register loopback test passed
+[INFO] [B200] Setting master clock rate selection to 'automatic'.
+[INFO] [B200] Asking for clock rate 16.000000 MHz... 
+[INFO] [B200] Actually got clock rate 16.000000 MHz.
+[INFO] [B200] Asking for clock rate 30.720000 MHz... 
+[INFO] [B200] Actually got clock rate 30.720000 MHz.
+NR-TOA UE cfg: sdr=usrp clock=internal time=internal f=2114550000 Fs=30720000 rx_gain=64.0 tx_gain=0.0 mode=0 meas_mode=0 full_band_sweep=0 strict_center_freq=0 gain_sweep=0 target_pci=-1 ssb_scs=15kHz anchor_db_path=targets/PROJECTS/NR-TOA/CONF/anchors.csv n_anchors=2
+NR-TOA note: using 3 configured scan target(s) instead of wide-band sweep.
+  scan_target[0]: freq=2114550000Hz target_pci=84
+  scan_target[1]: freq=3550080000Hz target_pci=188
+  scan_target[2]: freq=3558720000Hz target_pci=-1
+NR-TOA note: SSB mode now attempts real PBCH/MIB decode; treat ssb_locked=1 with mib=0 as a decode failure, not a successful cell accept.
+NR-TOA note: structured MIB context is retained for future Type0-PDCCH/SIB1 work (k_SSB/CORESET0/SearchSpace0).
+NR-TOA note: IQ near-miss dump enabled, dir=/tmp/nr_toa_iq
+relative_delay_csv: path=/tmp/nr_ssb_relative_delay_20260409_214518.csv
+USRP: configured req(rate=30720000 rx=2114550000 tx=2114550000 gain=64.0) act(rate=30720000 rx=2114550000 tx=2114550000 rx_gain=64.0 tx_gain=0.0 rx_bw=56000000) lo_locked=1
+USRP: RX streaming started
+freq_sweep: plan_points=3 center=2114550000Hz first=2114550000Hz last=3558720000Hz step_iters=20
+rx_gain_plan: count=1 start=64.0 end=64.0 current=64.0
+sync_actor: ts=43537460 nsamps=623184 avg_pwr=3816751.2 peak=55532836.0
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=0 dropped_meas=0 dropped_solver=0
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+USRP: RX retuned to 2114550000 Hz (act=2114550000 lo_locked=1)
+freq_sweep(GSCN): idx=0 gscn=1762 rx_freq=2114550000Hz target_pci=84 best_metric=0.000
+USRP: RX retuned to 3550080000 Hz (act=3550080000 lo_locked=1)
+freq_sweep(GSCN): idx=1 gscn=7957 rx_freq=3550080000Hz target_pci=188 best_metric=0.000
+USRP: RX retuned to 3558720000 Hz (act=3558720000 lo_locked=1)
+freq_sweep(GSCN): idx=2 gscn=7965 rx_freq=3558720000Hz target_pci=-1 best_metric=0.000
+pss_search: not-detected
+sync_result: not-detected ssb_locked=0 pbch=0 mib=0 pci=0 ssb=0 sfn=0 mib_payload=0x000000 freq=2114550000Hz gscn=1762 target_pci=84 offset=0 cfo=0.00 snr=0.00 metric=0.000 miss_streak=1 det=0 nodet=1 dropped_sync=0 dropped_meas=0 dropped_solver=0

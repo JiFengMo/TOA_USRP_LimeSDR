@@ -1,0 +1,35 @@
+NR-TOA UE cfg: sdr=usrp clock=internal time=internal band=78 f=3619200000 Fs=30720000 rx_gain=70.0 tx_gain=0.0 mode=0 meas_mode=0 full_band_sweep=0 strict_center_freq=1 gain_sweep=0 target_pci=-1 ssb_scs=30kHz anchor_db_path=targets/PROJECTS/NR-TOA/CONF/anchors.csv n_anchors=2
+NR-TOA note: SSB mode now attempts real PBCH/MIB decode; treat ssb_locked=1 with mib=0 as a decode failure, not a successful cell accept.
+NR-TOA note: structured MIB context now derives a live FR1 Type0-PDCCH/SIB1 skeleton (k_SSB/CORESET0/SearchSpace0 + monitoring window).
+NR-TOA note: IQ near-miss dump enabled, dir=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_pbchfix_notarget_20260427_172801/iq
+relative_delay_csv: path=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_pbchfix_notarget_20260427_172801/relative_delay.csv
+[INFO] [UHD] linux; GNU C++ version 13.3.0; Boost_108300; UHD_4.8.0.HEAD-0-g308126a4
+[INFO] [B200] Detected Device: B210
+[INFO] [B200] Operating over USB 3.
+[INFO] [B200] Initialize CODEC control...
+[INFO] [B200] Initialize Radio control...
+[INFO] [B200] Performing register loopback test... 
+[INFO] [B200] Register loopback test passed
+[INFO] [B200] Performing register loopback test... 
+[INFO] [B200] Register loopback test passed
+[INFO] [B200] Setting master clock rate selection to 'automatic'.
+[INFO] [B200] Asking for clock rate 16.000000 MHz... 
+[INFO] [B200] Actually got clock rate 16.000000 MHz.
+[INFO] [B200] Asking for clock rate 30.720000 MHz... 
+[INFO] [B200] Actually got clock rate 30.720000 MHz.
+USRP: configured req(rate=30720000 rx=3619200000 tx=3619200000 gain=70.0) act(rate=30720000 rx=3619200000 tx=3619200000 rx_gain=70.0 tx_gain=0.0 rx_bw=56000000 rx_ant=RX2 tx_ant=TX/RX) lo_locked=1
+USRP: RX streaming started
+freq_sweep: plan_points=1 center=3619200000Hz first=3619200000Hz last=3619200000Hz step_iters=20
+rx_gain_plan: count=1 start=70.0 end=70.0 current=70.0
+sync_actor: ts=42263645 nsamps=618800 avg_pwr=838000.4 peak=708951805.0
+pbch_bch: crc-fail pci=357 ssb=3 nhf=1 dmrs=102207568.000 second=102207568.000 ds=-44 dt=0 dcfo=500.0 pss=9110.826 snr=2.48
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=988 dropped_meas=0 dropped_solver=0
+pbch_bch: crc-fail pci=215 ssb=2 nhf=1 dmrs=54485032.000 second=54485032.000 ds=-44 dt=0 dcfo=500.0 pss=741.941 snr=0.99
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=1988 dropped_meas=0 dropped_solver=0
+pbch_bch: crc-fail pci=936 ssb=3 nhf=0 dmrs=553122.688 second=546105.688 ds=-22 dt=1 dcfo=-500.0 pss=674.356 snr=0.89
+iq_dump: saved tag=pbch_nearmiss reason=dmrs_ambig iq=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_pbchfix_notarget_20260427_172801/iq/pbch_nearmiss_seq00_ts42263645_cf3619200000_fs30720000_pci357_ssb3_pss9110826_dmrs3423322112.c16 meta=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_pbchfix_notarget_20260427_172801/iq/pbch_nearmiss_seq00_ts42263645_cf3619200000_fs30720000_pci357_ssb3_pss9110826_dmrs3423322112.meta.txt
+sync_result: not-detected ssb_locked=0 pbch=0 mib=0 pci=357 ssb=3 sfn=0 mib_payload=0x000000 freq=3619200000Hz gscn=7929 target_pci=-1 offset=566632 cfo=327.73 snr=2.48 metric=9110.826 miss_streak=1 det=0 nodet=1 dropped_sync=2383 dropped_meas=0 dropped_solver=0
+pbch_bch: crc-fail pci=657 ssb=7 nhf=1 dmrs=69589632.000 second=69030232.000 ds=-44 dt=-3 dcfo=-500.0 pss=7728.538 snr=2.56
+pbch_bch: crc-fail pci=552 ssb=3 nhf=1 dmrs=47306836.000 second=47306836.000 ds=44 dt=-1 dcfo=500.0 pss=629.661 snr=0.76
+pbch_bch: crc-fail pci=768 ssb=3 nhf=1 dmrs=631699.625 second=631699.625 ds=22 dt=-1 dcfo=-500.0 pss=520.351 snr=0.93
+iq_dump: saved tag=pbch_nearmiss reason=dmrs_ambig iq=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_pbchfix_notarget_20260427_172801/iq/pbch_nearmiss_seq01_ts1517482844_cf3619200000_fs30720000_pci657_ssb7_pss7728538_dmrs870154240.c16 meta=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_pbchfix_notarget_20260427_172801/iq/pbch_nearmiss_seq01_ts1517482844_cf3619200000_fs30720000_pci657_ssb7_pss7728538_dmrs870154240.meta.txt

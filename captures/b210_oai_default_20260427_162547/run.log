@@ -1,0 +1,68 @@
+NR-TOA UE cfg: sdr=usrp clock=internal time=internal band=78 f=3619200000 Fs=30720000 rx_gain=70.0 tx_gain=0.0 mode=0 meas_mode=0 full_band_sweep=0 strict_center_freq=1 gain_sweep=0 target_pci=0 ssb_scs=30kHz anchor_db_path=targets/PROJECTS/NR-TOA/CONF/anchors.csv n_anchors=2
+NR-TOA note: SSB mode now attempts real PBCH/MIB decode; treat ssb_locked=1 with mib=0 as a decode failure, not a successful cell accept.
+NR-TOA note: structured MIB context now derives a live FR1 Type0-PDCCH/SIB1 skeleton (k_SSB/CORESET0/SearchSpace0 + monitoring window).
+NR-TOA note: IQ near-miss dump enabled, dir=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq
+relative_delay_csv: path=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/relative_delay.csv
+[INFO] [UHD] linux; GNU C++ version 13.3.0; Boost_108300; UHD_4.8.0.HEAD-0-g308126a4
+[INFO] [B200] Detected Device: B210
+[INFO] [B200] Operating over USB 3.
+[INFO] [B200] Initialize CODEC control...
+[INFO] [B200] Initialize Radio control...
+[INFO] [B200] Performing register loopback test... 
+[INFO] [B200] Register loopback test passed
+[INFO] [B200] Performing register loopback test... 
+[INFO] [B200] Register loopback test passed
+[INFO] [B200] Setting master clock rate selection to 'automatic'.
+[INFO] [B200] Asking for clock rate 16.000000 MHz... 
+[INFO] [B200] Actually got clock rate 16.000000 MHz.
+[INFO] [B200] Asking for clock rate 30.720000 MHz... 
+[INFO] [B200] Actually got clock rate 30.720000 MHz.
+USRP: configured req(rate=30720000 rx=3619200000 tx=3619200000 gain=70.0) act(rate=30720000 rx=3619200000 tx=3619200000 rx_gain=70.0 tx_gain=0.0 rx_bw=56000000 rx_ant=RX2 tx_ant=TX/RX) lo_locked=1
+USRP: RX streaming started
+freq_sweep: plan_points=1 center=3619200000Hz first=3619200000Hz last=3619200000Hz step_iters=20
+rx_gain_plan: count=1 start=70.0 end=70.0 current=70.0
+sync_actor: ts=42163282 nsamps=618800 avg_pwr=402982.0 peak=185300921.0
+pbch_bch: crc-fail pci=0 ssb=6 nhf=1 dmrs=37306096.000 second=37025624.000 ds=0 dt=-1 dcfo=0.0 pss=8789.369 snr=2.49
+pbch_bch: crc-fail pci=0 ssb=3 nhf=0 dmrs=16135690.000 second=15857496.000 ds=0 dt=-3 dcfo=500.0 pss=531.257 snr=0.61
+pbch_bch: crc-fail pci=0 ssb=3 nhf=0 dmrs=11020384.000 second=10628639.000 ds=0 dt=3 dcfo=-500.0 pss=436.811 snr=0.17
+iq_dump: saved tag=pbch_nearmiss reason=dmrs_ambig iq=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq00_ts42163282_cf3619200000_fs30720000_pci0_ssb6_pss8789369_dmrs2946359296.c16 meta=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq00_ts42163282_cf3619200000_fs30720000_pci0_ssb6_pss8789369_dmrs2946359296.meta.txt
+sync_result: not-detected ssb_locked=0 pbch=0 mib=0 pci=0 ssb=6 sfn=0 mib_payload=0x000000 freq=3619200000Hz gscn=7929 target_pci=0 offset=365339 cfo=70.69 snr=2.49 metric=8789.369 miss_streak=1 det=0 nodet=1 dropped_sync=296 dropped_meas=0 dropped_solver=0
+pbch_bch: crc-fail pci=0 ssb=3 nhf=0 dmrs=59629924.000 second=56557788.000 ds=0 dt=2 dcfo=500.0 pss=528.373 snr=2.40
+pbch_bch: crc-fail pci=0 ssb=0 nhf=1 dmrs=103450248.000 second=103450248.000 ds=0 dt=0 dcfo=-500.0 pss=147.148 snr=0.13
+pbch_bch: crc-fail pci=0 ssb=5 nhf=1 dmrs=200175776.000 second=178403664.000 ds=0 dt=-3 dcfo=500.0 pss=134.194 snr=0.27
+iq_dump: saved tag=pbch_nearmiss reason=bch_crc iq=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq01_ts225946882_cf3619200000_fs30720000_pci0_ssb3_pss528374_dmrs3795349504.c16 meta=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq01_ts225946882_cf3619200000_fs30720000_pci0_ssb3_pss528374_dmrs3795349504.meta.txt
+pbch_bch: crc-fail pci=0 ssb=3 nhf=0 dmrs=158738416.000 second=155278752.000 ds=0 dt=3 dcfo=500.0 pss=7233.809 snr=2.71
+pbch_bch: crc-fail pci=0 ssb=3 nhf=0 dmrs=111680392.000 second=110002944.000 ds=0 dt=0 dcfo=-500.0 pss=572.087 snr=0.24
+pbch_bch: crc-fail pci=0 ssb=4 nhf=1 dmrs=78431784.000 second=77935616.000 ds=0 dt=0 dcfo=500.0 pss=456.451 snr=0.15
+iq_dump: saved tag=pbch_nearmiss reason=dmrs_ambig iq=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq02_ts418393682_cf3619200000_fs30720000_pci0_ssb3_pss7233809_dmrs4119592960.c16 meta=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq02_ts418393682_cf3619200000_fs30720000_pci0_ssb3_pss7233809_dmrs4119592960.meta.txt
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=985 dropped_meas=0 dropped_solver=0
+pbch_bch: crc-fail pci=0 ssb=6 nhf=1 dmrs=42399240.000 second=39897248.000 ds=0 dt=1 dcfo=500.0 pss=4202.114 snr=2.92
+pbch_bch: crc-fail pci=0 ssb=1 nhf=0 dmrs=21177390.000 second=20744422.000 ds=0 dt=1 dcfo=-500.0 pss=228.771 snr=0.40
+pbch_bch: crc-fail pci=0 ssb=1 nhf=1 dmrs=116230.172 second=116230.172 ds=0 dt=0 dcfo=500.0 pss=223.050 snr=0.30
+iq_dump: saved tag=pbch_nearmiss reason=bch_crc iq=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq03_ts608365282_cf3619200000_fs30720000_pci0_ssb6_pss4202114_dmrs3744534528.c16 meta=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq03_ts608365282_cf3619200000_fs30720000_pci0_ssb6_pss4202114_dmrs3744534528.meta.txt
+pbch_bch: crc-fail pci=0 ssb=3 nhf=0 dmrs=128223000.000 second=123705136.000 ds=0 dt=0 dcfo=500.0 pss=10427.930 snr=2.46
+pbch_bch: crc-fail pci=0 ssb=7 nhf=1 dmrs=20756190.000 second=20606722.000 ds=0 dt=2 dcfo=-500.0 pss=787.687 snr=0.42
+pbch_bch: crc-fail pci=0 ssb=0 nhf=1 dmrs=343170.406 second=343170.406 ds=0 dt=0 dcfo=-500.0 pss=555.435 snr=0.28
+iq_dump: saved tag=pbch_nearmiss reason=bch_crc iq=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq04_ts808237681_cf3619200000_fs30720000_pci0_ssb3_pss10427930_dmrs3668951040.c16 meta=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq04_ts808237681_cf3619200000_fs30720000_pci0_ssb3_pss10427930_dmrs3668951040.meta.txt
+pbch_bch: crc-fail pci=0 ssb=3 nhf=0 dmrs=38933352.000 second=37742604.000 ds=0 dt=1 dcfo=500.0 pss=1930.724 snr=2.82
+pbch_bch: crc-fail pci=0 ssb=0 nhf=0 dmrs=105639608.000 second=104926328.000 ds=0 dt=2 dcfo=-500.0 pss=1033.045 snr=0.36
+pbch_bch: crc-fail pci=0 ssb=2 nhf=0 dmrs=265192.625 second=262187.094 ds=0 dt=-3 dcfo=-500.0 pss=940.655 snr=0.56
+iq_dump: saved tag=pbch_nearmiss reason=bch_crc iq=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq05_ts1011822881_cf3619200000_fs30720000_pci0_ssb3_pss1930724_dmrs278646784.c16 meta=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq05_ts1011822881_cf3619200000_fs30720000_pci0_ssb3_pss1930724_dmrs278646784.meta.txt
+UE loop: state=2 locked=0 cum_tracking_shift_samp=0 dropped_sync=1982 dropped_meas=0 dropped_solver=0
+pbch_bch: crc-fail pci=0 ssb=3 nhf=0 dmrs=111033816.000 second=104895720.000 ds=0 dt=3 dcfo=500.0 pss=10210.566 snr=2.83
+pbch_bch: crc-fail pci=0 ssb=0 nhf=1 dmrs=9645623.000 second=9645623.000 ds=0 dt=1 dcfo=500.0 pss=704.867 snr=0.48
+pbch_bch: crc-fail pci=0 ssb=3 nhf=1 dmrs=45014164.000 second=45014164.000 ds=0 dt=3 dcfo=500.0 pss=478.980 snr=0.18
+iq_dump: saved tag=pbch_nearmiss reason=bch_crc iq=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq06_ts1201175681_cf3619200000_fs30720000_pci0_ssb3_pss10210566_dmrs3659636736.c16 meta=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq06_ts1201175681_cf3619200000_fs30720000_pci0_ssb3_pss10210566_dmrs3659636736.meta.txt
+USRP: RX overflow count=1 timeout=0
+Opbch_bch: crc-fail pci=0 ssb=3 nhf=0 dmrs=56131676.000 second=53946028.000 ds=0 dt=0 dcfo=500.0 pss=8439.360 snr=2.73
+pbch_bch: crc-fail pci=0 ssb=3 nhf=1 dmrs=6134589.000 second=6134589.000 ds=0 dt=-1 dcfo=-500.0 pss=613.243 snr=0.32
+pbch_bch: crc-fail pci=0 ssb=4 nhf=1 dmrs=16321425.000 second=16068898.000 ds=0 dt=0 dcfo=500.0 pss=517.498 snr=0.65
+iq_dump: saved tag=pbch_nearmiss reason=bch_crc iq=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq07_ts1384959281_cf3619200000_fs30720000_pci0_ssb3_pss8439360_dmrs297099264.c16 meta=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq07_ts1384959281_cf3619200000_fs30720000_pci0_ssb3_pss8439360_dmrs297099264.meta.txt
+pbch_bch: crc-fail pci=0 ssb=4 nhf=1 dmrs=23811038.000 second=23685546.000 ds=0 dt=-1 dcfo=500.0 pss=4662.266 snr=2.37
+pbch_bch: crc-fail pci=0 ssb=3 nhf=0 dmrs=10498577.000 second=10155745.000 ds=0 dt=0 dcfo=-500.0 pss=350.403 snr=0.16
+pbch_bch: crc-fail pci=0 ssb=7 nhf=1 dmrs=16672682.000 second=16663510.000 ds=0 dt=1 dcfo=500.0 pss=289.397 snr=0.16
+iq_dump: saved tag=pbch_nearmiss reason=dmrs_ambig iq=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq08_ts1568836183_cf3619200000_fs30720000_pci0_ssb4_pss4662266_dmrs2336200704.c16 meta=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq08_ts1568836183_cf3619200000_fs30720000_pci0_ssb4_pss4662266_dmrs2336200704.meta.txt
+pbch_bch: crc-fail pci=0 ssb=6 nhf=1 dmrs=72843920.000 second=72534528.000 ds=0 dt=-2 dcfo=500.0 pss=1245.344 snr=2.58
+pbch_bch: crc-fail pci=0 ssb=2 nhf=1 dmrs=353364.719 second=353364.719 ds=0 dt=-2 dcfo=-500.0 pss=229.668 snr=0.17
+pbch_bch: crc-fail pci=0 ssb=2 nhf=1 dmrs=19521734.000 second=19521734.000 ds=0 dt=0 dcfo=500.0 pss=224.513 snr=0.55
+iq_dump: saved tag=pbch_nearmiss reason=dmrs_ambig iq=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq09_ts1751382183_cf3619200000_fs30720000_pci0_ssb6_pss1245344_dmrs4124442624.c16 meta=/home/jfm/桌面/TOA_USRP_LimeSDR/captures/b210_oai_default_20260427_162547/iq/pbch_nearmiss_seq09_ts1751382183_cf3619200000_fs30720000_pci0_ssb6_pss1245344_dmrs4124442624.meta.txt
