@@ -97,6 +97,8 @@ int nr_toa_build_meas(const nr_sync_state_t *sync, const nr_iq_block_t *blk,
   }
   meas->pci = sync->pci;
   meas->ssb_index = sync->ssb_index;
+  meas->sfn = sync->sfn;
+  meas->slot = sync->slot;
   meas->snr_db = sync->snr_db;
   meas->peak_metric = 0.0f;
   meas->quality = 0.0f;

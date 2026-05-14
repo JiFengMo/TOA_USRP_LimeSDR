@@ -49,6 +49,7 @@ int main(void)
   nr_sync_state_t pbch_only;
   memset(&blk, 0, sizeof(blk));
   memset(&pbch_only, 0, sizeof(pbch_only));
+  blk.target_pci = -1;
 
   pbch_only.pci = 1U;
   pbch_only.ssb_index = NR_V0_SYNTH_PBCH_SSB_IDX;
@@ -92,6 +93,37 @@ int main(void)
   }
   if (nr_ssb_refine_sync(&blk, &hits[0], &sync) != 0) {
     return 14;
+  }
+  {
+    nr_ssb_window_t win;
+    nr_ssb_grid_t grid;
+    float dmrs_metric = -1.0f;
+    if (nr_ssb_extract_window(&blk, &sync, &win) != 0) {
+      return 27;
+    }
+    if (nr_ssb_demod(&blk, &win, sync.cfo_hz, &grid) != 0) {
+      return 28;
+    }
+    dmrs_metric = nr_ssb_pbch_dmrs_corr_metric(&grid, sync.pci,
+                                               NR_V0_SYNTH_PBCH_SSB_IDX, 0U);
+    if (dmrs_metric < 0.90f || dmrs_metric > 1.01f) {
+      return 29;
+    }
+  }
+  {
+    nr_sync_state_t target_sync = sync;
+    blk.target_pci = 1;
+    target_sync.coarse_offset_samp -= 3;
+    target_sync.cfo_hz -= 500.0f;
+    if (nr_ssb_pbch_decode(&blk, &target_sync) != 0) {
+      return 30;
+    }
+    if (!target_sync.pbch_ok || !target_sync.mib_ok ||
+        target_sync.sfn != NR_V0_SYNTH_PBCH_SFN ||
+        target_sync.mib_payload != NR_V0_SYNTH_PBCH_MIB_PAYLOAD) {
+      return 31;
+    }
+    blk.target_pci = -1;
   }
   if (sync.locked) {
     return 5;

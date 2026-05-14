@@ -1,4 +1,5 @@
 #include "openair1/PHY/NR_POSITIONING/nr_pos_api.h"
+#include "openairinterface5g/openair1/PHY/NR_UE_ESTIMATION/filt16a_32.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -11,85 +12,228 @@ static inline uint32_t nr_ssb_re_idx(uint8_t sym, uint16_t rel)
   return (uint32_t)sym * NR_SSB_RE_COLS + (uint32_t)rel;
 }
 
-static int nr_ssb_pbch_ls_estimate_only(const nr_ssb_grid_t *grid,
-                                        uint16_t pci,
-                                        uint8_t ssb_idx,
-                                        nr_chest_t *h,
-                                        float *dmrs_metric)
+static void nr_ssb_pbch_select_oai_filters(uint8_t v,
+                                           const int16_t **fl,
+                                           const int16_t **fm,
+                                           const int16_t **fr)
 {
-  static __thread cf32_t tls_h_ls_pbch[NR_SSB_TOTAL_RE];
+  switch (v & 3U) {
+    case 0U:
+      *fl = filt16a_l0;
+      *fm = filt16a_m0;
+      *fr = filt16a_r0;
+      break;
+    case 1U:
+      *fl = filt16a_l1;
+      *fm = filt16a_m1;
+      *fr = filt16a_r1;
+      break;
+    case 2U:
+      *fl = filt16a_l2;
+      *fm = filt16a_m2;
+      *fr = filt16a_r2;
+      break;
+    default:
+      *fl = filt16a_l3;
+      *fm = filt16a_m3;
+      *fr = filt16a_r3;
+      break;
+  }
+}
+
+static cf32_t nr_ssb_pbch_dmrs_ls(const cf32_t y, float xr, float xi)
+{
+  const float den = xr * xr + xi * xi + 1.0e-6f;
+  return (cf32_t){
+      .r = (y.r * xr + y.i * xi) / den,
+      .i = (y.i * xr - y.r * xi) / den,
+  };
+}
+
+static void nr_ssb_pbch_filter_accumulate(cf32_t *dst,
+                                          uint8_t *valid,
+                                          uint8_t sym,
+                                          uint16_t rel0,
+                                          cf32_t h_ls,
+                                          const int16_t *filt16)
+{
+  if (!dst || !valid || !filt16 || sym >= NR_SSB_RE_ROWS) {
+    return;
+  }
+
+  for (uint32_t t = 0U; t < 16U; t++) {
+    const uint32_t rel = (uint32_t)rel0 + t;
+    const float w = (float)filt16[t] / 16384.0f;
+    const uint32_t idx = nr_ssb_re_idx(sym, (uint16_t)rel);
+    if (rel >= NR_SSB_RE_COLS || w == 0.0f) {
+      continue;
+    }
+    dst[idx].r += w * h_ls.r;
+    dst[idx].i += w * h_ls.i;
+    valid[idx] = 1U;
+  }
+}
+
+static int nr_ssb_pbch_oai_channel_estimation(const nr_ssb_grid_t *grid,
+                                              uint16_t pci,
+                                              uint8_t ssb_idx,
+                                              uint8_t n_hf,
+                                              nr_chest_full_t *hf,
+                                              float *dmrs_metric)
+{
+  static __thread cf32_t tls_h_full_pbch[NR_SSB_TOTAL_RE];
   static __thread uint8_t tls_valid_pbch[NR_SSB_TOTAL_RE];
   float dmrs_i[144];
   float dmrs_q[144];
   uint16_t dmrs_rel[144];
   uint8_t dmrs_sym[144];
+  const int16_t *fl = NULL;
+  const int16_t *fm = NULL;
+  const int16_t *fr = NULL;
   const uint8_t v = (uint8_t)(pci & 3U);
   double cr = 0.0;
   double ci = 0.0;
   double px = 0.0;
   const double pr = 144.0;
+  uint32_t pilot = 0U;
 
   if (dmrs_metric) {
     *dmrs_metric = -1.0f;
   }
-  if (!grid || !grid->valid || !h) {
+  if (!grid || !grid->valid || !hf) {
     return -1;
   }
-
-  memset(tls_h_ls_pbch, 0, sizeof(tls_h_ls_pbch));
-  memset(tls_valid_pbch, 0, sizeof(tls_valid_pbch));
-
   if (nr_pbch_dmrs_re_positions(v, dmrs_rel, dmrs_sym, 144U) != 144U) {
     return -1;
   }
-  if (nr_v0_pbch_dmrs_build((int)pci, (int)ssb_idx, 0, dmrs_i, dmrs_q, 144U) != 144) {
+  if (nr_v0_pbch_dmrs_build((int)pci, (int)ssb_idx, (int)n_hf, dmrs_i, dmrs_q, 144U) != 144) {
     return -1;
   }
 
-  static uint32_t dmrs_dbg_cnt = 0U;
-  int do_dmrs_dbg = (pci == 2 && ssb_idx == 0 && (dmrs_dbg_cnt % 50U) == 0U);
-  for (uint32_t m = 0U; m < 144U; m++) {
-    const uint8_t sym = dmrs_sym[m];
-    const uint16_t rel = dmrs_rel[m];
-    const cf32_t y = grid->re[sym][rel];
-    const float xr = dmrs_i[m];
-    const float xi = dmrs_q[m];
-    const float den = xr * xr + xi * xi + 1.0e-6f;
-    cr += (double)y.r * (double)xr + (double)y.i * (double)xi;
-    ci += (double)y.i * (double)xr - (double)y.r * (double)xi;
-    px += (double)y.r * (double)y.r + (double)y.i * (double)y.i;
-    tls_h_ls_pbch[nr_ssb_re_idx(sym, rel)].r = (y.r * xr + y.i * xi) / den;
-    tls_h_ls_pbch[nr_ssb_re_idx(sym, rel)].i = (y.i * xr - y.r * xi) / den;
-    tls_valid_pbch[nr_ssb_re_idx(sym, rel)] = 1U;
-    if (do_dmrs_dbg && m < 8U) {
-      float h_r = tls_h_ls_pbch[nr_ssb_re_idx(sym, rel)].r;
-      float h_i = tls_h_ls_pbch[nr_ssb_re_idx(sym, rel)].i;
-      printf("  DMRS[%u] sym=%u rel=%u y=(%.2f,%.2f) ref=(%.3f,%.3f) h=(%.2f,%.2f)\n",
-             m, (unsigned)sym, (unsigned)rel, y.r, y.i, xr, xi, h_r, h_i);
+  nr_ssb_pbch_select_oai_filters(v, &fl, &fm, &fr);
+  memset(tls_h_full_pbch, 0, sizeof(tls_h_full_pbch));
+  memset(tls_valid_pbch, 0, sizeof(tls_valid_pbch));
+
+  for (uint8_t sym = 1U; sym <= 3U; sym++) {
+    const uint16_t seg0 = (sym == 2U) ? 48U : 240U;
+    for (uint16_t rb0 = 0U; rb0 < seg0; rb0 += 12U) {
+      const cf32_t y0 = grid->re[sym][rb0 + v];
+      const cf32_t y1 = grid->re[sym][rb0 + v + 4U];
+      const cf32_t y2 = grid->re[sym][rb0 + v + 8U];
+      const cf32_t h0 = nr_ssb_pbch_dmrs_ls(y0, dmrs_i[pilot], dmrs_q[pilot]);
+      cr += (double)y0.r * (double)dmrs_i[pilot] + (double)y0.i * (double)dmrs_q[pilot];
+      ci += (double)y0.i * (double)dmrs_i[pilot] - (double)y0.r * (double)dmrs_q[pilot];
+      px += (double)y0.r * (double)y0.r + (double)y0.i * (double)y0.i;
+      pilot++;
+      const cf32_t h1 = nr_ssb_pbch_dmrs_ls(y1, dmrs_i[pilot], dmrs_q[pilot]);
+      cr += (double)y1.r * (double)dmrs_i[pilot] + (double)y1.i * (double)dmrs_q[pilot];
+      ci += (double)y1.i * (double)dmrs_i[pilot] - (double)y1.r * (double)dmrs_q[pilot];
+      px += (double)y1.r * (double)y1.r + (double)y1.i * (double)y1.i;
+      pilot++;
+      const cf32_t h2 = nr_ssb_pbch_dmrs_ls(y2, dmrs_i[pilot], dmrs_q[pilot]);
+      cr += (double)y2.r * (double)dmrs_i[pilot] + (double)y2.i * (double)dmrs_q[pilot];
+      ci += (double)y2.i * (double)dmrs_i[pilot] - (double)y2.r * (double)dmrs_q[pilot];
+      px += (double)y2.r * (double)y2.r + (double)y2.i * (double)y2.i;
+      pilot++;
+      nr_ssb_pbch_filter_accumulate(tls_h_full_pbch, tls_valid_pbch, sym, rb0, h0, fl);
+      nr_ssb_pbch_filter_accumulate(tls_h_full_pbch, tls_valid_pbch, sym, rb0, h1, fm);
+      nr_ssb_pbch_filter_accumulate(tls_h_full_pbch, tls_valid_pbch, sym, rb0, h2, fr);
+    }
+
+    if (sym == 2U) {
+      for (uint16_t rb0 = 192U; rb0 < 240U; rb0 += 12U) {
+        const cf32_t y0 = grid->re[sym][rb0 + v];
+        const cf32_t y1 = grid->re[sym][rb0 + v + 4U];
+        const cf32_t y2 = grid->re[sym][rb0 + v + 8U];
+        const cf32_t h0 = nr_ssb_pbch_dmrs_ls(y0, dmrs_i[pilot], dmrs_q[pilot]);
+        cr += (double)y0.r * (double)dmrs_i[pilot] + (double)y0.i * (double)dmrs_q[pilot];
+        ci += (double)y0.i * (double)dmrs_i[pilot] - (double)y0.r * (double)dmrs_q[pilot];
+        px += (double)y0.r * (double)y0.r + (double)y0.i * (double)y0.i;
+        pilot++;
+        const cf32_t h1 = nr_ssb_pbch_dmrs_ls(y1, dmrs_i[pilot], dmrs_q[pilot]);
+        cr += (double)y1.r * (double)dmrs_i[pilot] + (double)y1.i * (double)dmrs_q[pilot];
+        ci += (double)y1.i * (double)dmrs_i[pilot] - (double)y1.r * (double)dmrs_q[pilot];
+        px += (double)y1.r * (double)y1.r + (double)y1.i * (double)y1.i;
+        pilot++;
+        const cf32_t h2 = nr_ssb_pbch_dmrs_ls(y2, dmrs_i[pilot], dmrs_q[pilot]);
+        cr += (double)y2.r * (double)dmrs_i[pilot] + (double)y2.i * (double)dmrs_q[pilot];
+        ci += (double)y2.i * (double)dmrs_i[pilot] - (double)y2.r * (double)dmrs_q[pilot];
+        px += (double)y2.r * (double)y2.r + (double)y2.i * (double)y2.i;
+        pilot++;
+        nr_ssb_pbch_filter_accumulate(tls_h_full_pbch, tls_valid_pbch, sym, rb0, h0, fl);
+        nr_ssb_pbch_filter_accumulate(tls_h_full_pbch, tls_valid_pbch, sym, rb0, h1, fm);
+        nr_ssb_pbch_filter_accumulate(tls_h_full_pbch, tls_valid_pbch, sym, rb0, h2, fr);
+      }
     }
   }
-  if (do_dmrs_dbg) {
-    float met = (float)(sqrt(cr * cr + ci * ci) / (sqrt(px * pr) + 1.0e-9));
-    printf("  DMRS_DIAG: pci=%u ssb=%u v=%u metric=%.4f cr=%.1f ci=%.1f px=%.1f\n",
-           (unsigned)pci, (unsigned)ssb_idx, (unsigned)v, met, cr, ci, px);
-    dmrs_dbg_cnt++;
-  } else if (pci == 2 && ssb_idx == 0) {
-    dmrs_dbg_cnt++;
+
+  if (pilot != 144U) {
+    return -1;
   }
 
-  h->h_ls = tls_h_ls_pbch;
-  h->valid_re = tls_valid_pbch;
-  h->n_re = NR_SSB_TOTAL_RE;
+  hf->h_full = tls_h_full_pbch;
+  hf->valid_re = tls_valid_pbch;
+  hf->n_re = NR_SSB_TOTAL_RE;
   if (dmrs_metric) {
     *dmrs_metric = (float)(sqrt(cr * cr + ci * ci) / (sqrt(px * pr) + 1.0e-9));
   }
   return 0;
 }
 
+float nr_ssb_pbch_dmrs_corr_metric(const nr_ssb_grid_t *grid,
+                                   uint16_t pci,
+                                   uint8_t ssb_idx,
+                                   uint8_t n_hf)
+{
+  float dmrs_i[144];
+  float dmrs_q[144];
+  uint16_t dmrs_rel[144];
+  uint8_t dmrs_sym[144];
+  const uint8_t v = (uint8_t)(pci & 3U);
+  double cumul_r = 0.0;
+  double cumul_i = 0.0;
+  double rx_pow = 0.0;
+  double ref_pow = 0.0;
+
+  if (!grid || !grid->valid) {
+    return -1.0f;
+  }
+
+  if (nr_pbch_dmrs_re_positions(v, dmrs_rel, dmrs_sym, 144U) != 144U) {
+    return -1.0f;
+  }
+  if (nr_v0_pbch_dmrs_build((int)pci, (int)ssb_idx, (int)n_hf, dmrs_i, dmrs_q, 144U) != 144) {
+    return -1.0f;
+  }
+
+  for (uint8_t sym = 1U; sym <= 3U; sym++) {
+    double sym_r = 0.0;
+    double sym_i = 0.0;
+    for (uint32_t m = 0U; m < 144U; m++) {
+      if (dmrs_sym[m] != sym) {
+        continue;
+      }
+      const uint16_t rel = dmrs_rel[m];
+      const cf32_t y = grid->re[sym][rel];
+      const float xr = dmrs_i[m];
+      const float xi = dmrs_q[m];
+      sym_r += (double)y.r * (double)xr + (double)y.i * (double)xi;
+      sym_i += (double)y.i * (double)xr - (double)y.r * (double)xi;
+      rx_pow += (double)y.r * (double)y.r + (double)y.i * (double)y.i;
+      ref_pow += (double)xr * (double)xr + (double)xi * (double)xi;
+    }
+    cumul_r += sym_r;
+    cumul_i += sym_i;
+  }
+  return (float)(sqrt(cumul_r * cumul_r + cumul_i * cumul_i) /
+                 (sqrt(rx_pow * ref_pow) + 1.0e-9));
+}
+
 static float nr_ssb_pbch_noise_cpe(const nr_ssb_grid_t *grid,
                                    const nr_chest_full_t *hf,
                                    uint16_t pci,
                                    uint8_t ssb_idx,
+                                   uint8_t n_hf,
                                    float *cpe_rad)
 {
   float dmrs_i[144];
@@ -112,7 +256,7 @@ static float nr_ssb_pbch_noise_cpe(const nr_ssb_grid_t *grid,
   if (nr_pbch_dmrs_re_positions(v, dmrs_rel, dmrs_sym, 144U) != 144U) {
     return 1.0f;
   }
-  if (nr_v0_pbch_dmrs_build((int)pci, (int)ssb_idx, 0, dmrs_i, dmrs_q, 144U) != 144) {
+  if (nr_v0_pbch_dmrs_build((int)pci, (int)ssb_idx, (int)n_hf, dmrs_i, dmrs_q, 144U) != 144) {
     return 1.0f;
   }
 
@@ -268,7 +412,8 @@ int nr_ssb_ls_estimate(const nr_ssb_grid_t *grid, const nr_sync_state_t *sync, n
   if (nr_pbch_dmrs_re_positions(v, dmrs_rel, dmrs_sym, 144U) != 144U) {
     return -1;
   }
-  if (nr_v0_pbch_dmrs_build((int)pci, (int)sync->ssb_index, 0, dmrs_i, dmrs_q, 144U) != 144) {
+  if (nr_v0_pbch_dmrs_build((int)pci, (int)sync->ssb_index,
+                            (int)sync->pbch_dmrs_n_hf, dmrs_i, dmrs_q, 144U) != 144) {
     return -1;
   }
   for (uint32_t m = 0U; m < 144U; m++) {
@@ -390,43 +535,24 @@ int nr_ssb_build_cir(const nr_chest_full_t *hf, nr_cir_t *cir)
 int nr_ssb_pbch_prepare_frontend(const nr_ssb_grid_t *grid,
                                  uint16_t pci,
                                  uint8_t ssb_idx,
+                                 uint8_t n_hf,
                                  float *dmrs_metric,
                                  float *noise_var,
                                  float *cpe_rad,
                                  float *llr)
 {
-  nr_sync_state_t sync_hint;
-  nr_chest_t h;
   nr_chest_full_t hf;
   float local_metric = -1.0f;
   float local_noise = 1.0f;
   float local_cpe = 0.0f;
 
-  memset(&h, 0, sizeof(h));
   memset(&hf, 0, sizeof(hf));
-  memset(&sync_hint, 0, sizeof(sync_hint));
 
-  if (nr_ssb_pbch_ls_estimate_only(grid, pci, ssb_idx, &h, &local_metric) != 0) {
-    return -1;
-  }
-  if (nr_ssb_interp_channel(&h, &hf) != 0) {
+  if (nr_ssb_pbch_oai_channel_estimation(grid, pci, ssb_idx, n_hf, &hf, &local_metric) != 0) {
     return -1;
   }
 
-  /* Keep the PBCH DMRS-only metric for hypothesis ranking, but for the actual
-   * LLR path use every known SSB reference once PCI/SSB are hypothesized.
-   * This is closer to OAI's "full block known after sync" behavior and is
-   * noticeably more stable than interpolating from PBCH DMRS alone. */
-  if (llr) {
-    sync_hint.pci = pci;
-    sync_hint.ssb_index = ssb_idx;
-    if (nr_ssb_ls_estimate(grid, &sync_hint, &h) != 0 ||
-        nr_ssb_interp_channel(&h, &hf) != 0) {
-      return -1;
-    }
-  }
-
-  local_noise = nr_ssb_pbch_noise_cpe(grid, &hf, pci, ssb_idx, &local_cpe);
+  local_noise = nr_ssb_pbch_noise_cpe(grid, &hf, pci, ssb_idx, n_hf, &local_cpe);
   if (llr && nr_ssb_pbch_build_llr(grid, &hf, pci, local_noise, local_cpe, llr) != 0) {
     return -1;
   }

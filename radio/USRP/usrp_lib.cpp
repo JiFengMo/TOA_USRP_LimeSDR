@@ -63,6 +63,12 @@ static int usrp_trx_config(openair0_device_t *device, openair0_config_t *cfg)
 
     st->usrp->set_rx_rate(st->sample_rate, 0);
     st->usrp->set_tx_rate(st->sample_rate, 0);
+    if (cfg->rx_antenna && cfg->rx_antenna[0] != '\0') {
+      st->usrp->set_rx_antenna(cfg->rx_antenna, 0);
+    }
+    if (cfg->tx_antenna && cfg->tx_antenna[0] != '\0') {
+      st->usrp->set_tx_antenna(cfg->tx_antenna, 0);
+    }
     st->usrp->set_rx_freq(uhd::tune_request_t(cfg->rx_freq_hz), 0);
     st->usrp->set_tx_freq(uhd::tune_request_t(cfg->tx_freq_hz), 0);
     st->usrp->set_rx_gain(cfg->rx_gain_db, 0);
@@ -84,6 +90,8 @@ static int usrp_trx_config(openair0_device_t *device, openair0_config_t *cfg)
     const double rx_gain_act = st->usrp->get_rx_gain(0);
     const double tx_gain_act = st->usrp->get_tx_gain(0);
     const double rx_bw_act = st->usrp->get_rx_bandwidth(0);
+    const std::string rx_ant_act = st->usrp->get_rx_antenna(0);
+    const std::string tx_ant_act = st->usrp->get_tx_antenna(0);
     bool lo_locked = true;
     const auto sns = st->usrp->get_rx_sensor_names(0);
     for (const auto &n : sns) {
@@ -94,9 +102,10 @@ static int usrp_trx_config(openair0_device_t *device, openair0_config_t *cfg)
     }
     std::printf(
         "USRP: configured req(rate=%.0f rx=%.0f tx=%.0f gain=%.1f) "
-        "act(rate=%.0f rx=%.0f tx=%.0f rx_gain=%.1f tx_gain=%.1f rx_bw=%.0f) lo_locked=%d\n",
+        "act(rate=%.0f rx=%.0f tx=%.0f rx_gain=%.1f tx_gain=%.1f rx_bw=%.0f rx_ant=%s tx_ant=%s) lo_locked=%d\n",
         st->sample_rate, cfg->rx_freq_hz, cfg->tx_freq_hz, cfg->rx_gain_db,
         rate_act, rx_freq_act, tx_freq_act, rx_gain_act, tx_gain_act, rx_bw_act,
+        rx_ant_act.c_str(), tx_ant_act.c_str(),
         lo_locked ? 1 : 0);
   } catch (const std::exception &e) {
     std::printf("USRP: trx_config exception: %s\n", e.what());

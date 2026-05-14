@@ -33,6 +33,7 @@ int nr_ssb_demod(const nr_iq_block_t *blk, const nr_ssb_window_t *win,
   }
   memset(grid, 0, sizeof(*grid));
   const uint32_t nfft = nr_v0_ssb_nfft(blk->fs_hz);
+  const int32_t abs_start_symbol = nr_v0_get_ssb_abs_start_symbol();
   const double fs_hz = (blk->fs_hz > 0.0) ? blk->fs_hz : 30720000.0;
   const double w = -2.0 * M_PI * (double)cfo_hz / fs_hz;
   if (win->len_samp < nr_v0_ssb_burst_len_fs(blk->fs_hz)) {
@@ -41,7 +42,9 @@ int nr_ssb_demod(const nr_iq_block_t *blk, const nr_ssb_window_t *win,
 
   uint32_t sym_off = 0U;
   for (int sym = 0; sym < NR_SSB_RE_ROWS; sym++) {
-    const uint32_t cp = nr_v0_ssb_symbol_cp_len_fs(blk->fs_hz, (uint32_t)sym);
+    const uint32_t cp = (abs_start_symbol >= 0)
+        ? nr_ofdm_symbol_cp_len_fs(blk->fs_hz, nr_v0_get_ssb_scs_khz(), (uint32_t)(abs_start_symbol + sym))
+        : nr_v0_ssb_symbol_cp_len_fs(blk->fs_hz, (uint32_t)sym);
     const uint32_t sym_len = nfft + cp;
     const uint32_t sym_start = win->start_samp + sym_off;
     const uint32_t fft_start = sym_start + cp;

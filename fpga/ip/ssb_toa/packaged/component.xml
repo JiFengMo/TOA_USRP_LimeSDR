@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spirit:component xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009">
+  <spirit:vendor>user.org</spirit:vendor>
+  <spirit:library>nr_toa</spirit:library>
+  <spirit:name>ssb_toa_axis_stub</spirit:name>
+  <spirit:version>0.1</spirit:version>
+  <spirit:description>AXI-Stream scaffold for NR SSB TOA FPGA bring-up. Run Vivado IP Packager or ADI project integration to infer final bus metadata.</spirit:description>
+  <spirit:fileSets>
+    <spirit:fileSet>
+      <spirit:name>xilinx_verilogsynthesis</spirit:name>
+      <spirit:file>
+        <spirit:name>hdl/ssb_toa_axis_stub.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+    </spirit:fileSet>
+  </spirit:fileSets>
+</spirit:component>

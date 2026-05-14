@@ -1,0 +1,35 @@
+# Build outputs
+build/
+build-*/
+*.o
+*.a
+*.so
+*.dll
+*.exe
+
+# CMake and test scratch
+CMakeFiles/
+CMakeCache.txt
+Testing/
+cmake_install.cmake
+compile_commands.json
+
+# Vivado/Xilinx generated state
+.Xil/
+*.jou
+*.log
+*.str
+*.wdb
+*.wcfg
+*.backup.jou
+*.backup.log
+fpga/ip/ssb_toa/.vivado_pkg/
+
+# Python/editor caches
+__pycache__/
+*.pyc
+.vscode/
+.idea/
+
+# Runtime dumps that can be regenerated
+NR_TOA_IQ_DUMP_DIR/

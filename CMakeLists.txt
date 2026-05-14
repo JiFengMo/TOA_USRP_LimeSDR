@@ -27,12 +27,18 @@ set(NR_POSITIONING_SOURCES
   openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c
   openair1/PHY/NR_POSITIONING/common/nr_pos_solver.c
   openair1/PHY/NR_POSITIONING/common/nr_toa_cfg_loader.c
+  openair1/PHY/NR_POSITIONING/common/nr_provider_select.c
   openair1/PHY/NR_POSITIONING/common/nr_radio_if.c
   openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c
+  openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.c
   openair1/PHY/NR_POSITIONING/common/nr_ssb_tx_scheduler.c
   openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c
   openair1/PHY/NR_POSITIONING/common/nr_anchor_write.c
   openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c
+  openair1/PHY/NR_POSITIONING/common/nr_type0_css.c
+  openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.c
+  openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.c
+  openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.c
   openair1/PHY/NR_POSITIONING/common/nr_toa_ue_helpers.c
   openair1/PHY/NR_POSITIONING/ssb/nr_pbch.c
   openair1/PHY/NR_POSITIONING/ssb/nr_ssb_ref.c
@@ -41,6 +47,7 @@ set(NR_POSITIONING_SOURCES
   openair1/PHY/NR_POSITIONING/ssb/nr_ssb_chest.c
   openair1/PHY/NR_POSITIONING/ssb/nr_ssb_toa_est.c
   openair1/PHY/NR_POSITIONING/ssb/nr_ssb_provider.c
+  openair1/PHY/NR_POSITIONING/fpga/nr_fpga_ssb_provider.c
   openair1/PHY/NR_POSITIONING/prs/nr_prs_extract.c
   openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c
   openair1/PHY/NR_POSITIONING/prs/nr_prs_toa_est.c
@@ -70,3 +77,6 @@ target_link_libraries(test_prs_toa PRIVATE nr_positioning)
 
 add_executable(test_solver openair1/PHY/NR_POSITIONING/tests/test_solver.c)
 target_link_libraries(test_solver PRIVATE nr_positioning)
+
+add_executable(test_fpga_provider_select openair1/PHY/NR_POSITIONING/tests/test_fpga_provider_select.c)
+target_link_libraries(test_fpga_provider_select PRIVATE nr_positioning)

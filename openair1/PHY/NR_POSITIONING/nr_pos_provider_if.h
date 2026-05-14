@@ -16,3 +16,4 @@ typedef struct {
 
 extern const nr_pos_provider_if_t nr_ssb_provider;
 extern const nr_pos_provider_if_t nr_prs_provider;
+extern const nr_pos_provider_if_t nr_fpga_ssb_provider;

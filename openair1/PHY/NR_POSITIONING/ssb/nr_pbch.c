@@ -43,6 +43,16 @@ static const uint8_t g_subblock_perm[32] = {
     12, 20, 13, 21, 14, 22, 15, 23,
     24, 25, 26, 28, 27, 29, 30, 31};
 
+const uint8_t *nr_polar_input_interleaver_164(void)
+{
+  return g_polar_il_max;
+}
+
+const uint8_t *nr_polar_subblock_interleaver_32(void)
+{
+  return g_subblock_perm;
+}
+
 static void nr_pbch_gen_prbs(uint32_t c_init, uint8_t *c, uint32_t len)
 {
   enum { NC = 1600 };
@@ -133,6 +143,7 @@ static void nr_pbch_payload_map(uint8_t *in_to_out32, uint8_t *scramble_mask32)
   uint32_t j_hrf = 10U;
   uint32_t j_ssb = 11U;
   uint32_t j_other = 14U;
+  const uint32_t unscrambling_mask = 0x1000041U;
 
   if (!in_to_out32) {
     return;
@@ -144,20 +155,62 @@ static void nr_pbch_payload_map(uint8_t *in_to_out32, uint8_t *scramble_mask32)
 
   for (uint32_t i = 0; i < NR_PBCH_A; i++) {
     uint32_t j = 0U;
-    if (i < 6U || (i >= 24U && i <= 27U)) {
+    if (i == 0U) {
+      j = j_other++;
+    } else if (i < 7U) {
+      j = j_sfn++;
+    } else if (i < 24U) {
+      j = j_other++;
+    } else if (i < 28U) {
       j = j_sfn++;
     } else if (i == 28U) {
       j = j_hrf++;
     } else if (i >= 29U) {
       j = j_ssb++;
-    } else {
-      j = j_other++;
     }
     in_to_out32[i] = g_pbch_payload_g[j];
-    if (scramble_mask32 && (i == 25U || i == 26U || i == 28U)) {
+    if (scramble_mask32 && ((unscrambling_mask >> in_to_out32[i]) & 1U)) {
       scramble_mask32[in_to_out32[i]] = 0U;
     }
   }
+}
+
+static void nr_pbch_parse_mib_bits(const uint8_t *payload_plain, nr_sync_state_t *sync)
+{
+  nr_mib_info_t mib;
+
+  if (!payload_plain || !sync) {
+    return;
+  }
+
+  memset(&mib, 0, sizeof(mib));
+  mib.valid = 1U;
+  mib.subcarrier_spacing_common = payload_plain[6] & 1U;
+  mib.half_frame_bit = payload_plain[28] & 1U;
+  mib.ssb_subcarrier_offset_msb = payload_plain[29] & 1U;
+  mib.ssb_subcarrier_offset =
+      (uint8_t)(((payload_plain[7] & 1U) << 3U) |
+                ((payload_plain[8] & 1U) << 2U) |
+                ((payload_plain[9] & 1U) << 1U) |
+                (payload_plain[10] & 1U));
+  mib.ssb_subcarrier_offset_full =
+      (uint8_t)((mib.ssb_subcarrier_offset & 0x0FU) |
+                ((mib.ssb_subcarrier_offset_msb & 0x1U) << 4U));
+  mib.dmrs_typeA_position = payload_plain[11] & 1U;
+  mib.control_resource_set_zero =
+      (uint8_t)(((payload_plain[12] & 1U) << 3U) |
+                ((payload_plain[13] & 1U) << 2U) |
+                ((payload_plain[14] & 1U) << 1U) |
+                (payload_plain[15] & 1U));
+  mib.search_space_zero =
+      (uint8_t)(((payload_plain[16] & 1U) << 3U) |
+                ((payload_plain[17] & 1U) << 2U) |
+                ((payload_plain[18] & 1U) << 1U) |
+                (payload_plain[19] & 1U));
+  mib.cell_barred = payload_plain[20] & 1U;
+  mib.intra_freq_reselection = payload_plain[21] & 1U;
+  mib.spare = payload_plain[22] & 1U;
+  sync->mib = mib;
 }
 
 static void nr_pbch_payload_interleave(const uint8_t *in32, uint8_t *out32,
@@ -294,6 +347,11 @@ static const uint16_t g_Q_0_Nminus1_512[512] = {
     439, 490, 463, 381, 497, 492, 443, 382, 498, 445, 471, 500, 446, 475, 487, 504, 255, 477, 491, 478, 383, 493, 499, 502, 494,
     501, 447, 505, 506, 479, 508, 495, 503, 507, 509, 510, 511};
 
+const uint16_t *nr_polar_reliability_sequence_512(void)
+{
+  return g_Q_0_Nminus1_512;
+}
+
 static int nr_pbch_u16_cmp(const void *a, const void *b)
 {
   const uint16_t va = *(const uint16_t *)a;
@@ -306,6 +364,66 @@ static int nr_pbch_extract_candidate(const uint8_t *uhat,
                                      uint8_t *payload_crc,
                                      uint8_t *payload_plain,
                                      uint16_t pci);
+
+static void nr_pbch_build_pi_k(uint32_t K, uint8_t *pi_k)
+{
+  uint32_t j = 0U;
+  const uint32_t base = 164U - K;
+
+  if (!pi_k || K > 164U) {
+    return;
+  }
+
+  for (uint32_t i = 0U; i < 164U; i++) {
+    if (g_polar_il_max[i] >= base) {
+      pi_k[j++] = (uint8_t)(g_polar_il_max[i] - base);
+    }
+  }
+}
+
+static int nr_pbch_extract_candidate_oai(const uint8_t *uhat,
+                                         const uint16_t *info_pos,
+                                         uint8_t *payload_crc,
+                                         uint8_t *payload_plain,
+                                         uint16_t pci)
+{
+  uint8_t pi_k[NR_PBCH_K];
+  uint8_t crc_bits[NR_PBCH_CRC];
+  uint8_t payload_bits[NR_PBCH_A];
+  uint64_t B = 0U;
+  uint32_t rxcrc = 0U;
+  uint32_t ar = 0U;
+
+  if (!uhat || !info_pos || !payload_crc || !payload_plain) {
+    return -1;
+  }
+
+  nr_pbch_build_pi_k(NR_PBCH_K, pi_k);
+  for (uint32_t k = 0U; k < NR_PBCH_K; k++) {
+    const uint32_t target_bit = (NR_PBCH_K - 1U) - (uint32_t)pi_k[k];
+    B |= ((uint64_t)(uhat[info_pos[k]] & 1U)) << target_bit;
+  }
+
+  rxcrc = (uint32_t)(B & 0xFFFFFFU);
+  ar = (uint32_t)(B >> NR_PBCH_CRC);
+  for (uint32_t i = 0U; i < NR_PBCH_A; i++) {
+    payload_bits[i] = (uint8_t)((ar >> (NR_PBCH_A - 1U - i)) & 1U);
+  }
+  if (nr_crc24c_bits(payload_bits, NR_PBCH_A) != rxcrc) {
+    return -1;
+  }
+
+  for (uint32_t i = 0U; i < NR_PBCH_CRC; i++) {
+    crc_bits[i] = (uint8_t)((rxcrc >> (NR_PBCH_CRC - 1U - i)) & 1U);
+  }
+  memcpy(payload_crc, payload_bits, sizeof(payload_bits));
+  memcpy(payload_crc + NR_PBCH_A, crc_bits, sizeof(crc_bits));
+
+  if (nr_pbch_payload_descramble(pci, payload_bits, payload_plain) != 0) {
+    return -1;
+  }
+  return 0;
+}
 
 static void nr_pbch_build_info_set(uint16_t *info_pos, uint8_t *frozen)
 {
@@ -581,12 +699,12 @@ static void nr_pbch_extract_u_from_tree_output(const nr_pbch_decoder_ctx_t *ctx,
   }
 }
 
-static int nr_pbch_oai_generic_decoder_int16(const float *llr_sub,
-                                             const uint8_t *frozen,
-                                             const uint16_t *info_pos,
-                                             uint8_t *payload_crc,
-                                             uint8_t *payload_plain,
-                                             uint16_t pci)
+int nr_pbch_oai_generic_decoder_int16(const float *llr_sub,
+                                      const uint8_t *frozen,
+                                      const uint16_t *info_pos,
+                                      uint8_t *payload_crc,
+                                      uint8_t *payload_plain,
+                                      uint16_t pci)
 {
   static __thread nr_pbch_decoder_ctx_t ctx;
   uint8_t uhat[NR_PBCH_N];
@@ -632,20 +750,28 @@ static int nr_pbch_extract_candidate(const uint8_t *uhat,
                                      uint8_t *payload_plain,
                                      uint16_t pci)
 {
-  uint8_t payload_il[NR_PBCH_K];
   if (!uhat || !info_pos || !payload_crc || !payload_plain) {
     return -1;
   }
-  for (uint32_t i = 0; i < NR_PBCH_K; i++) {
-    payload_il[i] = uhat[info_pos[i]];
+
+  if (nr_pbch_extract_candidate_oai(uhat, info_pos, payload_crc, payload_plain, pci) == 0) {
+    return 0;
   }
-  nr_polar_input_deinterleave(payload_il, NR_PBCH_K, payload_crc);
-  if (!nr_pbch_crc_ok(payload_crc)) {
-    return -1;
+
+  {
+    uint8_t payload_il[NR_PBCH_K];
+    for (uint32_t i = 0; i < NR_PBCH_K; i++) {
+      payload_il[i] = uhat[info_pos[i]];
+    }
+    nr_polar_input_deinterleave(payload_il, NR_PBCH_K, payload_crc);
+    if (!nr_pbch_crc_ok(payload_crc)) {
+      return -1;
+    }
+    if (nr_pbch_payload_descramble(pci, payload_crc, payload_plain) != 0) {
+      return -1;
+    }
   }
-  if (nr_pbch_payload_descramble(pci, payload_crc, payload_plain) != 0) {
-    return -1;
-  }
+
   return 0;
 }
 
@@ -799,13 +925,12 @@ static void nr_pbch_oai_copy_path_u8(uint8_t dst[NR_PBCH_N][NR_PBCH_POLAR_LEVELS
   }
 }
 
-static __attribute__((unused))
-int nr_pbch_oai_ca_scl_decode(const float *llr_sub,
-                              const uint8_t *frozen,
-                              const uint16_t *info_pos,
-                              uint8_t *payload_crc,
-                              uint8_t *payload_plain,
-                              uint16_t pci)
+static int nr_pbch_oai_ca_scl_decode(const float *llr_sub,
+                                     const uint8_t *frozen,
+                                     const uint16_t *info_pos,
+                                     uint8_t *payload_crc,
+                                     uint8_t *payload_plain,
+                                     uint16_t pci)
 {
   double llr[NR_PBCH_N][NR_PBCH_POLAR_LEVELS][NR_PBCH_MAX_PATHS];
   double old_llr[NR_PBCH_N][NR_PBCH_POLAR_LEVELS][NR_PBCH_MAX_PATHS];
@@ -1126,23 +1251,6 @@ int nr_pbch_bch_decode(const float *llr, uint32_t llr_len, nr_sync_state_t *sync
 
   memcpy(llr_scr, llr, sizeof(llr_scr));
 
-  {
-    static uint32_t llr_dbg = 0U;
-    if ((llr_dbg++ % 20U) == 0U) {
-      float sum_abs = 0.0f, mx = 0.0f;
-      uint32_t npos = 0U;
-      for (uint32_t i = 0; i < NR_PBCH_E; i++) {
-        float a = llr_scr[i] < 0 ? -llr_scr[i] : llr_scr[i];
-        sum_abs += a;
-        if (a > mx) mx = a;
-        if (llr_scr[i] > 0) npos++;
-      }
-      printf("  LLR_PRE_SCR: pci=%u ssb=%u mean_abs=%.2f max=%.2f pos_frac=%.3f\n",
-             (unsigned)sync->pci, (unsigned)sync->ssb_index,
-             sum_abs / NR_PBCH_E, mx, (float)npos / NR_PBCH_E);
-    }
-  }
-
   nr_pbch_codeword_descramble_llr(sync->pci, sync->ssb_index, llr_scr);
   nr_pbch_rate_match_decode(llr_scr, llr_rm);
   nr_pbch_subblock_deinterleave_llr(llr_rm, llr_sub);
@@ -1150,13 +1258,16 @@ int nr_pbch_bch_decode(const float *llr, uint32_t llr_len, nr_sync_state_t *sync
   nr_pbch_build_info_set(info_pos, frozen);
   if (nr_pbch_oai_generic_decoder_int16(llr_sub, frozen, info_pos,
                                         payload_crc, payload_plain, sync->pci) != 0) {
-    return -1;
+    if (nr_pbch_oai_ca_scl_decode(llr_sub, frozen, info_pos,
+                                  payload_crc, payload_plain, sync->pci) != 0) {
+      return -1;
+    }
   }
 
   for (uint32_t i = 0; i < 24U; i++) {
     mib = (mib << 1U) | (uint32_t)payload_plain[i];
   }
-  for (uint32_t i = 0; i < 6U; i++) {
+  for (uint32_t i = 1; i < 7U; i++) {
     sfn = (uint16_t)((sfn << 1U) | payload_plain[i]);
   }
   for (uint32_t i = 24U; i < 28U; i++) {
@@ -1166,6 +1277,7 @@ int nr_pbch_bch_decode(const float *llr, uint32_t llr_len, nr_sync_state_t *sync
   sync->sfn = sfn;
   sync->slot = payload_plain[28] ? 10U : 0U;
   sync->mib_payload = mib;
+  nr_pbch_parse_mib_bits(payload_plain, sync);
   sync->mib_ok = 1U;
   return 0;
 }

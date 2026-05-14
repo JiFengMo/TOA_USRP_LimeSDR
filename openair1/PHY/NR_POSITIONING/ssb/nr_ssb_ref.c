@@ -1,6 +1,5 @@
 #include "openair1/PHY/NR_POSITIONING/nr_pos_types.h"
 #include "openair1/PHY/NR_POSITIONING/nr_pos_api.h"
-
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -10,8 +9,10 @@
 #define NR_V0_SSB_SC 240U
 #define NR_V0_SSB_SYMS 4U
 #define NR_V0_FS_HZ_FALLBACK 30720000.0
+#define NR_V0_PBCH_DMRS_LENGTH_DWORD 10U
 
 static uint32_t g_nr_v0_ssb_scs_khz = 30U;
+static int32_t g_nr_v0_ssb_abs_start_symbol = -1;
 
 void nr_v0_set_ssb_scs_khz(uint32_t scs_khz)
 {
@@ -23,6 +24,16 @@ void nr_v0_set_ssb_scs_khz(uint32_t scs_khz)
 uint32_t nr_v0_get_ssb_scs_khz(void)
 {
   return g_nr_v0_ssb_scs_khz;
+}
+
+void nr_v0_set_ssb_abs_start_symbol(int32_t abs_symbol)
+{
+  g_nr_v0_ssb_abs_start_symbol = abs_symbol;
+}
+
+int32_t nr_v0_get_ssb_abs_start_symbol(void)
+{
+  return g_nr_v0_ssb_abs_start_symbol;
 }
 
 uint32_t nr_v0_default_ssb_scs_khz(double center_freq_hz)
@@ -201,6 +212,26 @@ static void nr_v0_gen_prbs(uint32_t c_init, uint8_t *c, uint32_t len)
 }
 
 static void nr_v0_build_sss_seq(int nid1, int nid2, float *seq);
+
+static inline uint32_t nr_v0_lte_gold_generic(uint32_t *x1, uint32_t *x2, uint8_t reset)
+{
+  if (reset) {
+    *x1 = 1U + (1U << 31);
+    *x2 = *x2 ^ ((*x2 ^ (*x2 >> 1) ^ (*x2 >> 2) ^ (*x2 >> 3)) << 31);
+    for (int32_t n = 1; n < 50; n++) {
+      *x1 = (*x1 >> 1) ^ (*x1 >> 4);
+      *x1 = *x1 ^ (*x1 << 31) ^ (*x1 << 28);
+      *x2 = (*x2 >> 1) ^ (*x2 >> 2) ^ (*x2 >> 3) ^ (*x2 >> 4);
+      *x2 = *x2 ^ (*x2 << 31) ^ (*x2 << 30) ^ (*x2 << 29) ^ (*x2 << 28);
+    }
+  }
+
+  *x1 = (*x1 >> 1) ^ (*x1 >> 4);
+  *x1 = *x1 ^ (*x1 << 31) ^ (*x1 << 28);
+  *x2 = (*x2 >> 1) ^ (*x2 >> 2) ^ (*x2 >> 3) ^ (*x2 >> 4);
+  *x2 = *x2 ^ (*x2 << 31) ^ (*x2 << 30) ^ (*x2 << 29) ^ (*x2 << 28);
+  return (*x1 ^ *x2);
+}
 
 static void nr_v0_build_pss_seq(int nid2, float *seq)
 {
@@ -406,9 +437,10 @@ int nr_v0_pbch_dmrs_build(int pci, int ssb_idx, int n_hf,
                           float *seq_i, float *seq_q, uint32_t max_len)
 {
   enum { DMRS_RE = 144 };
-  uint8_t c[2U * DMRS_RE];
+  uint32_t gold[NR_V0_PBCH_DMRS_LENGTH_DWORD] = {0};
+  static const uint8_t swap2bits[4] = {0U, 2U, 1U, 3U};
   int i_ssb = (ssb_idx >= 0) ? ssb_idx : 0;
-  if (i_ssb < 4 && (n_hf == 0 || n_hf == 1)) {
+  if (n_hf == 0 || n_hf == 1) {
     i_ssb += 4 * n_hf;
   }
   if (!seq_i || !seq_q || max_len < DMRS_RE) {
@@ -417,10 +449,19 @@ int nr_v0_pbch_dmrs_build(int pci, int ssb_idx, int n_hf,
   const uint32_t c_init =
       ((((uint32_t)i_ssb + 1U) * (((uint32_t)pci >> 2) + 1U)) << 11) +
       (((uint32_t)i_ssb + 1U) << 6) + ((uint32_t)pci & 3U);
-  nr_v0_gen_prbs(c_init, c, 2U * DMRS_RE);
+  {
+    uint32_t x1 = 0U;
+    uint32_t x2 = c_init;
+    for (uint32_t n = 0U; n < NR_V0_PBCH_DMRS_LENGTH_DWORD; n++) {
+      gold[n] = nr_v0_lte_gold_generic(&x1, &x2, (uint8_t)(n == 0U));
+    }
+  }
   for (uint32_t m = 0; m < DMRS_RE; m++) {
-    seq_i[m] = c[2U * m] ? -0.70710678118f : 0.70710678118f;
-    seq_q[m] = c[2U * m + 1U] ? -0.70710678118f : 0.70710678118f;
+    const uint8_t packed = ((const uint8_t *)gold)[m >> 2U];
+    const uint8_t raw = (uint8_t)((packed >> ((m << 1U) & 7U)) & 3U);
+    const uint8_t idx = swap2bits[raw];
+    seq_i[m] = (idx & 2U) ? -0.70710678118f : 0.70710678118f;
+    seq_q[m] = (idx & 1U) ? 0.70710678118f : -0.70710678118f;
   }
   return DMRS_RE;
 }

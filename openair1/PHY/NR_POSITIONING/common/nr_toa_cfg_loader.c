@@ -56,6 +56,70 @@ static int nr_parse_u32(const char *s, uint32_t *out)
   return 0;
 }
 
+static int nr_parse_i32(const char *s, int32_t *out)
+{
+  if (!s || !out) {
+    return -1;
+  }
+  char *end = NULL;
+  long v = strtol(s, &end, 0);
+  if (!end || end == s) {
+    return -1;
+  }
+  *out = (int32_t)v;
+  return 0;
+}
+
+static void nr_parse_scan_targets(const char *val, nr_toa_app_cfg_t *cfg)
+{
+  char buf[1024];
+  char *save = NULL;
+  char *tok = NULL;
+
+  if (!val || !cfg) {
+    return;
+  }
+
+  cfg->scan_target_count = 0U;
+  (void)snprintf(buf, sizeof(buf), "%s", val);
+  tok = strtok_r(buf, ",;", &save);
+  while (tok && cfg->scan_target_count < NR_TOA_MAX_SCAN_TARGETS) {
+    char *sep = NULL;
+    char *pci_txt = NULL;
+    nr_scan_target_t *t = &cfg->scan_targets[cfg->scan_target_count];
+    nr_trim(tok);
+    if (tok[0] == '\0') {
+      tok = strtok_r(NULL, ",;", &save);
+      continue;
+    }
+
+    t->center_freq_hz = 0.0;
+    t->target_pci = -1;
+    sep = strchr(tok, '@');
+    if (sep) {
+      *sep = '\0';
+      pci_txt = sep + 1;
+      nr_trim(tok);
+      nr_trim(pci_txt);
+    }
+
+    t->center_freq_hz = strtod(tok, NULL);
+    if (t->center_freq_hz <= 0.0) {
+      tok = strtok_r(NULL, ",;", &save);
+      continue;
+    }
+    if (pci_txt && pci_txt[0] != '\0') {
+      int32_t pci = -1;
+      if (nr_parse_i32(pci_txt, &pci) == 0 && pci >= 0 && pci < 1008) {
+        t->target_pci = pci;
+      }
+    }
+
+    cfg->scan_target_count++;
+    tok = strtok_r(NULL, ",;", &save);
+  }
+}
+
 int nr_toa_load_config(const char *path, nr_toa_app_cfg_t *cfg)
 {
   if (!path || !cfg) {
@@ -65,10 +129,14 @@ int nr_toa_load_config(const char *path, nr_toa_app_cfg_t *cfg)
 
   /* Defaults (override by conf). */
   (void)snprintf(cfg->sdr, sizeof(cfg->sdr), "lime");
+  cfg->provider[0] = '\0';
   cfg->mode = NR_TOA_MODE_SSB_TOA;
   cfg->meas_mode = NR_MEAS_MODE_MEAS_ONLY;
+  cfg->nr_band = -1;
   (void)snprintf(cfg->clock_source, sizeof(cfg->clock_source), "internal");
   (void)snprintf(cfg->time_source, sizeof(cfg->time_source), "internal");
+  cfg->rx_antenna[0] = '\0';
+  cfg->tx_antenna[0] = '\0';
   cfg->rx_gain_db = 0.0;
   cfg->tx_gain_db = 0.0;
   cfg->center_freq_hz = 0.0;
@@ -118,12 +186,18 @@ int nr_toa_load_config(const char *path, nr_toa_app_cfg_t *cfg)
 
     if (nr_streq_icase(key, "sdr")) {
       (void)snprintf(cfg->sdr, sizeof(cfg->sdr), "%s", val);
+    } else if (nr_streq_icase(key, "provider")) {
+      (void)snprintf(cfg->provider, sizeof(cfg->provider), "%s", val);
     } else if (nr_streq_icase(key, "sdr_addrs")) {
       (void)snprintf(cfg->sdr_addrs, sizeof(cfg->sdr_addrs), "%s", val);
     } else if (nr_streq_icase(key, "clock_source")) {
       (void)snprintf(cfg->clock_source, sizeof(cfg->clock_source), "%s", val);
     } else if (nr_streq_icase(key, "time_source")) {
       (void)snprintf(cfg->time_source, sizeof(cfg->time_source), "%s", val);
+    } else if (nr_streq_icase(key, "rx_antenna")) {
+      (void)snprintf(cfg->rx_antenna, sizeof(cfg->rx_antenna), "%s", val);
+    } else if (nr_streq_icase(key, "tx_antenna")) {
+      (void)snprintf(cfg->tx_antenna, sizeof(cfg->tx_antenna), "%s", val);
     } else if (nr_streq_icase(key, "center_freq_hz")) {
       cfg->center_freq_hz = strtod(val, NULL);
     } else if (nr_streq_icase(key, "sample_rate_hz")) {
@@ -145,6 +219,11 @@ int nr_toa_load_config(const char *path, nr_toa_app_cfg_t *cfg)
         cfg->meas_mode = NR_MEAS_MODE_POSITION_SOLVE;
       } else {
         cfg->meas_mode = NR_MEAS_MODE_MEAS_ONLY;
+      }
+    } else if (nr_streq_icase(key, "nr_band")) {
+      int32_t v = -1;
+      if (nr_parse_i32(val, &v) == 0 && v >= -1) {
+        cfg->nr_band = v;
       }
     } else if (nr_streq_icase(key, "anchor_db_path")) {
       (void)snprintf(cfg->anchor_db_path, sizeof(cfg->anchor_db_path), "%s", val);
@@ -174,10 +253,12 @@ int nr_toa_load_config(const char *path, nr_toa_app_cfg_t *cfg)
         cfg->gain_sweep_enable = (uint8_t)(v ? 1U : 0U);
       }
     } else if (nr_streq_icase(key, "target_pci")) {
-      uint32_t v = 0;
-      if (nr_parse_u32(val, &v) == 0 && v < 1008U) {
-        cfg->target_pci = (int32_t)v;
+      int32_t v = -1;
+      if (nr_parse_i32(val, &v) == 0 && v >= -1 && v < 1008) {
+        cfg->target_pci = v;
       }
+    } else if (nr_streq_icase(key, "scan_targets")) {
+      nr_parse_scan_targets(val, cfg);
     } else if (nr_streq_icase(key, "ssb_scs_khz")) {
       uint32_t v = 0;
       if (nr_parse_u32(val, &v) == 0) {
@@ -227,5 +308,7 @@ int nr_toa_build_rf_cfg(const nr_toa_app_cfg_t *cfg, openair0_config_t *rf_cfg)
   rf_cfg->sdr_addrs = cfg->sdr_addrs;
   rf_cfg->clock_source = cfg->clock_source;
   rf_cfg->time_source = cfg->time_source;
+  rf_cfg->rx_antenna = cfg->rx_antenna;
+  rf_cfg->tx_antenna = cfg->tx_antenna;
   return 0;
 }
