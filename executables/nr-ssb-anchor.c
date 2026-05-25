@@ -32,7 +32,10 @@ static void *ANCHOR_main_thread(void *arg)
   nr_clock_status_t clk;
   memset(&clk, 0, sizeof(clk));
 
-  while (!oai_exit && nr_toa_wait_clock_lock(ctx->dev, &clk) != 0) {
+  while (!oai_exit) {
+    if (nr_toa_wait_clock_lock(ctx->dev, &clk) == 0 && clk.locked) {
+      break;
+    }
     usleep(10000);
   }
   if (oai_exit) {
@@ -96,8 +99,11 @@ int main(int argc, char **argv)
   if (nr_toa_radio_init(&ctx.dev, &ctx.rf) != 0) {
     return 1;
   }
-  if (nr_toa_radio_start(ctx.dev) != 0) {
-    return 1;
+  if (ctx.rf.sample_rate > 0.0 && ctx.app.sample_rate_hz != ctx.rf.sample_rate) {
+    printf("NR-TOA anchor note: UHD adjusted sample rate from %.0fHz to %.0fHz; using actual rate for timing.\n",
+           ctx.app.sample_rate_hz,
+           ctx.rf.sample_rate);
+    ctx.app.sample_rate_hz = ctx.rf.sample_rate;
   }
 
   nr_ssb_ref_t ref;
@@ -115,6 +121,10 @@ int main(int argc, char **argv)
   memset(&ctx.burst, 0, sizeof(ctx.burst));
   ctx.burst.tx[0] = ctx.txbuf_mem;
   if (nr_ssb_ofdm_mod(&grid, &ctx.burst) != 0) {
+    return 1;
+  }
+
+  if (nr_toa_radio_start(ctx.dev) != 0) {
     return 1;
   }
 

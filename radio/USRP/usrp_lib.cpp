@@ -30,6 +30,32 @@ struct usrp_state_t {
   uint64_t rx_timeout_cnt;
 };
 
+static bool usrp_sensor_bool(uhd::usrp::multi_usrp::sptr usrp,
+                             const std::string &name,
+                             size_t chan,
+                             bool default_value)
+{
+  if (!usrp) {
+    return default_value;
+  }
+
+  const auto board_sensors = usrp->get_mboard_sensor_names(0);
+  for (const auto &n : board_sensors) {
+    if (n == name) {
+      return usrp->get_mboard_sensor(name, 0).to_bool();
+    }
+  }
+
+  const auto rx_sensors = usrp->get_rx_sensor_names(chan);
+  for (const auto &n : rx_sensors) {
+    if (n == name) {
+      return usrp->get_rx_sensor(name, chan).to_bool();
+    }
+  }
+
+  return default_value;
+}
+
 extern "C" {
 
 static int usrp_trx_config(openair0_device_t *device, openair0_config_t *cfg)
@@ -85,6 +111,9 @@ static int usrp_trx_config(openair0_device_t *device, openair0_config_t *cfg)
     st->tx_stream = st->usrp->get_tx_stream(tx_args);
 
     const double rate_act = st->usrp->get_rx_rate(0);
+    st->sample_rate = rate_act;
+    st->cfg.sample_rate = rate_act;
+    cfg->sample_rate = rate_act;
     const double rx_freq_act = st->usrp->get_rx_freq(0);
     const double tx_freq_act = st->usrp->get_tx_freq(0);
     const double rx_gain_act = st->usrp->get_rx_gain(0);
@@ -192,13 +221,27 @@ static int usrp_trx_read(openair0_device_t *device,
     auto *dst = reinterpret_cast<std::complex<int16_t> *>(buff[0]);
     uint32_t total = 0;
     bool ts_set = false;
-    int guard = 0;
-    while (total < nsamps && guard < 16) {
-      guard++;
+    uint64_t timeout_ms = (uint64_t)(1000.0 * ((double)nsamps / st->sample_rate + 0.5));
+    if (timeout_ms < 200U) {
+      timeout_ms = 200U;
+    }
+    const auto deadline = std::chrono::steady_clock::now() +
+                          std::chrono::milliseconds((long long)timeout_ms);
+    while (total < nsamps) {
+      const auto now = std::chrono::steady_clock::now();
+      if (now >= deadline) {
+        std::printf("USRP: RX block timeout partial=%u/%u timeout_ms=%llu\n",
+                    total,
+                    nsamps,
+                    (unsigned long long)timeout_ms);
+        return -1;
+      }
+      const double remain = std::chrono::duration<double>(deadline - now).count();
+      const double recv_timeout = (remain < 0.05) ? remain : 0.05;
       std::vector<void *> buffs(1);
       buffs[0] = (void *)(dst + total);
       uhd::rx_metadata_t md;
-      const size_t got = st->rx_stream->recv(buffs, nsamps - total, md, 0.05, false);
+      const size_t got = st->rx_stream->recv(buffs, nsamps - total, md, recv_timeout, false);
 
       if (md.error_code == uhd::rx_metadata_t::ERROR_CODE_TIMEOUT) {
         st->rx_timeout_cnt++;
@@ -206,18 +249,22 @@ static int usrp_trx_read(openair0_device_t *device,
       }
       if (md.error_code == uhd::rx_metadata_t::ERROR_CODE_OVERFLOW) {
         st->rx_overflow_cnt++;
-        if ((st->rx_overflow_cnt % 100U) == 1U) {
-          std::printf("USRP: RX overflow count=%llu timeout=%llu\n",
-                      (unsigned long long)st->rx_overflow_cnt,
-                      (unsigned long long)st->rx_timeout_cnt);
-        }
-        continue;
+        std::printf("USRP: RX overflow count=%llu timeout=%llu partial=%u/%u; dropping block\n",
+                    (unsigned long long)st->rx_overflow_cnt,
+                    (unsigned long long)st->rx_timeout_cnt,
+                    total,
+                    nsamps);
+        return -2;
       }
       if (md.error_code != uhd::rx_metadata_t::ERROR_CODE_NONE) {
         std::printf("USRP RX metadata error: %s\n", md.strerror().c_str());
         return -1;
       }
       if (!ts_set) {
+        if (!md.has_time_spec) {
+          std::printf("USRP RX metadata missing first-sample timestamp\n");
+          return -1;
+        }
         const double tsec = md.time_spec.get_real_secs();
         *ptimestamp = (openair0_timestamp_t)llround(tsec * st->sample_rate);
         ts_set = true;
@@ -325,6 +372,82 @@ static int usrp_set_rx_gain(openair0_device_t *device, double rx_gain_db)
   }
 }
 
+static int usrp_get_device_time(openair0_device_t *device, openair0_timestamp_t *ts)
+{
+  if (!device || !device->priv || !ts) {
+    return -1;
+  }
+  usrp_state_t *st = (usrp_state_t *)device->priv;
+  if (!st->usrp || !(st->sample_rate > 0.0)) {
+    return -1;
+  }
+  try {
+    const double tsec = st->usrp->get_time_now().get_real_secs();
+    *ts = (openair0_timestamp_t)llround(tsec * st->sample_rate);
+    return 0;
+  } catch (const std::exception &e) {
+    std::printf("USRP: get_device_time exception: %s\n", e.what());
+    return -1;
+  }
+}
+
+static int usrp_set_time_next_pps(openair0_device_t *device, uint64_t epoch_ns)
+{
+  if (!device || !device->priv) {
+    return -1;
+  }
+  usrp_state_t *st = (usrp_state_t *)device->priv;
+  if (!st->usrp) {
+    return -1;
+  }
+  try {
+    const double epoch_sec = (double)epoch_ns / 1.0e9;
+    st->usrp->set_time_next_pps(uhd::time_spec_t(epoch_sec));
+    std::this_thread::sleep_for(std::chrono::milliseconds(1100));
+    std::printf("USRP: time set at next PPS to %.9f s\n", epoch_sec);
+    return 0;
+  } catch (const std::exception &e) {
+    std::printf("USRP: set_time_next_pps exception: %s\n", e.what());
+    return -1;
+  }
+}
+
+static int usrp_get_clock_status(openair0_device_t *device,
+                                 uint8_t *ref_locked,
+                                 uint8_t *pps_locked,
+                                 uint8_t *gps_locked)
+{
+  if (!device || !device->priv || !ref_locked || !pps_locked || !gps_locked) {
+    return -1;
+  }
+  usrp_state_t *st = (usrp_state_t *)device->priv;
+  if (!st->usrp) {
+    return -1;
+  }
+  try {
+    const std::string clock_src = st->cfg.clock_source ? std::string(st->cfg.clock_source) : std::string("");
+    const std::string time_src = st->cfg.time_source ? std::string(st->cfg.time_source) : std::string("");
+    bool ref = true;
+    if (clock_src == "external" || clock_src == "gpsdo" || clock_src == "gps") {
+      ref = usrp_sensor_bool(st->usrp, "ref_locked", 0, false);
+    }
+    const bool gps = usrp_sensor_bool(st->usrp, "gps_locked", 0, false);
+    bool pps = true;
+    if (time_src == "gpsdo" || time_src == "gps") {
+      pps = gps;
+    } else if (time_src == "external") {
+      pps = ref;
+    }
+    *ref_locked = ref ? 1U : 0U;
+    *pps_locked = pps ? 1U : 0U;
+    *gps_locked = gps ? 1U : 0U;
+    return 0;
+  } catch (const std::exception &e) {
+    std::printf("USRP: get_clock_status exception: %s\n", e.what());
+    return -1;
+  }
+}
+
 openair0_device_t *openair0_device_get_usrp(openair0_config_t *cfg)
 {
   openair0_device_t *dev = (openair0_device_t *)calloc(1, sizeof(openair0_device_t));
@@ -339,6 +462,9 @@ openair0_device_t *openair0_device_get_usrp(openair0_config_t *cfg)
   dev->trx_write_func = usrp_trx_write;
   dev->trx_set_rx_freq_func = usrp_set_rx_freq;
   dev->trx_set_rx_gain_func = usrp_set_rx_gain;
+  dev->trx_get_time_func = usrp_get_device_time;
+  dev->trx_set_time_next_pps_func = usrp_set_time_next_pps;
+  dev->trx_get_clock_status_func = usrp_get_clock_status;
   dev->openair0_cfg = cfg;
   dev->priv = (void *)(new usrp_state_t());
   if (!dev->priv) {

@@ -353,6 +353,54 @@ openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c.s
 .PHONY : openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.c.s
 
+openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.o: openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.o
+
+# target to build an object file
+openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.c.o
+
+openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.i: openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.i
+
+# target to preprocess a source file
+openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.c.i
+
+openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.s: openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.s
+
+# target to generate assembly for a file
+openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.c.s
+
+openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.o: openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.o
+
+# target to build an object file
+openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.c.o
+
+openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.i: openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.i
+
+# target to preprocess a source file
+openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.c.i
+
+openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.s: openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.s
+
+# target to generate assembly for a file
+openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.c.s
+
 openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.o: openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.c.o
 .PHONY : openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.o
 
@@ -425,6 +473,30 @@ openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.s
 .PHONY : openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.c.s
 
+openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.o: openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.o
+
+# target to build an object file
+openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.c.o
+
+openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.i: openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.i
+
+# target to preprocess a source file
+openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.c.i
+
+openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.s: openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.s
+
+# target to generate assembly for a file
+openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.c.s
+
 openair1/PHY/NR_POSITIONING/common/nr_pos_solver.o: openair1/PHY/NR_POSITIONING/common/nr_pos_solver.c.o
 .PHONY : openair1/PHY/NR_POSITIONING/common/nr_pos_solver.o
 
@@ -472,6 +544,30 @@ openair1/PHY/NR_POSITIONING/common/nr_radio_if.s: openair1/PHY/NR_POSITIONING/co
 openair1/PHY/NR_POSITIONING/common/nr_radio_if.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_radio_if.c.s
 .PHONY : openair1/PHY/NR_POSITIONING/common/nr_radio_if.c.s
+
+openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.o: openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.o
+
+# target to build an object file
+openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.c.o
+
+openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.i: openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.i
+
+# target to preprocess a source file
+openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.c.i
+
+openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.s: openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.s
+
+# target to generate assembly for a file
+openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.c.s
 
 openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.o: openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.c.o
 .PHONY : openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.o
@@ -592,6 +688,30 @@ openair1/PHY/NR_POSITIONING/common/nr_trace_sink.s: openair1/PHY/NR_POSITIONING/
 openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c.s
 .PHONY : openair1/PHY/NR_POSITIONING/common/nr_trace_sink.c.s
+
+openair1/PHY/NR_POSITIONING/common/nr_type0_css.o: openair1/PHY/NR_POSITIONING/common/nr_type0_css.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_type0_css.o
+
+# target to build an object file
+openair1/PHY/NR_POSITIONING/common/nr_type0_css.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_type0_css.c.o
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_type0_css.c.o
+
+openair1/PHY/NR_POSITIONING/common/nr_type0_css.i: openair1/PHY/NR_POSITIONING/common/nr_type0_css.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_type0_css.i
+
+# target to preprocess a source file
+openair1/PHY/NR_POSITIONING/common/nr_type0_css.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_type0_css.c.i
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_type0_css.c.i
+
+openair1/PHY/NR_POSITIONING/common/nr_type0_css.s: openair1/PHY/NR_POSITIONING/common/nr_type0_css.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_type0_css.s
+
+# target to generate assembly for a file
+openair1/PHY/NR_POSITIONING/common/nr_type0_css.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nr_positioning.dir/build.make CMakeFiles/nr_positioning.dir/openair1/PHY/NR_POSITIONING/common/nr_type0_css.c.s
+.PHONY : openair1/PHY/NR_POSITIONING/common/nr_type0_css.c.s
 
 openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.o: openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.c.o
 .PHONY : openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.o
@@ -1057,6 +1177,12 @@ help:
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.o"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.i"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_clock_mgr.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_coreset0_extract.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_dl_slot_geom.s"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.o"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.i"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_epoch_mgr.s"
@@ -1066,12 +1192,18 @@ help:
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.o"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.i"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_meas_assoc.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_pdcch_coreset0.s"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_pos_solver.o"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_pos_solver.i"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_pos_solver.s"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_radio_if.o"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_radio_if.i"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_radio_if.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_sib1_rx_plan.s"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.o"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.i"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_ssb_beacon_gen.s"
@@ -1087,6 +1219,9 @@ help:
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_trace_sink.o"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_trace_sink.i"
 	@echo "... openair1/PHY/NR_POSITIONING/common/nr_trace_sink.s"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_type0_css.o"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_type0_css.i"
+	@echo "... openair1/PHY/NR_POSITIONING/common/nr_type0_css.s"
 	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.o"
 	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.i"
 	@echo "... openair1/PHY/NR_POSITIONING/prs/nr_prs_chest.s"

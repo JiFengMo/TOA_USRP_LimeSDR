@@ -56,6 +56,10 @@ int nr_toa_radio_read(openair0_device_t *dev, nr_iq_block_t *blk)
   openair0_timestamp_t ts = 0;
   /* Phase-0 skeleton: backends may ignore antenna, but we pass the buffers. */
   int ret = dev->trx_read_func(dev, &ts, buf, blk->nsamps, 0);
+  if (ret == -2) {
+    blk->overrun = 1U;
+    return -1;
+  }
   if (ret < 0) {
     return -1;
   }

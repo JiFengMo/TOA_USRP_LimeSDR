@@ -1103,13 +1103,13 @@ int main(int argc, char **argv)
   if (nr_toa_radio_init(&ue.dev, &ue.rf_cfg) != 0) {
     return 1;
   }
-  if (nr_toa_radio_start(ue.dev) != 0) {
-    return 1;
+  if (ue.rf_cfg.sample_rate > 0.0 && fabs(ue.rf_cfg.sample_rate - ue.app_cfg.sample_rate_hz) > 1.0) {
+    printf("NR-TOA note: UHD adjusted sample rate from %.0fHz to %.0fHz; using actual rate for timing.\n",
+           ue.app_cfg.sample_rate_hz,
+           ue.rf_cfg.sample_rate);
+    ue.app_cfg.sample_rate_hz = ue.rf_cfg.sample_rate;
   }
   if (nr_iq_ring_init(&ue.iq_ring, 64) != 0) {
-    return 1;
-  }
-  if (ue.provider->init(ue.provider_ctx) != 0) {
     return 1;
   }
 
@@ -1133,8 +1133,21 @@ int main(int argc, char **argv)
   ue.next_sync_job_id = 1;
   ue.sync_jobs_dropped = 0;
 
+  if (ue.provider->init(ue.provider_ctx) != 0) {
+    return 1;
+  }
+
   /* Start actor threads. */
   if (pthread_create(&ue.sync_tid, NULL, sync_actor_thread, &ue) != 0) {
+    return 1;
+  }
+
+  if (nr_toa_radio_start(ue.dev) != 0) {
+    oai_exit = 1;
+    pthread_mutex_lock(&ue.sync_mtx);
+    pthread_cond_broadcast(&ue.sync_cv);
+    pthread_mutex_unlock(&ue.sync_mtx);
+    pthread_join(ue.sync_tid, NULL);
     return 1;
   }
 

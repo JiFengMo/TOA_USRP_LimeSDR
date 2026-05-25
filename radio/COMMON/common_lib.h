@@ -63,6 +63,14 @@ typedef int (*trx_set_rx_freq_func_t)(struct openair0_device *device,
                                       double rx_freq_hz);
 typedef int (*trx_set_rx_gain_func_t)(struct openair0_device *device,
                                       double rx_gain_db);
+typedef int (*trx_get_time_func_t)(struct openair0_device *device,
+                                   openair0_timestamp_t *ts);
+typedef int (*trx_set_time_next_pps_func_t)(struct openair0_device *device,
+                                            uint64_t epoch_ns);
+typedef int (*trx_get_clock_status_func_t)(struct openair0_device *device,
+                                           uint8_t *ref_locked,
+                                           uint8_t *pps_locked,
+                                           uint8_t *gps_locked);
 
 typedef struct openair0_device {
   void *priv;
@@ -75,6 +83,9 @@ typedef struct openair0_device {
   trx_write_func_t trx_write_func;
   trx_set_rx_freq_func_t trx_set_rx_freq_func;
   trx_set_rx_gain_func_t trx_set_rx_gain_func;
+  trx_get_time_func_t trx_get_time_func;
+  trx_set_time_next_pps_func_t trx_set_time_next_pps_func;
+  trx_get_clock_status_func_t trx_get_clock_status_func;
 } openair0_device_t;
 
 openair0_device_t *openair0_device_get_usrp(openair0_config_t *cfg);
